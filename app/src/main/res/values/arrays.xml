@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="grid_spinner">
+        <item >Grid: 5x5</item>
+        <item >Grid: 10x10</item>
+        <item >Grid: 20x20</item>
+    </string-array>
+
+</resources>

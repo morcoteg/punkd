@@ -1,0 +1,21 @@
+<resources>
+    <string name="app_name">Fawful SteamPunked</string>
+
+    <string name="player1">Player 1</string>
+    <string name="player2">Player 2</string>
+
+    <string name="buttonStart">Start</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="title_activity_game_board">GameBoard</string>
+
+
+
+    <string name="buttonHowTo">How To Play</string>
+
+    <string name="howToTitle">Rules of the game:</string>
+    <string name="rules">this is where we put the list of rules once we figure out what they are (I honestly have no idea)</string>
+
+
+    <color name="green"> #4caf50</color>
+</resources>
