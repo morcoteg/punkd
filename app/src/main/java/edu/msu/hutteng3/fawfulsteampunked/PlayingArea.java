@@ -76,8 +76,8 @@ public class PlayingArea {
         // Load the start pipes
         pipeStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         //pipeStartp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        pipeEndp1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
-        pipeEndp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
+        pipeEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
+        //pipeEndp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
         handle=BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
 
 
@@ -144,7 +144,7 @@ public class PlayingArea {
 
 
 
-        pipeStart=getScaledBitmap(pipeStart, canvas.getWidth()/10, canvas.getHeight()/10);
+        //pipeStart=getScaledBitmap(pipeStart, canvas.getWidth()/10, canvas.getHeight()/10);
 
 
 
@@ -155,50 +155,49 @@ public class PlayingArea {
 
         paint.setTextSize(48f);
 
-        canvas.drawText(player1name, 0, canvas.getHeight() / 6, paint);
-        canvas.drawText(player2name, 0, canvas.getHeight() / 2, paint);
+        //pipeStart height to get below +42f for text size
+        canvas.drawText(player1name, 0, pipeStart.getHeight()+42f, paint);
+
+        //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
+        canvas.drawText(player2name, 0, 2*hit/5+pipeStart.getHeight()+42f, paint);
 
 
 
-       // canvas.drawCircle(0,0,5,paint);
-        //this works on the 7 in portrait, looks really bad in landscape
-        //due to all the hardcoded ratios being there for testing to ake sure rotate was working
+
+        //Draw the start pipes
         canvas.save();
-        canvas.translate(pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
-        canvas.rotate(-90);
-        canvas.drawBitmap(pipeStart, -pipeStart.getHeight() /4, -pipeStart.getWidth() / 2, paint);
-       // canvas.drawBitmap(pipeStartp2, -9*hit / 16, -pipeStartp1.getHeight() / 2, paint);
 
-        canvas.translate(-pipeStart.getWidth() / 2, -pipeStart.getHeight() / 2);
+        canvas.rotate(90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
+
+        canvas.drawBitmap(pipeStart, 0, 0, paint);
+        //canvas.drawBitmap(pipeStart, hit / 5, 0, paint);
+        canvas.drawBitmap(pipeStart, 2 * hit / 5, 0, paint);
+        //canvas.drawBitmap(pipeStart, 3 * hit / 5, 0, paint);
+        //canvas.drawBitmap(pipeStart, 4 * hit / 5, 0, paint);
+
         canvas.restore();
 
 
+        //Draw the end pipes
         canvas.save();
-        canvas.translate(pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
-        canvas.rotate(-90);
-        //canvas.drawBitmap(pipeStartp1,-pipeStartp1.getHeight() / 2, -pipeStartp1.getWidth() / 2, paint);
-        // canvas.drawBitmap(pipeStartp2, -9*hit / 16, -pipeStartp1.getHeight() / 2, paint);
+        //I use pipeStart for the rotate and the margin to move to keep the start and end pipe on the same line
+        canvas.rotate(-90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
 
-        canvas.translate(-pipeStart.getWidth() / 2, -pipeStart.getHeight() / 2);
+        //canvas.drawBitmap(pipeEnd, 0, wid - pipeStart.getWidth(), paint);
+        canvas.drawBitmap(pipeEnd, -hit / 5, wid - pipeStart.getWidth(), paint);
+        //canvas.drawBitmap(pipeEnd, -2*hit / 5, wid-pipeStart.getWidth(), paint);
+        canvas.drawBitmap(pipeEnd, -3 * hit / 5, wid - pipeStart.getWidth(), paint);
+       // canvas.drawBitmap(pipeEnd, -4 * hit / 5, wid-pipeStart.getWidth(), paint);
+
         canvas.restore();
 
 
-
-       // canvas.drawBitmap(pipeEndp2,- 11*wid/16, pipeStartp1.getHeight()*4f, paint);
-
-
-
-       // canvas.drawCircle(0,0,5,paint);
-
-
-
-
-       // canvas.drawBitmap(handle, 0, 3*hit / 16, paint);
-
-      //  canvas.drawBitmap(handle, 0,hit / 2, paint);
-
-
-
+        //Draw the handles for the start pipes unrotated
+        canvas.drawBitmap(handle, 0, 0, paint);
+        //canvas.drawBitmap(handle, 0,hit/5, paint);
+        canvas.drawBitmap(handle, 0,2*hit/5, paint);
+        //canvas.drawBitmap(handle, 0,3*hit/5, paint);
+       // canvas.drawBitmap(handle, 0,4*hit/5, paint);
     }
 
 
@@ -230,8 +229,8 @@ public class PlayingArea {
      */
     private Bitmap pipeStart; //<may be able to combine these into one of each
     //private Bitmap pipeStartp2;
-    private Bitmap pipeEndp1;
-    private Bitmap pipeEndp2;
+    private Bitmap pipeEnd;
+   // private Bitmap pipeEndp2;
     private Bitmap handle;
 
 
