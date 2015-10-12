@@ -1,8 +1,11 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.app.Activity;
 import android.content.Context;
 import android.graphics.Canvas;
+import android.support.annotation.NonNull;
 import android.util.AttributeSet;
+import android.view.MotionEvent;
 import android.view.View;
 
 
@@ -41,15 +44,31 @@ public class GameBoardView extends View {
 
     private void init(AttributeSet attrs, int defStyle) {
 
-         playingArea= new PlayingArea(getContext());
 
-        playingArea.setPlayer1Nmae("Hope");
+        playingArea= new PlayingArea(getContext());
+
+        //playingArea.setPlayer1Nmae("Hope");
         // linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
         // linePaint.setColor(0xff008000);
         // linePaint.setStrokeWidth(3);
 
 
     }
+
+
+
+    @Override
+    public boolean onTouchEvent(@NonNull MotionEvent event) {
+        GameBoard host = (GameBoard) this.getContext();
+        host.newTurn();
+        return false;
+    }
+
+
+
+
+
+
 
 
     @Override
@@ -62,12 +81,10 @@ public class GameBoardView extends View {
 
 
 
-    public void setPlayer1name(String name){
-        playingArea.setPlayer1Nmae(name);
-    }
+    public void setPlayer1name(String name){playingArea.setPlayer1Name(name);}
 
     public void setPlayer2name(String name){
-        playingArea.setPlayer2Nmae(name);
+        playingArea.setPlayer2Name(name);
     }
 
 

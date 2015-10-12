@@ -1,12 +1,19 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by Tyler on 10/10/2015.
@@ -36,15 +43,14 @@ public class PlayingArea {
 
 
 
-    public void setPlayer1Nmae(String name){
+    public void setPlayer1Name(String name){
         player1name=name;
     }
 
 
-    public void setPlayer2Nmae(String name){
+    public void setPlayer2Name(String name){
         player2name=name;
     }
-
 
 
     /**
@@ -61,21 +67,28 @@ public class PlayingArea {
 
 
 
+
+
     public PlayingArea(Context context) {
 
 
 
         // Load the start pipes
-        pipeStartp1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        pipeStartp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        pipeStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        //pipeStartp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         pipeEndp1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
         pipeEndp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
         handle=BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
+
+
+        //Bitmap b = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
+       // profileImage.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
+
+
+
+
+
     }
-
-
-
-
 
 
 
@@ -130,6 +143,11 @@ public class PlayingArea {
         */
 
 
+
+        pipeStart=getScaledBitmap(pipeStart, canvas.getWidth()/10, canvas.getHeight()/10);
+
+
+
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
@@ -142,34 +160,65 @@ public class PlayingArea {
 
 
 
-
+       // canvas.drawCircle(0,0,5,paint);
         //this works on the 7 in portrait, looks really bad in landscape
         //due to all the hardcoded ratios being there for testing to ake sure rotate was working
         canvas.save();
-        canvas.translate(pipeStartp1.getWidth() / 2, pipeStartp1.getHeight() / 2);
+        canvas.translate(pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
         canvas.rotate(-90);
-        canvas.drawBitmap(pipeStartp1,- hit / 4, -pipeStartp1.getHeight() / 2, paint);
-        canvas.drawBitmap(pipeStartp2, -9*hit / 16, -pipeStartp1.getHeight() / 2, paint);
+        canvas.drawBitmap(pipeStart, -pipeStart.getHeight() /4, -pipeStart.getWidth() / 2, paint);
+       // canvas.drawBitmap(pipeStartp2, -9*hit / 16, -pipeStartp1.getHeight() / 2, paint);
 
-
-
-        canvas.drawBitmap(pipeEndp1, - 3*wid /8 , pipeStartp1.getHeight() * 4f, paint);
-        canvas.drawBitmap(pipeEndp2,- 11*wid/16, pipeStartp1.getHeight()*4f, paint);
-
-        canvas.translate(-pipeStartp1.getWidth() / 2, -pipeStartp1.getHeight() / 2);
+        canvas.translate(-pipeStart.getWidth() / 2, -pipeStart.getHeight() / 2);
         canvas.restore();
 
 
-        canvas.drawBitmap(handle, 0, 3*hit / 16, paint);
+        canvas.save();
+        canvas.translate(pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
+        canvas.rotate(-90);
+        //canvas.drawBitmap(pipeStartp1,-pipeStartp1.getHeight() / 2, -pipeStartp1.getWidth() / 2, paint);
+        // canvas.drawBitmap(pipeStartp2, -9*hit / 16, -pipeStartp1.getHeight() / 2, paint);
 
-        canvas.drawBitmap(handle, 0,hit / 2, paint);
+        canvas.translate(-pipeStart.getWidth() / 2, -pipeStart.getHeight() / 2);
+        canvas.restore();
+
+
+
+       // canvas.drawBitmap(pipeEndp2,- 11*wid/16, pipeStartp1.getHeight()*4f, paint);
+
+
+
+       // canvas.drawCircle(0,0,5,paint);
+
+
+
+
+       // canvas.drawBitmap(handle, 0, 3*hit / 16, paint);
+
+      //  canvas.drawBitmap(handle, 0,hit / 2, paint);
 
 
 
     }
 
 
+    public static Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight)
+    {
+        int bWidth = b.getWidth();
+        int bHeight = b.getHeight();
 
+        int nWidth = reqWidth;
+        int nHeight = reqHeight;
+
+       // float parentRatio = (float) reqHeight / reqWidth;
+
+      //  nHeight = bHeight;
+        //nWidth = (int) (reqWidth * parentRatio);
+       // nWidth = bWidth;
+
+
+        return Bitmap.createScaledBitmap(b, nWidth, nHeight, true);
+    }
 
 
 
@@ -179,8 +228,8 @@ public class PlayingArea {
     /**
      * Pipe bitmaps
      */
-    private Bitmap pipeStartp1; //<may be able to combine these into one of each
-    private Bitmap pipeStartp2;
+    private Bitmap pipeStart; //<may be able to combine these into one of each
+    //private Bitmap pipeStartp2;
     private Bitmap pipeEndp1;
     private Bitmap pipeEndp2;
     private Bitmap handle;
@@ -267,4 +316,35 @@ public class PlayingArea {
          */
         return start.search();
     }
+
+
+
+
+
+
+
+
+
+    /**
+     * Handle a touch event from the view.
+     *
+     * @param view  The view that is the source of the touch
+     * @param event The motion event describing the touch
+     * @return true if the touch is handled.
+     */
+ /*   public boolean onTouchEvent(View view, MotionEvent event) {
+
+       //we'll neeed ths for move and place I think
+
+
+
+        return false;
+    }
+
+*/
+
+
+
+
+
 }

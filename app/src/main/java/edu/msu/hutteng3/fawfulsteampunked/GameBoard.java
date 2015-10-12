@@ -1,5 +1,9 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.app.AlertDialog;
+import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -36,6 +40,13 @@ public class GameBoard extends AppCompatActivity {
         String p2= extras.getString("PLAYER_2_NAME");
         int gridSize=extras.getInt("GRID_SIZE");
 
+
+        player1name=p1;
+        player2name=p2;
+
+        //set these to initially be p1 for curerent and p2 for other to give the first player the first move
+        currentPlayer=p1;
+        otherPlayer=p2;
 
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);
@@ -88,9 +99,69 @@ public class GameBoard extends AppCompatActivity {
 
 
 
+    private String player1name;
+    private String player2name;
+    private String currentPlayer;
+    private String otherPlayer;
+
+
+    public void newTurn(){
+        //Needs to be moved somewhere else to not have the player name come up as NULL
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+
+        // Parameterize the builder
+        builder.setTitle(currentPlayer + "\'s turn");
 
 
 
+        String thing=player1name;
+        builder.setItems(new CharSequence[]
+                        {"Add a pipe", "Delete a pipe", "Surrender", "Open valve"},
+                new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                        switch (which) {
+                            case 0:
+                                //add
+                                // Toast.makeText(hope, "clicked 1",0).show();
+                                int x=0;
+                                break;
+                            case 1:
+                                //delete
+                                //Toast.makeText(hope, "clicked 2", 0).show();
+                                break;
+                            case 2:
+                                //surrender
+                                surrender(otherPlayer,currentPlayer);
+                                break;
+                            case 3:
+                                //open valve
+                                //Toast.makeText(hope, "clicked 4", 0).show();
+                                break;
+                        }
+                    }
+                });
+        builder.create().show();
+    }
+
+
+
+
+
+    public void surrender(String winner, String loser) {
+        Intent intent = new Intent(this, EndGame.class);
+
+
+        intent.putExtra("WINNER", winner);
+
+        intent.putExtra("LOSER", loser);
+
+
+        startActivity(intent);
+
+    }
 
 
 
