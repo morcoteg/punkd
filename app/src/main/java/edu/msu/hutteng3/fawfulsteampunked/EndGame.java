@@ -1,9 +1,12 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.EditText;
 
 public class EndGame extends AppCompatActivity {
 
@@ -13,12 +16,10 @@ public class EndGame extends AppCompatActivity {
         setContentView(R.layout.activity_end_game);
 
 
-
         Bundle extras = getIntent().getExtras();
 
-        String winner= extras.getString("WINNER");
-        String loser= extras.getString("LOSER");
-
+        String winner = extras.getString("WINNER");
+        String loser = extras.getString("LOSER");
 
 
         getEndGameView().setWinner(winner);
@@ -31,7 +32,6 @@ public class EndGame extends AppCompatActivity {
     private EndGameView getEndGameView() {
         return (EndGameView) findViewById(R.id.endGameView);
     }
-
 
 
     @Override
@@ -55,4 +55,20 @@ public class EndGame extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
+
+    /*
+    *Handles the new game button prees
+     */
+    public void onNewGame(View view) {
+        Intent intent = new Intent(this, MainActivity.class);
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //<clears the stack
+
+
+        startActivity(intent);
+
+
+    }
+
+
 }

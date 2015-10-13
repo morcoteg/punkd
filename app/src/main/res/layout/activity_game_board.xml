@@ -12,6 +12,17 @@
         android:layout_centerHorizontal="true"
         android:background="@android:color/white"
         android:layout_alignParentEnd="false"
-        android:layout_alignParentBottom="true" />
+        android:layout_above="@+id/pipeSelectView" />
+
+    <edu.msu.hutteng3.fawfulsteampunked.PipeSelectView
+        android:layout_width="wrap_content"
+        android:layout_height="100dp"
+        android:id="@+id/pipeSelectView"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:background="@color/green" />
 
 </RelativeLayout>

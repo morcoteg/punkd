@@ -50,19 +50,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-
     /**
-     * The hat choice spinner
+     * The grid choice spinner
      */
     private Spinner getSpinner() {
         return (Spinner) findViewById(R.id.spinnerGrid);
     }
 
 
-
-
     /**
-     * Request code when selecting a picture
+     * Request code when selecting a gid size
      */
     private int gridSize = 0;
 
@@ -73,10 +70,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartGame(View view) {
 
-
         Intent intent = new Intent(this, GameBoard.class);
-
-
 
         EditText txtDescriptionp1 = (EditText) findViewById(R.id.player1);
         String p1 = txtDescriptionp1.getText().toString();
@@ -86,13 +80,9 @@ public class MainActivity extends AppCompatActivity {
         String p2 = txtDescriptionp2.getText().toString();
         intent.putExtra("PLAYER_2_NAME", p2);
 
-
         intent.putExtra("GRID_SIZE",gridSize);
 
         startActivity(intent);
-
-
-
 
     }
 
@@ -145,11 +135,6 @@ public class MainActivity extends AppCompatActivity {
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
     }
-
-
-
-
-
 
 
 }

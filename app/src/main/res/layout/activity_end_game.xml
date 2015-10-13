@@ -5,8 +5,20 @@
 
     <edu.msu.hutteng3.fawfulsteampunked.EndGameView
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
+        android:layout_height="50dp"
         android:id="@+id/endGameView"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_above="@+id/buttonNewGame" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonNewGame"
+        android:id="@+id/buttonNewGame"
+        android:onClick="onNewGame"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="81dp" />
 </RelativeLayout>

@@ -16,18 +16,14 @@ import android.view.View;
 public class GameBoardView extends View {
 
 
-
-
-
     //Hi It's Gabe testing a commit :)
 
 
-
-
     /**
-     * The actual puzzle
+     * The actual grid
      */
     private PlayingArea playingArea;
+
 
     public GameBoardView(Context context) {
         super(context);
@@ -45,23 +41,8 @@ public class GameBoardView extends View {
     }
 
     private void init(AttributeSet attrs, int defStyle) {
-
-
         playingArea= new PlayingArea(getContext());
-
-        //playingArea.setPlayer1Nmae("Hope");
-        // linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
-        // linePaint.setColor(0xff008000);
-        // linePaint.setStrokeWidth(3);
-
-
     }
-
-
-
-
-
-
 
 
     @Override
@@ -72,22 +53,12 @@ public class GameBoardView extends View {
     }
 
 
-
-
-
-
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         GameBoard host = (GameBoard) this.getContext();
         host.newTurn();
         return false;
     }
-
-
-
-
-
-
 
 
     @Override
@@ -99,18 +70,13 @@ public class GameBoardView extends View {
 
 
 
-
     public void setPlayer1name(String name){playingArea.setPlayer1Name(name);}
 
     public void setPlayer2name(String name){
         playingArea.setPlayer2Name(name);
     }
 
-
-    public void setGridSize(int scale){
-        playingArea.setGridSize(scale);
-
-    }
+    public void setGridSize(int scale){playingArea.setGridSize(scale);}
 
 
 }

@@ -32,8 +32,6 @@ public class GameBoard extends AppCompatActivity {
         setContentView(R.layout.activity_game_board);
 
 
-
-
         Bundle extras = getIntent().getExtras();
 
         String p1= extras.getString("PLAYER_1_NAME");
@@ -76,11 +74,8 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
-
-
-
     /**
-     * The hatter view object
+     * The gameBoard view object
      */
     private GameBoardView getGameBoardView() {
         return (GameBoardView) findViewById(R.id.gameBoardView);
@@ -98,7 +93,6 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
     private String player1name;
     private String player2name;
     private String currentPlayer;
@@ -109,15 +103,12 @@ public class GameBoard extends AppCompatActivity {
         //Needs to be moved somewhere else to not have the player name come up as NULL
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-
         // Parameterize the builder
         builder.setTitle(currentPlayer + "\'s turn");
 
-
-
         String thing=player1name;
         builder.setItems(new CharSequence[]
-                        {"Add a pipe", "Delete a pipe", "Surrender", "Open valve"},
+                        {"Add a pipe (disabled)", "Delete a pipe(disabled)", "Surrender", "Open valve(disabled)"},
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
@@ -148,21 +139,14 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
-
     public void surrender(String winner, String loser) {
         Intent intent = new Intent(this, EndGame.class);
 
-
         intent.putExtra("WINNER", winner);
-
         intent.putExtra("LOSER", loser);
 
-
         startActivity(intent);
-
     }
-
 
 
 }

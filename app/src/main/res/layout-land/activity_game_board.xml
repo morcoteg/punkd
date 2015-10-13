@@ -6,10 +6,20 @@
 
 
     <edu.msu.hutteng3.fawfulsteampunked.GameBoardView
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:id="@+id/gameBoardView"
         android:background="@android:color/white"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/pipeAreaView"
+        android:layout_toStartOf="@+id/pipeAreaView" />
+
+    <edu.msu.hutteng3.fawfulsteampunked.PipeSelectView
+        android:layout_width="100dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/pipeAreaView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
 </RelativeLayout>

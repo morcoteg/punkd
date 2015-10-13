@@ -114,10 +114,10 @@ public class PlayingArea {
     public void draw(Canvas canvas) {
 
         int wid = canvas.getWidth();
-        int hit = 4*canvas.getHeight()/5;//<4/5ths of the total canvas size to allow for the bottom bar
+        int hit = canvas.getHeight();
 
 
-
+        //the ratio is used to ensure alignment of the pipe parts, disregarding the gaudge
         float ratio=((float)pipeEnd.getHeight())/((float)pipeStart.getHeight());
 
 
@@ -145,14 +145,18 @@ public class PlayingArea {
         //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
         canvas.drawText(player2name, 0, 2 * hit / gridSize + pipeStart.getHeight() + 42f, paint);
 
+        canvas.drawText("touch screen to simulate turn,"
+                , wid/4, hit/2, paint); //NEED TO TAKE OUT FOR FINAL
 
+        canvas.drawText("then choose 'surrender' to go"
+                , wid/4, hit/2+42f, paint); //NEED TO TAKE OUT FOR FINAL
+
+        canvas.drawText("to end of game view."
+                , wid/4, hit/2+84f, paint); //NEED TO TAKE OUT FOR FINAL
 
 
         //Draw the start pipes
         canvas.save();
-
-        //canvas.rotate(90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
-
 
        // canvas.translate(pipeStart.getHeight() / 2, pipeStart.getWidth() / 2);
        // canvas.rotate(90);
@@ -160,25 +164,23 @@ public class PlayingArea {
         //canvas.drawBitmap(pipeStart, 0, 0, paint);
 
 
-       // canvas.drawCircle(-pipeStart.getWidth() / 2, -pipeStart.getHeight() / 2, 100, paint);
-       //canvas.drawCircle(-100, -100, 10, paint);
-
         canvas.drawBitmap(pipeStart, 0, 0, paint);
-        canvas.drawBitmap(pipeStart, 0,hit / gridSize,  paint);
+        //canvas.drawBitmap(pipeStart, 0,hit / gridSize,  paint);//test
         canvas.drawBitmap(pipeStart, 0,2 * hit / gridSize, paint);
-        canvas.drawBitmap(pipeStart, 0,3 * hit / gridSize, paint);
-        canvas.drawBitmap(pipeStart, 0,4 * hit / gridSize,  paint);
+        //canvas.drawBitmap(pipeStart, 0,3 * hit / gridSize, paint); //test
+        //canvas.drawBitmap(pipeStart, 0,4 * hit / gridSize,  paint); //test
 
 
+        /* Tests to make sure starts and ends are alligned
         canvas.drawBitmap(pipeStart, pipeStart.getWidth(), 0, paint);
         canvas.drawBitmap(pipeStart, 2*pipeStart.getWidth(), 0, paint);
         canvas.drawBitmap(pipeStart,  3 * pipeStart.getWidth(),0, paint);
-       // canvas.drawBitmap(pipeStart, 0, 4 * -pipeStart.getHeight()-50, paint);
-       // canvas.drawBitmap(pipeStart, 0, 5 * -pipeStart.getHeight()-50, paint);
-       // canvas.drawBitmap(pipeStart, 0, 6 * -pipeStart.getHeight()-50, paint);
-       // canvas.drawBitmap(pipeStart, 0, 7 * -pipeStart.getHeight()-50, paint);
-       // canvas.drawBitmap(pipeStart, 0, 8*-pipeStart.getHeight()-50, paint);
-
+        canvas.drawBitmap(pipeStart,  4 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  5 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  6 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  7 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  8*pipeStart.getWidth(),0, paint);
+*/
         canvas.restore();
 
 
@@ -187,50 +189,21 @@ public class PlayingArea {
         int diff=pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the guadge
         //canvas.rotate(-90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
 
-        canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(), diff, paint);
+        //canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(), diff, paint); //test
         canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(),  hit/gridSize+diff, paint);
-        canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 2*hit/gridSize+diff, paint);
+        //canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 2*hit/gridSize+diff, paint); //test
         canvas.drawBitmap(pipeEnd, wid - pipeEnd.getWidth(),3*hit/gridSize+diff,  paint);
-        canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 4*hit/gridSize+diff, paint);
+        //canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 4*hit/gridSize+diff, paint); //test
 
         canvas.restore();
 
 
         //Draw the handles for the start pipes unrotated
         canvas.drawBitmap(handle, 0, 0, paint);
-        //canvas.drawBitmap(handle, 0,hit/5, paint);
+        //canvas.drawBitmap(handle, 0,hit/5, paint); //test
         canvas.drawBitmap(handle, 0,2*hit/gridSize, paint);
-        //canvas.drawBitmap(handle, 0,3*hit/5, paint);
-        //canvas.drawBitmap(handle, 0,4*hit/5, paint);
-
-
-
-
-        //Create and fill the pipes to add area
-        paint.setColor(Color.rgb(51, 146, 51)); //<creates green
-        canvas.drawRect(0, 4 * canvas.getHeight() / 5, canvas.getWidth(), canvas.getHeight(), paint);
-
-        pipeCap=Bitmap.createScaledBitmap(pipeCap, wid/5, canvas.getHeight()/5, false);
-        canvas.drawBitmap(pipeCap, 0, 4 * canvas.getHeight() / 5, paint);
-
-        pipe90=Bitmap.createScaledBitmap(pipe90, wid/5, canvas.getHeight()/5, false);
-        canvas.drawBitmap(pipe90, wid / 5, 4 * canvas.getHeight() / 5, paint);
-        canvas.drawBitmap(pipe90, 2 * wid / 5, 4 * canvas.getHeight() / 5, paint); //<he had two 90s in his board so I made 2 in ours
-
-        pipeTee=Bitmap.createScaledBitmap(pipeTee, wid/5, canvas.getHeight()/5, false);
-        canvas.drawBitmap(pipeTee,3*wid/5,4 * canvas.getHeight() / 5, paint);
-
-
-        //Use min to avoid going off the bottim or on the board, might be bad way to make scaled if it gets rotated
-        pipeStraight=Bitmap.createScaledBitmap(pipeStraight,Math.min(wid/5, canvas.getHeight()/5), Math.min(canvas.getHeight()/5, wid/5), false);
-        canvas.save();
-
-        canvas.rotate(90, pipeStraight.getWidth() / 2, pipeStraight.getHeight() / 2);
-
-
-        canvas.drawBitmap(pipeStraight,4*canvas.getHeight()/5, -4*wid/5, null);
-
-        canvas.restore();
+        //canvas.drawBitmap(handle, 0,3*hit/5, paint); //test
+        //canvas.drawBitmap(handle, 0,4*hit/5, paint); //test
 
 
     }
@@ -324,10 +297,6 @@ public class PlayingArea {
 
 
 
-
-
-
-
     /**
      * Handle a touch event from the view.
      *
@@ -337,15 +306,13 @@ public class PlayingArea {
      */
  /*   public boolean onTouchEvent(View view, MotionEvent event) {
 
-       //we'll neeed ths for move and place I think
-
+       //we'll need ths for move and place I think
 
 
         return false;
     }
 
 */
-
 
 
 

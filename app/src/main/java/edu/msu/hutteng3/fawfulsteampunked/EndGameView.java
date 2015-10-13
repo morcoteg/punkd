@@ -10,9 +10,7 @@ import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
-/**
- * TODO: document your custom view class.
- */
+
 public class EndGameView extends View {
 
     public EndGameView(Context context) {
@@ -40,8 +38,6 @@ public class EndGameView extends View {
         super.onDraw(canvas);
 
 
-
-
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
@@ -52,8 +48,6 @@ public class EndGameView extends View {
 
         canvas.drawText("Winner: "+winner, canvas.getWidth()/4, canvas.getHeight() / 6, paint);
         canvas.drawText("Loser: "+loser, canvas.getWidth()/4, canvas.getHeight() / 2, paint);
-
-
 
 
     }
@@ -72,9 +66,5 @@ public class EndGameView extends View {
         loser=toSet;
     }
 
-// on new gamje button press intent.addFlags
-    //(
-    //Intent.FLAG_ACTIVITY_CLEAR_TOP
-    //)
-//to clear the stack
+
 }
