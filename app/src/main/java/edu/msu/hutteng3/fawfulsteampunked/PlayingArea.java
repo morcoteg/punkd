@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -66,6 +67,27 @@ public class PlayingArea {
 
 
 
+    private int gridSize=5; //default to 5 to avoid divide by 0 error/
+    public void setGridSize(int grid){
+        if (grid==0)
+            gridSize=5;
+        else if(grid==1)
+            gridSize=10;
+        else
+            gridSize=20;
+    }
+
+    /**
+     * Pipe bitmaps
+     */
+    private Bitmap pipeStart; //<may be able to combine these into one
+    private Bitmap pipeStraight;
+    private Bitmap pipeEnd;
+    private Bitmap handle;
+    private Bitmap pipeCap;
+    private Bitmap pipe90;
+    private Bitmap pipeTee;
+
 
 
 
@@ -75,17 +97,12 @@ public class PlayingArea {
 
         // Load the start pipes
         pipeStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        //pipeStartp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        pipeStraight = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         pipeEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
-        //pipeEndp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
         handle=BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
-
-
-        //Bitmap b = BitmapFactory.decodeByteArray(imageAsBytes, 0, imageAsBytes.length);
-       // profileImage.setImageBitmap(Bitmap.createScaledBitmap(b, 120, 120, false));
-
-
-
+        pipeCap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cap);
+        pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
+        pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
 
 
     }
@@ -97,69 +114,36 @@ public class PlayingArea {
     public void draw(Canvas canvas) {
 
         int wid = canvas.getWidth();
-        int hit = canvas.getHeight();
-
-        // Determine the minimum of the two dimensions
-        int minDim = wid < hit ? wid : hit;
-/*
-        puzzleSize = (int) (minDim * SCALE_IN_VIEW);
-
-        // Compute the margins so we center the puzzle
-        marginX = (wid - puzzleSize) / 2;
-        marginY = (hit - puzzleSize) / 2;
-
-        //
-        // Draw the outline of the puzzle
-        //
-
-        //draw the outline square first
-        fillPaint.setColor(Color.rgb(51, 146, 51)); //rgb take int values for a red, green, and blue component to make the dark green
-        canvas.drawRect(marginX - 5, marginY - 5, marginX + puzzleSize + 5, marginY + puzzleSize + 5, fillPaint);
-
-
-        //change paint color to grey and create the puzzle area
-        fillPaint.setColor(0xffcccccc);
-        canvas.drawRect(marginX, marginY, marginX + puzzleSize, marginY + puzzleSize, fillPaint);
-
-
-        scaleFactor = (float) puzzleSize / (float) puzzleComplete.getWidth();
-
-        canvas.save();
-        canvas.translate(marginX, marginY);
-        canvas.scale(scaleFactor, scaleFactor);
-
-        //If the puzzle is solved, display the final image and not the pieces
-        if (isComplete)
-            canvas.drawBitmap(puzzleComplete, 0, 0, null);
-
-
-        canvas.restore();
-        if(!isComplete) {
-            for (PuzzlePiece piece : pieces) {
-                piece.draw(canvas, marginX, marginY, puzzleSize, scaleFactor);
-            }
-        }
-
-        */
+        int hit = 4*canvas.getHeight()/5;//<4/5ths of the total canvas size to allow for the bottom bar
 
 
 
-        //pipeStart=getScaledBitmap(pipeStart, canvas.getWidth()/10, canvas.getHeight()/10);
+        float ratio=((float)pipeEnd.getHeight())/((float)pipeStart.getHeight());
 
 
+        pipeStart=Bitmap.createScaledBitmap(pipeStart, wid / gridSize, hit / gridSize, false);
+
+        int newHeight=(int)(ratio*pipeStart.getHeight());
+
+
+
+        pipeEnd=Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false);
+
+
+        handle=Bitmap.createScaledBitmap(handle, wid/ gridSize,hit/gridSize, false);
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
 
 
-        paint.setTextSize(48f);
+        paint.setTextSize(42f);
 
         //pipeStart height to get below +42f for text size
-        canvas.drawText(player1name, 0, pipeStart.getHeight()+42f, paint);
+        canvas.drawText(player1name, 0, pipeStart.getHeight() + 42f, paint);
 
         //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
-        canvas.drawText(player2name, 0, 2*hit/5+pipeStart.getHeight()+42f, paint);
+        canvas.drawText(player2name, 0, 2 * hit / gridSize + pipeStart.getHeight() + 42f, paint);
 
 
 
@@ -167,27 +151,47 @@ public class PlayingArea {
         //Draw the start pipes
         canvas.save();
 
-        canvas.rotate(90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
+        //canvas.rotate(90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
+
+
+       // canvas.translate(pipeStart.getHeight() / 2, pipeStart.getWidth() / 2);
+       // canvas.rotate(90);
+        //canvas.translate(-pipeStart.getHeight()/2, -pipeStart.getWidth()/2);
+        //canvas.drawBitmap(pipeStart, 0, 0, paint);
+
+
+       // canvas.drawCircle(-pipeStart.getWidth() / 2, -pipeStart.getHeight() / 2, 100, paint);
+       //canvas.drawCircle(-100, -100, 10, paint);
 
         canvas.drawBitmap(pipeStart, 0, 0, paint);
-        //canvas.drawBitmap(pipeStart, hit / 5, 0, paint);
-        canvas.drawBitmap(pipeStart, 2 * hit / 5, 0, paint);
-        //canvas.drawBitmap(pipeStart, 3 * hit / 5, 0, paint);
-        //canvas.drawBitmap(pipeStart, 4 * hit / 5, 0, paint);
+        canvas.drawBitmap(pipeStart, 0,hit / gridSize,  paint);
+        canvas.drawBitmap(pipeStart, 0,2 * hit / gridSize, paint);
+        canvas.drawBitmap(pipeStart, 0,3 * hit / gridSize, paint);
+        canvas.drawBitmap(pipeStart, 0,4 * hit / gridSize,  paint);
+
+
+        canvas.drawBitmap(pipeStart, pipeStart.getWidth(), 0, paint);
+        canvas.drawBitmap(pipeStart, 2*pipeStart.getWidth(), 0, paint);
+        canvas.drawBitmap(pipeStart,  3 * pipeStart.getWidth(),0, paint);
+       // canvas.drawBitmap(pipeStart, 0, 4 * -pipeStart.getHeight()-50, paint);
+       // canvas.drawBitmap(pipeStart, 0, 5 * -pipeStart.getHeight()-50, paint);
+       // canvas.drawBitmap(pipeStart, 0, 6 * -pipeStart.getHeight()-50, paint);
+       // canvas.drawBitmap(pipeStart, 0, 7 * -pipeStart.getHeight()-50, paint);
+       // canvas.drawBitmap(pipeStart, 0, 8*-pipeStart.getHeight()-50, paint);
 
         canvas.restore();
 
 
         //Draw the end pipes
         canvas.save();
-        //I use pipeStart for the rotate and the margin to move to keep the start and end pipe on the same line
-        canvas.rotate(-90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
+        int diff=pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the guadge
+        //canvas.rotate(-90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
 
-        //canvas.drawBitmap(pipeEnd, 0, wid - pipeStart.getWidth(), paint);
-        canvas.drawBitmap(pipeEnd, -hit / 5, wid - pipeStart.getWidth(), paint);
-        //canvas.drawBitmap(pipeEnd, -2*hit / 5, wid-pipeStart.getWidth(), paint);
-        canvas.drawBitmap(pipeEnd, -3 * hit / 5, wid - pipeStart.getWidth(), paint);
-       // canvas.drawBitmap(pipeEnd, -4 * hit / 5, wid-pipeStart.getWidth(), paint);
+        canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(), diff, paint);
+        canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(),  hit/gridSize+diff, paint);
+        canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 2*hit/gridSize+diff, paint);
+        canvas.drawBitmap(pipeEnd, wid - pipeEnd.getWidth(),3*hit/gridSize+diff,  paint);
+        canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 4*hit/gridSize+diff, paint);
 
         canvas.restore();
 
@@ -195,43 +199,43 @@ public class PlayingArea {
         //Draw the handles for the start pipes unrotated
         canvas.drawBitmap(handle, 0, 0, paint);
         //canvas.drawBitmap(handle, 0,hit/5, paint);
-        canvas.drawBitmap(handle, 0,2*hit/5, paint);
+        canvas.drawBitmap(handle, 0,2*hit/gridSize, paint);
         //canvas.drawBitmap(handle, 0,3*hit/5, paint);
-       // canvas.drawBitmap(handle, 0,4*hit/5, paint);
+        //canvas.drawBitmap(handle, 0,4*hit/5, paint);
+
+
+
+
+        //Create and fill the pipes to add area
+        paint.setColor(Color.rgb(51, 146, 51)); //<creates green
+        canvas.drawRect(0, 4 * canvas.getHeight() / 5, canvas.getWidth(), canvas.getHeight(), paint);
+
+        pipeCap=Bitmap.createScaledBitmap(pipeCap, wid/5, canvas.getHeight()/5, false);
+        canvas.drawBitmap(pipeCap, 0, 4 * canvas.getHeight() / 5, paint);
+
+        pipe90=Bitmap.createScaledBitmap(pipe90, wid/5, canvas.getHeight()/5, false);
+        canvas.drawBitmap(pipe90, wid / 5, 4 * canvas.getHeight() / 5, paint);
+        canvas.drawBitmap(pipe90, 2 * wid / 5, 4 * canvas.getHeight() / 5, paint); //<he had two 90s in his board so I made 2 in ours
+
+        pipeTee=Bitmap.createScaledBitmap(pipeTee, wid/5, canvas.getHeight()/5, false);
+        canvas.drawBitmap(pipeTee,3*wid/5,4 * canvas.getHeight() / 5, paint);
+
+
+        //Use min to avoid going off the bottim or on the board, might be bad way to make scaled if it gets rotated
+        pipeStraight=Bitmap.createScaledBitmap(pipeStraight,Math.min(wid/5, canvas.getHeight()/5), Math.min(canvas.getHeight()/5, wid/5), false);
+        canvas.save();
+
+        canvas.rotate(90, pipeStraight.getWidth() / 2, pipeStraight.getHeight() / 2);
+
+
+        canvas.drawBitmap(pipeStraight,4*canvas.getHeight()/5, -4*wid/5, null);
+
+        canvas.restore();
+
+
     }
 
 
-    public static Bitmap getScaledBitmap(Bitmap b, int reqWidth, int reqHeight)
-    {
-        int bWidth = b.getWidth();
-        int bHeight = b.getHeight();
-
-        int nWidth = reqWidth;
-        int nHeight = reqHeight;
-
-       // float parentRatio = (float) reqHeight / reqWidth;
-
-      //  nHeight = bHeight;
-        //nWidth = (int) (reqWidth * parentRatio);
-       // nWidth = bWidth;
-
-
-        return Bitmap.createScaledBitmap(b, nWidth, nHeight, true);
-    }
-
-
-
-
-
-
-    /**
-     * Pipe bitmaps
-     */
-    private Bitmap pipeStart; //<may be able to combine these into one of each
-    //private Bitmap pipeStartp2;
-    private Bitmap pipeEnd;
-   // private Bitmap pipeEndp2;
-    private Bitmap handle;
 
 
     /**

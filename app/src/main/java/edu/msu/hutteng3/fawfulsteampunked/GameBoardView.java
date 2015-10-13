@@ -2,6 +2,7 @@ package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.res.Configuration;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -58,6 +59,23 @@ public class GameBoardView extends View {
 
 
 
+
+
+
+
+
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+
+        invalidate();
+    }
+
+
+
+
+
+
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         GameBoard host = (GameBoard) this.getContext();
@@ -89,8 +107,8 @@ public class GameBoardView extends View {
     }
 
 
-    public void setScale(int scale){
-        playingArea.setScale(scale);
+    public void setGridSize(int scale){
+        playingArea.setGridSize(scale);
 
     }
 

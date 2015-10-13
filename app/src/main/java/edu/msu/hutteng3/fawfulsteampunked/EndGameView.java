@@ -54,6 +54,8 @@ public class EndGameView extends View {
         canvas.drawText("Loser: "+loser, canvas.getWidth()/4, canvas.getHeight() / 2, paint);
 
 
+
+
     }
 
 
@@ -70,6 +72,9 @@ public class EndGameView extends View {
         loser=toSet;
     }
 
-
-
+// on new gamje button press intent.addFlags
+    //(
+    //Intent.FLAG_ACTIVITY_CLEAR_TOP
+    //)
+//to clear the stack
 }

@@ -50,7 +50,7 @@ public class GameBoard extends AppCompatActivity {
 
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);
-        getGameBoardView().setScale(gridSize);
+        getGameBoardView().setGridSize(gridSize);
     }
 
     @Override
