@@ -11,13 +11,13 @@
         android:id="@+id/gameBoardView"
         android:background="@android:color/white"
         android:layout_alignParentStart="true"
-        android:layout_toLeftOf="@+id/pipeAreaView"
-        android:layout_toStartOf="@+id/pipeAreaView" />
+        android:layout_toLeftOf="@+id/pipeSelectView"
+        android:layout_toStartOf="@+id/pipeSelectView" />
 
     <edu.msu.hutteng3.fawfulsteampunked.PipeSelectView
         android:layout_width="100dp"
         android:layout_height="fill_parent"
-        android:id="@+id/pipeAreaView"
+        android:id="@+id/pipeSelectView"
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />

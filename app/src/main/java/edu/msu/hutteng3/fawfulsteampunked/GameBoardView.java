@@ -3,6 +3,7 @@ package edu.msu.hutteng3.fawfulsteampunked;
 import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.support.annotation.NonNull;
 import android.util.AttributeSet;
@@ -69,6 +70,17 @@ public class GameBoardView extends View {
     }
 
 
+
+    public void setAddPipe(boolean on){playingArea.setAddPipe(on);}
+
+
+
+
+
+    public void setPipeToAdd(Bitmap pipe){
+        playingArea.setPipeToAdd(pipe);
+        invalidate();
+    }
 
     public void setPlayer1name(String name){playingArea.setPlayer1Name(name);}
 

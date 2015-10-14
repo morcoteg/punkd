@@ -66,6 +66,15 @@ public class PlayingArea {
     }
 
 
+    private Bitmap pipeToAdd;
+    public void setPipeToAdd(Bitmap pipe){pipeToAdd=pipe;}
+
+
+
+    private boolean toAdd=false;
+    public void setAddPipe(boolean on){toAdd=on;}
+
+
 
     private int gridSize=5; //default to 5 to avoid divide by 0 error/
     public void setGridSize(int grid){
@@ -93,8 +102,6 @@ public class PlayingArea {
 
     public PlayingArea(Context context) {
 
-
-
         // Load the start pipes
         pipeStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         pipeStraight = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
@@ -103,7 +110,6 @@ public class PlayingArea {
         pipeCap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cap);
         pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
         pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
-
 
     }
 
@@ -120,23 +126,17 @@ public class PlayingArea {
         //the ratio is used to ensure alignment of the pipe parts, disregarding the gaudge
         float ratio=((float)pipeEnd.getHeight())/((float)pipeStart.getHeight());
 
-
         pipeStart=Bitmap.createScaledBitmap(pipeStart, wid / gridSize, hit / gridSize, false);
 
         int newHeight=(int)(ratio*pipeStart.getHeight());
-
-
-
         pipeEnd=Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false);
 
-
         handle=Bitmap.createScaledBitmap(handle, wid/ gridSize,hit/gridSize, false);
+
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
-
-
         paint.setTextSize(42f);
 
         //pipeStart height to get below +42f for text size
@@ -145,67 +145,33 @@ public class PlayingArea {
         //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
         canvas.drawText(player2name, 0, 2 * hit / gridSize + pipeStart.getHeight() + 42f, paint);
 
-        canvas.drawText("touch screen to simulate turn,"
-                , wid/4, hit/2, paint); //NEED TO TAKE OUT FOR FINAL
-
-        canvas.drawText("then choose 'surrender' to go"
-                , wid/4, hit/2+42f, paint); //NEED TO TAKE OUT FOR FINAL
-
-        canvas.drawText("to end of game view."
-                , wid/4, hit/2+84f, paint); //NEED TO TAKE OUT FOR FINAL
-
 
         //Draw the start pipes
-        canvas.save();
-
-       // canvas.translate(pipeStart.getHeight() / 2, pipeStart.getWidth() / 2);
-       // canvas.rotate(90);
-        //canvas.translate(-pipeStart.getHeight()/2, -pipeStart.getWidth()/2);
-        //canvas.drawBitmap(pipeStart, 0, 0, paint);
+        canvas.drawBitmap(pipeStart, 0, 0, paint); //player 1
+        canvas.drawBitmap(pipeStart, 0,2 * hit / gridSize, paint); //player 2
 
 
-        canvas.drawBitmap(pipeStart, 0, 0, paint);
-        //canvas.drawBitmap(pipeStart, 0,hit / gridSize,  paint);//test
-        canvas.drawBitmap(pipeStart, 0,2 * hit / gridSize, paint);
-        //canvas.drawBitmap(pipeStart, 0,3 * hit / gridSize, paint); //test
-        //canvas.drawBitmap(pipeStart, 0,4 * hit / gridSize,  paint); //test
-
-
-        /* Tests to make sure starts and ends are alligned
-        canvas.drawBitmap(pipeStart, pipeStart.getWidth(), 0, paint);
-        canvas.drawBitmap(pipeStart, 2*pipeStart.getWidth(), 0, paint);
-        canvas.drawBitmap(pipeStart,  3 * pipeStart.getWidth(),0, paint);
-        canvas.drawBitmap(pipeStart,  4 * pipeStart.getWidth(),0, paint);
-        canvas.drawBitmap(pipeStart,  5 * pipeStart.getWidth(),0, paint);
-        canvas.drawBitmap(pipeStart,  6 * pipeStart.getWidth(),0, paint);
-        canvas.drawBitmap(pipeStart,  7 * pipeStart.getWidth(),0, paint);
-        canvas.drawBitmap(pipeStart,  8*pipeStart.getWidth(),0, paint);
-*/
-        canvas.restore();
 
 
         //Draw the end pipes
-        canvas.save();
-        int diff=pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the guadge
-        //canvas.rotate(-90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
+        int diff=pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the gaudge
 
-        //canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(), diff, paint); //test
         canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(),  hit/gridSize+diff, paint);
-        //canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 2*hit/gridSize+diff, paint); //test
         canvas.drawBitmap(pipeEnd, wid - pipeEnd.getWidth(),3*hit/gridSize+diff,  paint);
-        //canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 4*hit/gridSize+diff, paint); //test
-
-        canvas.restore();
 
 
         //Draw the handles for the start pipes unrotated
         canvas.drawBitmap(handle, 0, 0, paint);
-        //canvas.drawBitmap(handle, 0,hit/5, paint); //test
         canvas.drawBitmap(handle, 0,2*hit/gridSize, paint);
-        //canvas.drawBitmap(handle, 0,3*hit/5, paint); //test
-        //canvas.drawBitmap(handle, 0,4*hit/5, paint); //test
 
 
+
+
+        //resize and draw the pipe we are adding
+        if (toAdd==true && pipeToAdd !=null) {
+            pipeToAdd=Bitmap.createScaledBitmap(pipeToAdd, wid / gridSize, hit / gridSize, false);
+            canvas.drawBitmap(pipeToAdd, wid / 2, hit / 2, paint);
+        }
     }
 
 
