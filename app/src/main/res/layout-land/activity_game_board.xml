@@ -2,57 +2,24 @@
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="edu.msu.hutteng3.fawfulsteampunked.GameBoard"
-    android:background="@color/green"
-    android:paddingRight="15dp">
+    android:background="@color/green">
 
 
     <edu.msu.hutteng3.fawfulsteampunked.GameBoardView
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="fill_parent"
         android:id="@+id/gameBoardView"
         android:background="@android:color/white"
-        android:layout_toStartOf="@+id/imageViewStraight"
-        android:layout_alignParentStart="false"
-        android:layout_marginRight="15dp" />
+        android:layout_alignParentStart="true"
+        android:layout_toLeftOf="@+id/pipeAreaView"
+        android:layout_toStartOf="@+id/pipeAreaView" />
 
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageView90"
-        android:src="@drawable/pipe90"
-        android:background="@color/green"
-        android:layout_alignParentBottom="true"
-        android:layout_toRightOf="@+id/gameBoardView"
-        android:layout_toEndOf="@+id/gameBoardView" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageViewCap"
-        android:src="@drawable/cap"
-        android:background="@color/green"
+    <edu.msu.hutteng3.fawfulsteampunked.PipeSelectView
+        android:layout_width="100dp"
+        android:layout_height="fill_parent"
+        android:id="@+id/pipeAreaView"
         android:layout_alignParentTop="true"
-        android:layout_toRightOf="@+id/gameBoardView"
-        android:layout_toEndOf="@+id/gameBoardView" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageViewStraight"
-        android:src="@drawable/straight"
-        android:background="@color/green"
-        android:layout_above="@+id/imageView90"
-        android:layout_alignLeft="@+id/imageViewTee"
-        android:layout_alignStart="@+id/imageViewTee" />
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/imageViewTee"
-        android:src="@drawable/tee"
-        android:background="@color/green"
-        android:layout_above="@+id/imageViewStraight"
         android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:layout_marginBottom="15dp" />
+        android:layout_alignParentEnd="true" />
+
 </RelativeLayout>

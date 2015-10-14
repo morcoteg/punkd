@@ -14,8 +14,14 @@
     <string name="buttonHowTo">How To Play</string>
 
     <string name="howToTitle">Rules of the game:</string>
-    <string name="rules">this is where we put the list of rules once we figure out what they are (I honestly have no idea)</string>
+    <string name="rules">Currently, you may only simulate a turn by player 1 and can oly choose \'surrender\' thus making player 1 the loser and player 2 the winner.</string>
 
 
     <color name="green"> #4caf50</color>
+    <string name="title_activity_end_game">EndGame</string>
+
+
+    <string name="buttonNewGame">New Game</string>
+
+    <string name="hello_world">Hello world!</string>
 </resources>

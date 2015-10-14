@@ -1,12 +1,20 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.RectF;
+import android.view.MotionEvent;
+import android.view.View;
+import android.widget.EditText;
+import android.widget.Toast;
 
 /**
  * Created by Tyler on 10/10/2015.
@@ -36,15 +44,14 @@ public class PlayingArea {
 
 
 
-    public void setPlayer1Nmae(String name){
+    public void setPlayer1Name(String name){
         player1name=name;
     }
 
 
-    public void setPlayer2Nmae(String name){
+    public void setPlayer2Name(String name){
         player2name=name;
     }
-
 
 
     /**
@@ -60,22 +67,45 @@ public class PlayingArea {
 
 
 
+    private int gridSize=5; //default to 5 to avoid divide by 0 error/
+    public void setGridSize(int grid){
+        if (grid==0)
+            gridSize=5;
+        else if(grid==1)
+            gridSize=10;
+        else
+            gridSize=20;
+    }
+
+    /**
+     * Pipe bitmaps
+     */
+    private Bitmap pipeStart; //<may be able to combine these into one
+    private Bitmap pipeStraight;
+    private Bitmap pipeEnd;
+    private Bitmap handle;
+    private Bitmap pipeCap;
+    private Bitmap pipe90;
+    private Bitmap pipeTee;
+
+
+
 
     public PlayingArea(Context context) {
 
 
 
         // Load the start pipes
-        pipeStartp1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        pipeStartp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        pipeEndp1 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
-        pipeEndp2 = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
+        pipeStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        pipeStraight = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        pipeEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
         handle=BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
+        pipeCap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cap);
+        pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
+        pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
+
+
     }
-
-
-
-
 
 
 
@@ -86,104 +116,99 @@ public class PlayingArea {
         int wid = canvas.getWidth();
         int hit = canvas.getHeight();
 
-        // Determine the minimum of the two dimensions
-        int minDim = wid < hit ? wid : hit;
-/*
-        puzzleSize = (int) (minDim * SCALE_IN_VIEW);
 
-        // Compute the margins so we center the puzzle
-        marginX = (wid - puzzleSize) / 2;
-        marginY = (hit - puzzleSize) / 2;
-
-        //
-        // Draw the outline of the puzzle
-        //
-
-        //draw the outline square first
-        fillPaint.setColor(Color.rgb(51, 146, 51)); //rgb take int values for a red, green, and blue component to make the dark green
-        canvas.drawRect(marginX - 5, marginY - 5, marginX + puzzleSize + 5, marginY + puzzleSize + 5, fillPaint);
+        //the ratio is used to ensure alignment of the pipe parts, disregarding the gaudge
+        float ratio=((float)pipeEnd.getHeight())/((float)pipeStart.getHeight());
 
 
-        //change paint color to grey and create the puzzle area
-        fillPaint.setColor(0xffcccccc);
-        canvas.drawRect(marginX, marginY, marginX + puzzleSize, marginY + puzzleSize, fillPaint);
+        pipeStart=Bitmap.createScaledBitmap(pipeStart, wid / gridSize, hit / gridSize, false);
+
+        int newHeight=(int)(ratio*pipeStart.getHeight());
 
 
-        scaleFactor = (float) puzzleSize / (float) puzzleComplete.getWidth();
 
-        canvas.save();
-        canvas.translate(marginX, marginY);
-        canvas.scale(scaleFactor, scaleFactor);
-
-        //If the puzzle is solved, display the final image and not the pieces
-        if (isComplete)
-            canvas.drawBitmap(puzzleComplete, 0, 0, null);
+        pipeEnd=Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false);
 
 
-        canvas.restore();
-        if(!isComplete) {
-            for (PuzzlePiece piece : pieces) {
-                piece.draw(canvas, marginX, marginY, puzzleSize, scaleFactor);
-            }
-        }
-
-        */
-
+        handle=Bitmap.createScaledBitmap(handle, wid/ gridSize,hit/gridSize, false);
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
 
 
-        paint.setTextSize(48f);
+        paint.setTextSize(42f);
 
-        canvas.drawText(player1name, 0, canvas.getHeight() / 6, paint);
-        canvas.drawText(player2name, 0, canvas.getHeight() / 2, paint);
+        //pipeStart height to get below +42f for text size
+        canvas.drawText(player1name, 0, pipeStart.getHeight() + 42f, paint);
+
+        //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
+        canvas.drawText(player2name, 0, 2 * hit / gridSize + pipeStart.getHeight() + 42f, paint);
+
+        canvas.drawText("touch screen to simulate turn,"
+                , wid/4, hit/2, paint); //NEED TO TAKE OUT FOR FINAL
+
+        canvas.drawText("then choose 'surrender' to go"
+                , wid/4, hit/2+42f, paint); //NEED TO TAKE OUT FOR FINAL
+
+        canvas.drawText("to end of game view."
+                , wid/4, hit/2+84f, paint); //NEED TO TAKE OUT FOR FINAL
 
 
-
-
-        //this works on the 7 in portrait, looks really bad in landscape
-        //due to all the hardcoded ratios being there for testing to ake sure rotate was working
+        //Draw the start pipes
         canvas.save();
-        canvas.translate(pipeStartp1.getWidth() / 2, pipeStartp1.getHeight() / 2);
-        canvas.rotate(-90);
-        canvas.drawBitmap(pipeStartp1,- hit / 4, -pipeStartp1.getHeight() / 2, paint);
-        canvas.drawBitmap(pipeStartp2, -9*hit / 16, -pipeStartp1.getHeight() / 2, paint);
+
+       // canvas.translate(pipeStart.getHeight() / 2, pipeStart.getWidth() / 2);
+       // canvas.rotate(90);
+        //canvas.translate(-pipeStart.getHeight()/2, -pipeStart.getWidth()/2);
+        //canvas.drawBitmap(pipeStart, 0, 0, paint);
 
 
+        canvas.drawBitmap(pipeStart, 0, 0, paint);
+        //canvas.drawBitmap(pipeStart, 0,hit / gridSize,  paint);//test
+        canvas.drawBitmap(pipeStart, 0,2 * hit / gridSize, paint);
+        //canvas.drawBitmap(pipeStart, 0,3 * hit / gridSize, paint); //test
+        //canvas.drawBitmap(pipeStart, 0,4 * hit / gridSize,  paint); //test
 
-        canvas.drawBitmap(pipeEndp1, - 3*wid /8 , pipeStartp1.getHeight() * 4f, paint);
-        canvas.drawBitmap(pipeEndp2,- 11*wid/16, pipeStartp1.getHeight()*4f, paint);
 
-        canvas.translate(-pipeStartp1.getWidth() / 2, -pipeStartp1.getHeight() / 2);
+        /* Tests to make sure starts and ends are alligned
+        canvas.drawBitmap(pipeStart, pipeStart.getWidth(), 0, paint);
+        canvas.drawBitmap(pipeStart, 2*pipeStart.getWidth(), 0, paint);
+        canvas.drawBitmap(pipeStart,  3 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  4 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  5 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  6 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  7 * pipeStart.getWidth(),0, paint);
+        canvas.drawBitmap(pipeStart,  8*pipeStart.getWidth(),0, paint);
+*/
         canvas.restore();
 
 
-        canvas.drawBitmap(handle, 0, 3*hit / 16, paint);
+        //Draw the end pipes
+        canvas.save();
+        int diff=pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the guadge
+        //canvas.rotate(-90, pipeStart.getWidth() / 2, pipeStart.getHeight() / 2);
 
-        canvas.drawBitmap(handle, 0,hit / 2, paint);
+        //canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(), diff, paint); //test
+        canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(),  hit/gridSize+diff, paint);
+        //canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 2*hit/gridSize+diff, paint); //test
+        canvas.drawBitmap(pipeEnd, wid - pipeEnd.getWidth(),3*hit/gridSize+diff,  paint);
+        //canvas.drawBitmap(pipeEnd,wid - pipeEnd.getWidth(), 4*hit/gridSize+diff, paint); //test
 
+        canvas.restore();
+
+
+        //Draw the handles for the start pipes unrotated
+        canvas.drawBitmap(handle, 0, 0, paint);
+        //canvas.drawBitmap(handle, 0,hit/5, paint); //test
+        canvas.drawBitmap(handle, 0,2*hit/gridSize, paint);
+        //canvas.drawBitmap(handle, 0,3*hit/5, paint); //test
+        //canvas.drawBitmap(handle, 0,4*hit/5, paint); //test
 
 
     }
 
 
-
-
-
-
-
-
-
-    /**
-     * Pipe bitmaps
-     */
-    private Bitmap pipeStartp1; //<may be able to combine these into one of each
-    private Bitmap pipeStartp2;
-    private Bitmap pipeEndp1;
-    private Bitmap pipeEndp2;
-    private Bitmap handle;
 
 
     /**
@@ -267,4 +292,29 @@ public class PlayingArea {
          */
         return start.search();
     }
+
+
+
+
+
+    /**
+     * Handle a touch event from the view.
+     *
+     * @param view  The view that is the source of the touch
+     * @param event The motion event describing the touch
+     * @return true if the touch is handled.
+     */
+ /*   public boolean onTouchEvent(View view, MotionEvent event) {
+
+       //we'll need ths for move and place I think
+
+
+        return false;
+    }
+
+*/
+
+
+
+
 }
