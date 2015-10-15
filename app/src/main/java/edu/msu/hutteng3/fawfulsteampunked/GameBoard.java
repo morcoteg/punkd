@@ -49,6 +49,9 @@ public class GameBoard extends AppCompatActivity {
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);
         getGameBoardView().setGridSize(gridSize);
+
+        //give the pipe select view a path to the game board view
+        getPipeSelectView().setGameBoardView(getGameBoardView());
     }
 
     @Override
@@ -82,6 +85,14 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
+    /**
+     * The pipeSelectView view object
+     */
+    private PipeSelectView getPipeSelectView() {
+        return (PipeSelectView) findViewById(R.id.pipeSelectView);
+    }
+
+
 
     public void setP1Name(){
         getGameBoardView().setPlayer1name(Integer.toString(R.id.player1));
@@ -108,7 +119,7 @@ public class GameBoard extends AppCompatActivity {
 
         String thing=player1name;
         builder.setItems(new CharSequence[]
-                        {"Add a pipe (disabled)", "Delete a pipe(disabled)", "Surrender", "Open valve(disabled)"},
+                        {"Add a pipe", "Discard a pipe", "Surrender", "Open valve(disabled)"},
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
@@ -116,12 +127,13 @@ public class GameBoard extends AppCompatActivity {
                         switch (which) {
                             case 0:
                                 //add
-                                // Toast.makeText(hope, "clicked 1",0).show();
-                                int x=0;
+                                getGameBoardView().setAddPipe(true);
+                                getPipeSelectView().setDiscard(false);
                                 break;
                             case 1:
                                 //delete
-                                //Toast.makeText(hope, "clicked 2", 0).show();
+                                getGameBoardView().setAddPipe(false);
+                                getPipeSelectView().setDiscard(true);
                                 break;
                             case 2:
                                 //surrender
@@ -129,13 +141,19 @@ public class GameBoard extends AppCompatActivity {
                                 break;
                             case 3:
                                 //open valve
-                                //Toast.makeText(hope, "clicked 4", 0).show();
+                                getGameBoardView().setAddPipe(false);
+                                getPipeSelectView().setDiscard(false);
                                 break;
                         }
                     }
                 });
         builder.create().show();
     }
+
+
+
+
+
 
 
 
