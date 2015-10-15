@@ -73,13 +73,13 @@ public class PipeArea {
 
         if (discard && touchedPipePos!=-1) {
             discardPipe();
-            discard=false; //neew to set to false because you can oly generate 1 new pipe at a time
-            touchedPipePos=-1;
+            discard = false; //neew to set to false because you can oly generate 1 new pipe at a time
+            touchedPipePos =- 1;
         }
 
-        for (int count=0; count<5;count++){
-            Bitmap pipe=order.elementAt(count);
-            if(pipe.sameAs(pipeStraight))
+        for (int count = 0; count < 5; count++){
+            Bitmap pipe = order.elementAt(count);
+            if (pipe.sameAs(pipeStraight))
                 drawStraightPipe(canvas,count, pipe,wid, hit, orentation, paint);
             else
                 drawNotStraightPipe(canvas,count, pipe,wid, hit, orentation, paint);
@@ -112,15 +112,15 @@ public class PipeArea {
 
     public void drawStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation, Paint paint){
 
-        pipe= Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
+        pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
         canvas.save();
-        if (orentation==wid)
-            pipe=Bitmap.createScaledBitmap(pipe,hit, wid/5, false);//<need to resize due to rotation
+        if (orentation == wid)
+            pipe = Bitmap.createScaledBitmap(pipe,hit, wid/5, false);//<need to resize due to rotation
 
         canvas.rotate(90, pipe.getWidth() / 2, pipe.getHeight() / 2);
 
         //we are in portrait
-        if (orentation==wid) {
+        if (orentation == wid) {
             //subtract (pipeStraight.getHeight()-hit)/2 due to the roatation and the translation done
             canvas.drawBitmap(pipe, -(pipe.getHeight() - hit) / 2, -offset * wid / 5 - (pipe.getHeight()-hit)/2, null);
         }

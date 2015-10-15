@@ -63,8 +63,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private int gridSize = 0;
 
-    public void setGrid(int size){
-        gridSize=size;
+    public void setGrid(int size) {
+        gridSize = size;
     }
 
 

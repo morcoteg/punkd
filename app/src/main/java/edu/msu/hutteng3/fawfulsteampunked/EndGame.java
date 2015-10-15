@@ -30,6 +30,7 @@ public class EndGame extends AppCompatActivity {
 
 
     private EndGameView getEndGameView() {
+
         return (EndGameView) findViewById(R.id.endGameView);
     }
 

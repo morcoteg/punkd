@@ -34,17 +34,17 @@ public class GameBoard extends AppCompatActivity {
 
         Bundle extras = getIntent().getExtras();
 
-        String p1= extras.getString("PLAYER_1_NAME");
-        String p2= extras.getString("PLAYER_2_NAME");
-        int gridSize=extras.getInt("GRID_SIZE");
+        String p1 = extras.getString("PLAYER_1_NAME");
+        String p2 = extras.getString("PLAYER_2_NAME");
+        int gridSize = extras.getInt("GRID_SIZE");
 
 
-        player1name=p1;
-        player2name=p2;
+        player1name = p1;
+        player2name = p2;
 
         //set these to initially be p1 for curerent and p2 for other to give the first player the first move
-        currentPlayer=p1;
-        otherPlayer=p2;
+        currentPlayer = p1;
+        otherPlayer = p2;
 
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);

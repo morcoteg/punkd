@@ -82,13 +82,17 @@ public class GameBoardView extends View {
         invalidate();
     }
 
-    public void setPlayer1name(String name){playingArea.setPlayer1Name(name);}
+    public void setPlayer1name(String name){
+        playingArea.setPlayer1Name(name);
+    }
 
     public void setPlayer2name(String name){
         playingArea.setPlayer2Name(name);
     }
 
-    public void setGridSize(int scale){playingArea.setGridSize(scale);}
+    public void setGridSize(int scale){
+        playingArea.setGridSize(scale);
+    }
 
 
 }

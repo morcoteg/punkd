@@ -97,12 +97,12 @@ public class Pipe {
             /*
              * If no connection this direction, ignore
              */
-            if(!connect[d]) {
+            if (!connect[d]) {
                 continue;
             }
 
             Pipe n = neighbor(d);
-            if(n == null) {
+            if (n == null) {
                 // We leak
                 // We have a connection with nothing on the other side
                 return false;
@@ -114,18 +114,18 @@ public class Pipe {
             // the other pipe must have a connection
             // in direction 3 (west)
             int dp = (d + 2) % 4;
-            if(!n.connect[dp]) {
+            if (!n.connect[dp]) {
                 // We have a bad connection, the other side is not
                 // a flange to connect to
                 return false;
             }
 
-            if(n.visited) {
+            if (n.visited) {
                 // Already visited this one, so no leaks this way
                 continue;
             } else {
                 // Is there a lead in that direction
-                if(!n.search()) {
+                if (!n.search()) {
                     // We found a leak downstream of this pipe
                     return false;
                 }
