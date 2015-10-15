@@ -49,23 +49,24 @@ public class PipeArea {
 
     private int cwidth;
     private int cheight;
-
+    private int margin=20;
 
 
     public void draw(Canvas canvas) {
 
-        int wid = canvas.getWidth();
-        int hit = canvas.getHeight();
+        int wid = canvas.getWidth()-margin;
+        int hit = canvas.getHeight()-margin;
 
 
-        //used for on touch
-        cwidth=wid;
-        cheight=hit;
 
 
 
         int orentation=Math.max(hit, wid);
 
+
+        //used for on touch, the real canvas size )may need to remove the argin addition, needs to be tested on the 4 and S
+        cwidth=wid+margin;
+        cheight=hit+margin;
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -73,7 +74,7 @@ public class PipeArea {
 
         if (discard && touchedPipePos!=-1) {
             discardPipe();
-            discard = false; //neew to set to false because you can oly generate 1 new pipe at a time
+            discard = false; //need to set to false because you can oly generate 1 new pipe at a time
             touchedPipePos =- 1;
         }
 
@@ -98,14 +99,14 @@ public class PipeArea {
 
 
 
-    public void drawNotStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation, Paint paint){
+    public void drawNotStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation, Paint paint) {
 
         pipe= Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
         if (orentation==wid)
-            canvas.drawBitmap(pipe, offset*wid/5, 0, paint);
+            canvas.drawBitmap(pipe, offset*wid/5, margin/2, paint);
         //we are in landscape
         else
-            canvas.drawBitmap(pipe, 0, offset * hit / 5, paint);
+            canvas.drawBitmap(pipe, margin/2, offset * hit / 5, paint);
 
     }
 
@@ -121,12 +122,12 @@ public class PipeArea {
 
         //we are in portrait
         if (orentation == wid) {
-            //subtract (pipeStraight.getHeight()-hit)/2 due to the roatation and the translation done
-            canvas.drawBitmap(pipe, -(pipe.getHeight() - hit) / 2, -offset * wid / 5 - (pipe.getHeight()-hit)/2, null);
+            //subtract (pipeStraight.getHeight()-hit)/2 due to the rotation and the translation done
+            canvas.drawBitmap(pipe, -(pipe.getHeight() - hit) / 2 + margin/2, -offset * wid / 5 - (pipe.getHeight()-hit)/2, null);
         }
         //we are in landscape
         else
-            canvas.drawBitmap(pipe,  offset * hit / 5,0, null);
+            canvas.drawBitmap(pipe,  offset * hit / 5, -margin/2, null);
         canvas.restore();
     }
 
