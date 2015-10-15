@@ -30,14 +30,36 @@ public class Pipe {
     private boolean[] connect = {false, false, false, false};
 
     /**
+     * X location in the playing area
+     */
+    private float x = 0;
+    public float getX(){return x;}
+    public void setX(float newX){x=newX;}
+
+    /**
+     * Y location in the playing area
+     */
+    private float y = 0;
+    public float getY(){return y;}
+    public void setY(float newY){y=newY;}
+
+
+
+
+    /**
      * X location in the playing area (index into array)
      */
-    private int x = 0;
+    private int xIndex = 0;
+
 
     /**
      * Y location in the playing area (index into array)
      */
-    private int y = 0;
+    private int yIndex = 0;
+
+
+
+
 
     /**
      * Depth-first visited visited
@@ -144,16 +166,16 @@ public class Pipe {
     private Pipe neighbor(int d) {
         switch(d) {
             case 0:
-                return playingArea.getPipe(x, y-1);
+                return playingArea.getPipe(xIndex, yIndex-1);
 
             case 1:
-                return playingArea.getPipe(x+1, y);
+                return playingArea.getPipe(xIndex+1, yIndex);
 
             case 2:
-                return playingArea.getPipe(x, y+1);
+                return playingArea.getPipe(xIndex, yIndex+1);
 
             case 3:
-                return playingArea.getPipe(x-1, y);
+                return playingArea.getPipe(xIndex-1, yIndex);
         }
 
         return null;
@@ -175,8 +197,8 @@ public class Pipe {
      */
     public void set(PlayingArea playingArea, int x, int y) {
         this.playingArea = playingArea;
-        this.x = x;
-        this.y = y;
+        this.xIndex = x;
+        this.yIndex = y;
     }
 
     /**
@@ -194,4 +216,58 @@ public class Pipe {
     public void setVisited(boolean visited) {
         this.visited = visited;
     }
+
+
+
+    private Bitmap bitmap;
+    public void setBitmap(Bitmap newMap){bitmap=newMap;}
+    public Bitmap getBitmap() {return bitmap;}
+
+
+    /**
+     * Move the puzzle piece by dx, dy
+     * @param dx x amount to move
+     * @param dy y amount to move
+     */
+    public void move(float dx, float dy) {
+        x += dx;
+        y += dy;
+    }
+
+
+
+
+
+
+
+
+
+
+    /**
+     * Test to see if we have touched a pipe
+     * @param testX X location as a normalized coordinate (0 to 1)
+     * @param testY Y location as a normalized coordinate (0 to 1)
+     * @param puzzleSize the size of the puzzle in pixels
+     * @param scaleFactor the amount to scale a piece by
+     * @return true if we hit the piece
+     */
+    public boolean hit(float testX, float testY, int puzzleSize, float scaleFactor) {
+
+        // Make relative to the location and size to the piece size
+
+        //MAY NEED TO CHANGE WHEN BOARD IS UNIFORM SIZE
+
+        int pX = (int)((testX -x) * puzzleSize) + bitmap.getWidth()/8; //I have no idea why /2 failed but /8 works
+        int pY = (int)((testY-y ) * puzzleSize) + bitmap.getHeight()/8;
+
+
+        if(pX < 0 || pX >= bitmap.getWidth() || pY < 0 || pY >= bitmap.getHeight())
+            return false;
+        else
+        // We are within the rectangle of the piece.
+        // Are we touching actual picture?
+             return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
+    }
+
+
 }

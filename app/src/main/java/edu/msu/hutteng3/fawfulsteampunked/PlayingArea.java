@@ -37,8 +37,7 @@ public class PlayingArea {
     private Pipe [][] pipes;
 
 
-
-
+    
     private String player1name;
     private String player2name;
 
@@ -54,25 +53,17 @@ public class PlayingArea {
     }
 
 
-    /**
-     * Image drawing scale
-     */
-    private float imageScale = 1;
-
-
-
-    public void setScale(int scale){
-        imageScale = scale;
-    }
-
-
-    private Bitmap pipeToAdd;
-    public void setPipeToAdd(Bitmap pipe){pipeToAdd = pipe;}
+    private Pipe pipeToAdd;
+    public void setPipeToAdd(Bitmap pipe){pipeToAdd.setBitmap(pipe);}
 
 
 
     private boolean toAdd = false;
-    public void setAddPipe(boolean on){ toAdd = on;}
+    public void setAddPipe(boolean on){
+        toAdd = on;
+        pipeToAdd.setX(0.5f);
+        pipeToAdd.setY(0.5f);
+    }
 
 
 
@@ -99,6 +90,13 @@ public class PlayingArea {
 
 
 
+    /**
+     * Percentage of the display width or height that
+     * is occupied by the playing area.
+     * since the button and the pipe select parts each take up 100dp a piece
+     */
+    final static float SCALE_IN_VIEW = 0.8f;
+
 
     public PlayingArea(Context context) {
 
@@ -111,6 +109,10 @@ public class PlayingArea {
         pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
         pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
 
+
+
+
+        pipeToAdd=new Pipe(context,1);
     }
 
 
@@ -121,6 +123,30 @@ public class PlayingArea {
 
         int wid = canvas.getWidth();
         int hit = canvas.getHeight();
+
+        width=wid;
+        height=hit;
+
+
+
+
+
+
+
+        // Determine the minimum of the two dimensions
+        int minDim = wid < hit ? hit : wid;
+
+        gridPix = (int) (minDim * SCALE_IN_VIEW); //that scale in view may only hold for the 7, need to check 4 and S
+
+
+
+
+
+
+
+
+
+
 
 
         //the ratio is used to ensure alignment of the pipe parts, disregarding the gaudge
@@ -169,8 +195,11 @@ public class PlayingArea {
 
         //resize and draw the pipe we are adding
         if (toAdd == true && pipeToAdd != null) {
-            pipeToAdd = Bitmap.createScaledBitmap(pipeToAdd, wid / gridSize, hit / gridSize, false);
-            canvas.drawBitmap(pipeToAdd, wid / 2, hit / 2, paint);
+            float x=pipeToAdd.getX();
+            float y=pipeToAdd.getY();
+
+            pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
+            canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX()*wid, pipeToAdd.getY()*hit, paint);
         }
     }
 
@@ -263,6 +292,24 @@ public class PlayingArea {
 
 
 
+
+    /**
+     * Most recent relative X touch when dragging
+     */
+    private float lastRelX;
+
+    /**
+     * Most recent relative Y touch when dragging
+     */
+    private float lastRelY;
+
+    /**
+     * The size of the grid in pixels
+     */
+    private int gridPix;
+
+
+
     /**
      * Handle a touch event from the view.
      *
@@ -270,15 +317,115 @@ public class PlayingArea {
      * @param event The motion event describing the touch
      * @return true if the touch is handled.
      */
- /*   public boolean onTouchEvent(View view, MotionEvent event) {
+    public boolean onTouchEvent(View view, MotionEvent event) {
 
-       //we'll need ths for move and place I think
+        //
+        // Convert an x,y location to a relative location in the
+        // puzzle.
+        //
+
+        float relX = (event.getX(0)) / width;
+        float relY = (event.getY(0)) / height;
+
+        switch(event.getAction()) {
+
+            case MotionEvent.ACTION_DOWN:
+                return onTouched(relX, relY);
+
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                return onReleased(view, relX, relY);
+
+            case MotionEvent.ACTION_MOVE:
+
+                if(pipeToAdd != null) {
+
+                    pipeToAdd.move(relX - lastRelX, relY - lastRelY);
+                    lastRelX = relX;
+                    lastRelY = relY;
+                    view.invalidate();
+                    return true;
+                }
+                break;
+        }
 
 
         return false;
     }
 
-*/
+
+
+
+    /**
+     * Handle a touch message. This is when we get an initial touch
+     *
+     * @param x x location for the touch, relative to the puzzle - 0 to 1 over the puzzle
+     * @param y y location for the touch, relative to the puzzle - 0 to 1 over the puzzle
+     * @return true if the touch is handled
+     */
+    private boolean onTouched(float x, float y) {
+
+        float scaleFactor=(float)Math.pow(gridSize,2);
+        if (pipeToAdd.getBitmap() !=null){
+            if(pipeToAdd.hit(x, y, gridPix, 1)) {
+                // We hit a pipe
+                lastRelX = x;
+                lastRelY = y;
+                return true;
+           }
+
+        }
+
+        return false;
+    }
+
+
+    /**
+     * Handle a release of a touch message.
+     * @param x x location for the touch release, relative to the puzzle - 0 to 1 over the puzzle
+     * @param y y location for the touch release, relative to the puzzle - 0 to 1 over the puzzle
+     * @return true if the touch is handled
+     */
+    private boolean onReleased(View view, float x, float y) {
+        if(pipeToAdd != null) {
+           /* if(dragging.maybeSnap()) {
+                // We have snapped into place
+                view.invalidate();
+
+                //Delete the piece being dragged and reinsert at the start to fix overlapping
+                pieces.remove(pieces.indexOf(dragging));
+                pieces.add(0,dragging);
+
+                if(isDone()) {
+
+                    pView=(PuzzleView)view; //<probably a better way to do this since casting isn't a good idea
+                    isComplete=true; //<set true so we can draw the final image
+
+                    // The puzzle is done
+                    // Instantiate a dialog box builder
+                    AlertDialog.Builder builder =
+                            new AlertDialog.Builder(view.getContext());
+
+                    ShuffleListener listener = new ShuffleListener();
+
+                    // Parameterize the builder
+                    builder.setTitle(R.string.hurrah);
+                    builder.setMessage(R.string.completed_puzzle);
+                    builder.setPositiveButton(android.R.string.ok, null);
+                    builder.setNegativeButton(R.string.shuffle, listener);
+
+                    // Create the dialog box and show it
+                    AlertDialog alertDialog = builder.create();
+                    alertDialog.show();
+
+                }
+            }*/
+            //pipeToAdd = null;
+            return true;
+        }
+
+        return false;
+    }
 
 
 

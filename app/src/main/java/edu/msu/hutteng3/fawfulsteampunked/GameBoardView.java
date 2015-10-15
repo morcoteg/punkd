@@ -58,7 +58,7 @@ public class GameBoardView extends View {
     public boolean onTouchEvent(@NonNull MotionEvent event) {
        // GameBoard host = (GameBoard) this.getContext();
 
-        return false;
+        return playingArea.onTouchEvent(this,event);
     }
 
 
