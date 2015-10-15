@@ -36,7 +36,7 @@ public class PipeSelectView extends View {
     private PipeArea pipeSelect;
     private void init(AttributeSet attrs, int defStyle) {
 
-        pipeSelect= new PipeArea(getContext());
+        pipeSelect = new PipeArea(getContext());
 
     }
 

@@ -62,28 +62,28 @@ public class PlayingArea {
 
 
     public void setScale(int scale){
-        imageScale=scale;
+        imageScale = scale;
     }
 
 
     private Bitmap pipeToAdd;
-    public void setPipeToAdd(Bitmap pipe){pipeToAdd=pipe;}
+    public void setPipeToAdd(Bitmap pipe){pipeToAdd = pipe;}
 
 
 
-    private boolean toAdd=false;
-    public void setAddPipe(boolean on){toAdd=on;}
+    private boolean toAdd = false;
+    public void setAddPipe(boolean on){ toAdd = on;}
 
 
 
-    private int gridSize=5; //default to 5 to avoid divide by 0 error/
+    private int gridSize = 5; //default to 5 to avoid divide by 0 error/
     public void setGridSize(int grid){
-        if (grid==0)
-            gridSize=5;
-        else if(grid==1)
-            gridSize=10;
+        if (grid == 0)
+            gridSize = 5;
+        else if(grid == 1)
+            gridSize = 10;
         else
-            gridSize=20;
+            gridSize = 20;
     }
 
     /**
@@ -106,7 +106,7 @@ public class PlayingArea {
         pipeStart = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         pipeStraight = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         pipeEnd = BitmapFactory.decodeResource(context.getResources(), R.drawable.gauge);
-        handle=BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
+        handle = BitmapFactory.decodeResource(context.getResources(), R.drawable.handle);
         pipeCap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cap);
         pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
         pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
@@ -124,14 +124,14 @@ public class PlayingArea {
 
 
         //the ratio is used to ensure alignment of the pipe parts, disregarding the gaudge
-        float ratio=((float)pipeEnd.getHeight())/((float)pipeStart.getHeight());
+        float ratio = ((float)pipeEnd.getHeight()) / ((float)pipeStart.getHeight());
 
-        pipeStart=Bitmap.createScaledBitmap(pipeStart, wid / gridSize, hit / gridSize, false);
+        pipeStart = Bitmap.createScaledBitmap(pipeStart, wid / gridSize, hit / gridSize, false);
 
-        int newHeight=(int)(ratio*pipeStart.getHeight());
-        pipeEnd=Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false);
+        int newHeight = (int)(ratio*pipeStart.getHeight());
+        pipeEnd = Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false);
 
-        handle=Bitmap.createScaledBitmap(handle, wid/ gridSize,hit/gridSize, false);
+        handle = Bitmap.createScaledBitmap(handle, wid/ gridSize,hit/gridSize, false);
 
 
         Paint paint = new Paint();
@@ -154,7 +154,7 @@ public class PlayingArea {
 
 
         //Draw the end pipes
-        int diff=pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the gaudge
+        int diff = pipeStart.getHeight()-pipeEnd.getHeight(); //<the amount we need to adjust due to the gaudge
 
         canvas.drawBitmap(pipeEnd, wid- pipeEnd.getWidth(),  hit/gridSize+diff, paint);
         canvas.drawBitmap(pipeEnd, wid - pipeEnd.getWidth(),3*hit/gridSize+diff,  paint);
@@ -168,8 +168,8 @@ public class PlayingArea {
 
 
         //resize and draw the pipe we are adding
-        if (toAdd==true && pipeToAdd !=null) {
-            pipeToAdd=Bitmap.createScaledBitmap(pipeToAdd, wid / gridSize, hit / gridSize, false);
+        if (toAdd == true && pipeToAdd != null) {
+            pipeToAdd = Bitmap.createScaledBitmap(pipeToAdd, wid / gridSize, hit / gridSize, false);
             canvas.drawBitmap(pipeToAdd, wid / 2, hit / 2, paint);
         }
     }
@@ -218,7 +218,7 @@ public class PlayingArea {
      * @return Reference to Pipe object or null if none exists
      */
     public Pipe getPipe(int x, int y) {
-        if(x < 0 || x >= width || y < 0 || y >= height) {
+        if (x < 0 || x >= width || y < 0 || y >= height) {
             return null;
         }
 

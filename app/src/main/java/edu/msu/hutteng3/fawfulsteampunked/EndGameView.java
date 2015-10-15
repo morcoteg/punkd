@@ -46,8 +46,8 @@ public class EndGameView extends View {
         paint.setTextSize(48f);
 
 
-        canvas.drawText("Winner: "+winner, canvas.getWidth()/4, canvas.getHeight() / 6, paint);
-        canvas.drawText("Loser: "+loser, canvas.getWidth()/4, canvas.getHeight() / 2, paint);
+        canvas.drawText("Winner: "+ winner, canvas.getWidth()/4, canvas.getHeight() / 6, paint);
+        canvas.drawText("Loser: "+ loser, canvas.getWidth()/4, canvas.getHeight() / 2, paint);
 
 
     }
@@ -59,11 +59,11 @@ public class EndGameView extends View {
     public String loser;
 
     public void setWinner(String toSet){
-        winner=toSet;
+        winner = toSet;
     }
 
     public void setLoser(String toSet){
-        loser=toSet;
+        loser = toSet;
     }
 
 
