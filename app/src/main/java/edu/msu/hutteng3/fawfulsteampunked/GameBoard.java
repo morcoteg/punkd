@@ -110,7 +110,7 @@ public class GameBoard extends AppCompatActivity {
     private String otherPlayer;
 
 
-    public void newTurn(){
+    public void newTurn(View view){
         //Needs to be moved somewhere else to not have the player name come up as NULL
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
 

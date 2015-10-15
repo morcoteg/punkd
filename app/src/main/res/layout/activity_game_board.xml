@@ -21,8 +21,18 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
+        android:background="@color/green"
+        android:layout_toLeftOf="@+id/buttonSim"
+        android:layout_toStartOf="@+id/buttonSim" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/sim_turn"
+        android:id="@+id/buttonSim"
+        android:layout_below="@+id/gameBoardView"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:background="@color/green" />
+        android:onClick="newTurn" />
 
 </RelativeLayout>
