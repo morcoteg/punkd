@@ -48,7 +48,7 @@ public class PlayingArea {
     private Touch touch2 = new Touch();
 
 
-    
+
     private String player1name;
     private String player2name;
 
