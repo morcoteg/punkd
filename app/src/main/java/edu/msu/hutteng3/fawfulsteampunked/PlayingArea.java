@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
@@ -21,6 +22,9 @@ import android.widget.Toast;
  * Created by Tyler on 10/10/2015.
  */
 public class PlayingArea {
+
+    private static final String PARAMETERS = "parameters";
+
     /**
      * Width of the playing area (integer number of cells)
      */
@@ -560,6 +564,33 @@ public class PlayingArea {
 
         pipeToAdd.setX(xp / width);
         pipeToAdd.setY(yp / height);
+    }
+
+
+    /**
+     * Save the view state to a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to save to
+     */
+    public void putToBundle(String key, Bundle bundle ) {
+
+        //iterate through the existing pipes urine
+        for (Pipe[] pipeArray : pipes){
+            for (Pipe pipe  : pipeArray){
+                //pipe.putToBundle(PARAMETERS, outState);
+            }
+        }
+
+    }
+
+    /**
+     * Get the view state from a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to load from
+     */
+    public void getFromBundle(String key, Bundle bundle) {
+
+
     }
 
     //////////////////////////////////////////////// NESTED CLASS touch ///////////////////////////

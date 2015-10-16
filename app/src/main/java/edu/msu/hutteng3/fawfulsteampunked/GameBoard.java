@@ -23,7 +23,7 @@ public class GameBoard extends AppCompatActivity {
     public static final int GRID_10 = 1;
     public static final int GRID_20 = 2;
 
-
+    private static final String PARAMETERS = "parameters";
 
 
     @Override
@@ -151,12 +151,6 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
     public void surrender(String winner, String loser) {
         Intent intent = new Intent(this, EndGame.class);
 
@@ -166,6 +160,14 @@ public class GameBoard extends AppCompatActivity {
         startActivity(intent);
     }
 
+
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+        getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
+    }
 
 }
 
