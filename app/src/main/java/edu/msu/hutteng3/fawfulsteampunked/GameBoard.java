@@ -119,7 +119,7 @@ public class GameBoard extends AppCompatActivity {
 
         String thing=player1name;
         builder.setItems(new CharSequence[]
-                        {"Add a pipe", "Discard a pipe", "Surrender", "Open valve(disabled)"},
+                        {"Add a pipe", "Discard a pipe", "Surrender", "Open valve"},
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int which) {
                         // The 'which' argument contains the index position
@@ -143,6 +143,11 @@ public class GameBoard extends AppCompatActivity {
                                 //open valve
                                 getGameBoardView().setAddPipe(false);
                                 getPipeSelectView().setDiscard(false);
+                                getGameBoardView().setOpened(true,currentPlayer);
+                                getGameBoardView().invalidate();
+                                String temp=currentPlayer;
+                                currentPlayer=otherPlayer;
+                                otherPlayer=temp;
                                 break;
                         }
                     }
@@ -166,7 +171,7 @@ public class GameBoard extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
+        //getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
     }
 
 }

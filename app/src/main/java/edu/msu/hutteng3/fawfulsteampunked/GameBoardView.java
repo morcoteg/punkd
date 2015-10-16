@@ -97,4 +97,7 @@ public class GameBoardView extends View {
 
     public PlayingArea getPlayingArea(){return playingArea;}
 
+
+    public void setOpened(boolean toOpen,String currentPlayer){playingArea.setOpened(toOpen,currentPlayer);}
+
 }

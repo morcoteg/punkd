@@ -131,6 +131,12 @@ public class PlayingArea {
     }
 
 
+    private boolean opened=false;
+    private String openingPlayer;
+    public void setOpened(boolean toOpen, String currentPlayer){
+        opened=toOpen;
+        openingPlayer=currentPlayer;
+    }
 
 
 
@@ -186,10 +192,33 @@ public class PlayingArea {
         canvas.drawBitmap(pipeEnd, wid - pipeEnd.getWidth(),3*hit/gridSize+diff,  paint);
 
 
-        //Draw the handles for the start pipes unrotated
-        canvas.drawBitmap(handle, 0, 0, paint);
-        canvas.drawBitmap(handle, 0,2*hit/gridSize, paint);
+        if (opened) {
+            //Draw a rotated hadle for P1 and an unrotated for P2
+            if(openingPlayer==player1name) {
+                canvas.save();
+                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2);
+                canvas.drawBitmap(handle, 0, 0, paint);
+                canvas.restore();
+                canvas.drawBitmap(handle, 0, 2 * hit / gridSize, paint);
+            }
+            //Draw a rotated hadle for P2 and an unrotated for P1
+            else {
+                canvas.save();
+                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2+2 * hit / gridSize);
+                canvas.drawBitmap(handle, 0, 2 * hit / gridSize, paint);
+                canvas.restore();
+                canvas.drawBitmap(handle, 0, 0, paint);
 
+            }
+
+
+
+        }
+        else {
+            //Draw the handles for the start pipes unrotated
+            canvas.drawBitmap(handle, 0, 0, paint);
+            canvas.drawBitmap(handle, 0, 2 * hit / gridSize, paint);
+       }
 
 
 
