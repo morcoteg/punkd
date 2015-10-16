@@ -37,7 +37,7 @@ public class PlayingArea {
     private Pipe [][] pipes;
 
 
-    
+
     private String player1name;
     private String player2name;
 
