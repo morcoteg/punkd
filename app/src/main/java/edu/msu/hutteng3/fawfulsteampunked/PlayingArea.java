@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
 import android.graphics.RectF;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -35,6 +36,16 @@ public class PlayingArea {
      * First level: X, second level Y
      */
     private Pipe [][] pipes;
+
+    /**
+     * First touch status
+     */
+    private Touch touch1 = new Touch();
+
+    /**
+     * Second touch status
+     */
+    private Touch touch2 = new Touch();
 
 
 
@@ -127,25 +138,10 @@ public class PlayingArea {
         width=wid;
         height=hit;
 
-
-
-
-
-
-
         // Determine the minimum of the two dimensions
         int minDim = wid < hit ? hit : wid;
 
         gridPix = (int) (minDim * SCALE_IN_VIEW); //that scale in view may only hold for the 7, need to check 4 and S
-
-
-
-
-
-
-
-
-
 
 
 
@@ -193,14 +189,19 @@ public class PlayingArea {
 
 
 
-        //resize and draw the pipe we are adding
-        if (toAdd == true && pipeToAdd != null) {
-            float x=pipeToAdd.getX();
-            float y=pipeToAdd.getY();
 
-            pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
-            canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX()*wid, pipeToAdd.getY()*hit, paint);
+        //resize and draw the pipe we are adding
+            if (toAdd == true && pipeToAdd != null) {
+                float x=pipeToAdd.getX();
+                float y=pipeToAdd.getY();
+                canvas.save();
+                canvas.translate(x,y);
+                canvas.rotate(pipeToAdd.getAngle());
+                pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid, pipeToAdd.getY()*hit, paint);
+                canvas.restore();
         }
+        canvas.restore();
     }
 
 
@@ -309,6 +310,32 @@ public class PlayingArea {
     private int gridPix;
 
 
+    /**
+     * Get the positions for the two touches and put them
+     * into the appropriate touch objects.
+     * @param event the motion event
+     */
+    private void getPositions(MotionEvent event, View view) {
+        for(int i=0;  i<event.getPointerCount();  i++) {
+
+            // Get the pointer id
+            int id = event.getPointerId(i);
+
+            // Get coordinates
+            float x = event.getX(i);
+            float y = event.getY(i);
+
+            if(id == touch1.id) {
+                touch1.x = x;
+                touch1.y = y;
+            } else if(id == touch2.id) {
+                touch2.x = x;
+                touch2.y = y;
+            }
+        }
+
+        view.invalidate();
+    }
 
     /**
      * Handle a touch event from the view.
@@ -318,7 +345,7 @@ public class PlayingArea {
      * @return true if the touch is handled.
      */
     public boolean onTouchEvent(View view, MotionEvent event) {
-
+        int id = event.getPointerId(event.getActionIndex());
         //
         // Convert an x,y location to a relative location in the
         // puzzle.
@@ -327,17 +354,51 @@ public class PlayingArea {
         float relX = (event.getX(0)) / width;
         float relY = (event.getY(0)) / height;
 
-        switch(event.getAction()) {
+        switch(event.getActionMasked()) {
 
             case MotionEvent.ACTION_DOWN:
+                touch1.id = id;
+                touch2.id = -1;
+                getPositions(event, view);
+                touch1.copyToLast();
                 return onTouched(relX, relY);
+
+            case MotionEvent.ACTION_POINTER_DOWN:
+
+                if(touch1.id >= 0 && touch2.id < 0) {
+                    touch2.id = id;
+                    getPositions(event, view);
+                    touch2.copyToLast();
+                    return true;
+                }
+                break;
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_CANCEL:
+                touch1.id = -1;
+                touch2.id = -1;
+                view.invalidate();
                 return onReleased(view, relX, relY);
 
-            case MotionEvent.ACTION_MOVE:
+            case MotionEvent.ACTION_POINTER_UP:
+                if(id == touch2.id) {
+                    touch2.id = -1;
+                } else if(id == touch1.id) {
+                    // Make what was touch2 now be touch1 by
+                    // swapping the objects.
+                    Touch t = touch1;
+                    touch1 = touch2;
+                    touch2 = t;
+                    touch2.id = -1;
+                }
+                view.invalidate();
+                return true;
 
+            case MotionEvent.ACTION_MOVE:
+                getPositions(event, view);
+
+                int touch1id = touch1.id;
+                int touch2id = touch1.id;
                 if(pipeToAdd != null) {
 
                     pipeToAdd.move(relX - lastRelX, relY - lastRelY);
@@ -347,6 +408,7 @@ public class PlayingArea {
                     return true;
                 }
                 break;
+
         }
 
 
@@ -366,7 +428,7 @@ public class PlayingArea {
     private boolean onTouched(float x, float y) {
 
         float scaleFactor=(float)Math.pow(gridSize,2);
-        if (pipeToAdd.getBitmap() !=null){
+        if ( pipeToAdd.getBitmap() != null){
             if(pipeToAdd.hit(x, y, gridPix, 1)) {
                 // We hit a pipe
                 lastRelX = x;
@@ -427,6 +489,81 @@ public class PlayingArea {
         return false;
     }
 
+
+    /**
+     * Determine the angle for two touches
+     * @param x1 Touch 1 x
+     * @param y1 Touch 1 y
+     * @param x2 Touch 2 x
+     * @param y2 Touch 2 y
+     * @return computed angle in degrees
+     */
+    private float angle(float x1, float y1, float x2, float y2) {
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+        return (float) Math.toDegrees(Math.atan2(dy, dx));
+    }
+
+
+    //////////////////////////////////////////////// NESTED CLASS touch ///////////////////////////
+
+    /**
+     * Local class to handle the touch status for one touch.
+     * We will have one object of this type for each of the
+     * two possible touches.
+     */
+    private class Touch {
+        /**
+         * Touch id
+         */
+        public int id = -1;
+
+        /**
+         * Current x location
+         */
+        public float x = 0;
+
+        /**
+         * Current y location
+         */
+        public float y = 0;
+
+        /**
+         * Previous x location
+         */
+        public float lastX = 0;
+
+        /**
+         * Previous y location
+         */
+        public float lastY = 0;
+
+        /**
+         * Change in x value from previous
+         */
+        public float dX = 0;
+
+        /**
+         * Change in y value from previous
+         */
+        public float dY = 0;
+
+        /**
+         * Copy the current values to the previous values
+         */
+        public void copyToLast() {
+            lastX = x;
+            lastY = y;
+        }
+
+        /**
+         * Compute the values of dX and dY
+         */
+        public void computeDeltas() {
+            dX = x - lastX;
+            dY = y - lastY;
+        }
+    }
 
 
 

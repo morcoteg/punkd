@@ -3,6 +3,9 @@ package edu.msu.hutteng3.fawfulsteampunked;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
+
+import java.io.Serializable;
 
 /**
  * Created by Tyler on 10/10/2015.
@@ -15,6 +18,10 @@ public class Pipe {
      */
     private PlayingArea playingArea = null;
 
+    /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
 
 
 
@@ -33,17 +40,21 @@ public class Pipe {
      * X location in the playing area
      */
     private float x = 0;
-    public float getX(){return x;}
-    public void setX(float newX){x=newX;}
+
+    private float mAngle = (1/3);
 
     /**
      * Y location in the playing area
      */
     private float y = 0;
-    public float getY(){return y;}
-    public void setY(float newY){y=newY;}
 
+    public float getX(){ return x; }
+    public void setX(float newX){ x = newX; }
 
+    public float getY(){ return y; }
+    public void setY(float newY){ y = newY; }
+
+    public float getAngle(){return mAngle;}
 
 
     /**
@@ -234,7 +245,26 @@ public class Pipe {
         y += dy;
     }
 
+    /**
+     * Rotate the image around the point x1, y1
+     * @param dAngle Angle to rotate in degrees
+     * @param x1 rotation point x
+     * @param y1 rotation point y
+     */
+    public void rotate(float dAngle, float x1, float y1) {
+        mAngle += dAngle;
+        //params.hatAngle += dAngle;
 
+        // Compute the radians angle
+        double rAngle = Math.toRadians(dAngle);
+        float ca = (float) Math.cos(rAngle);
+        float sa = (float) Math.sin(rAngle);
+        float xp = (x - x1) * ca - (y - y1) * sa + x1;
+        float yp = (x - x1) * sa + (y - y1) * ca + y1;
+
+        x = xp;
+        y = yp;
+    }
 
 
 
@@ -269,5 +299,31 @@ public class Pipe {
              return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
     }
 
+
+    ///////////////////////////////////////////////// NESTED CLASSES parameters ///////////////////////////
+
+    /**
+     * Parameters class for the Pipe's coordinates x, y and the rotation angle
+     */
+    private static class Parameters implements Serializable {
+
+
+        /**
+         * X location of Pipe relative to the image
+         */
+        public float pipeX = 0;
+
+        /**
+         * Y location of Pipe relative to the image
+         */
+        public float pipeY = 0;
+
+
+        /**
+         * Pipe rotation angle
+         */
+        public float hatAngle = 0;
+
+    }
 
 }
