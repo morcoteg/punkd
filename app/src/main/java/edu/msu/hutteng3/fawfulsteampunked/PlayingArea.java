@@ -201,7 +201,9 @@ public class PlayingArea {
 
             canvas.save();
 
-            canvas.rotate(pipeToAdd.getAngle(), x*wid + pipeToAdd.getBitmap().getWidth()/2 , y*hit + pipeToAdd.getBitmap().getHeight()/2);
+            canvas.rotate(pipeToAdd.getAngle(), x * wid, y * hit );
+
+            canvas.drawCircle(x*wid , y*hit, 10,paint);
             pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
             canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid, pipeToAdd.getY() * hit, paint);
             canvas.restore();
@@ -299,15 +301,7 @@ public class PlayingArea {
 
 
 
-    /**
-     * Most recent relative X touch when dragging
-     */
-    private float lastRelX;
 
-    /**
-     * Most recent relative Y touch when dragging
-     */
-    private float lastRelY;
 
     /**
      * The size of the grid in pixels
@@ -328,12 +322,14 @@ public class PlayingArea {
 
             // Get coordinates
             float x = event.getX(i);
-            float y = event.getY(i);
+            float y = event.getY(i)-200;
 
             if(id == touch1.id) {
+                touch1.copyToLast();
                 touch1.x = x;
                 touch1.y = y;
             } else if(id == touch2.id) {
+                touch2.copyToLast();
                 touch2.x = x;
                 touch2.y = y;
             }
@@ -356,8 +352,8 @@ public class PlayingArea {
         // puzzle.
         //
 
-        float relX = (event.getX(0)) / width;
-        float relY = (event.getY(0)) / height;
+       // float relX = (event.getX(0)) / width;
+       // float relY = (event.getY(0)) / height;
 
         switch(event.getActionMasked()) {
 
@@ -366,7 +362,7 @@ public class PlayingArea {
                 touch2.id = -1;
                 getPositions(event, view);
                 touch1.copyToLast();
-                return onTouched(relX, relY);
+                return true;
 
             case MotionEvent.ACTION_POINTER_DOWN:
 
@@ -383,7 +379,7 @@ public class PlayingArea {
                 touch1.id = -1;
                 touch2.id = -1;
                 view.invalidate();
-                return onReleased(view, relX, relY);
+                return true;
 
             case MotionEvent.ACTION_POINTER_UP:
                 if(id == touch2.id) {
@@ -400,18 +396,18 @@ public class PlayingArea {
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                getPositions(event, view);
+
 
                 if(pipeToAdd.getBitmap() != null) {
-
-                    move(relX - lastRelX, relY - lastRelY);
-                    lastRelX = relX;
-                    lastRelY = relY;
+                    getPositions(event, view);
+                    move();
+                    //lastRelX = relX;
+                    //lastRelY = relY;
                     view.invalidate();
                     return true;
                 }
-                view.invalidate();
-                break;
+
+               // break;
 
         }
 
@@ -422,28 +418,7 @@ public class PlayingArea {
 
 
 
-    /**
-     * Handle a touch message. This is when we get an initial touch
-     *
-     * @param x x location for the touch, relative to the puzzle - 0 to 1 over the puzzle
-     * @param y y location for the touch, relative to the puzzle - 0 to 1 over the puzzle
-     * @return true if the touch is handled
-     */
-    private boolean onTouched(float x, float y) {
 
-        float scaleFactor=(float)Math.pow(gridSize,2);
-        if ( pipeToAdd.getBitmap() != null){
-            if(pipeToAdd.hit(x, y, gridPix, 1)) {
-                // We hit a pipe
-                lastRelX = x;
-                lastRelY = y;
-                return true;
-           }
-
-        }
-
-        return false;
-    }
 
 
     /**
@@ -511,10 +486,9 @@ public class PlayingArea {
 
     /**
      * Move the puzzle piece by dx, dy
-     * @param dx x amount to move
-     * @param dy y amount to move
+
      */
-    public void move(float dx, float dy) {
+    public void move() {
 
 
         if (touch1.id < 0){
@@ -526,8 +500,8 @@ public class PlayingArea {
             //We are moving
             touch1.computeDeltas();
 
-            pipeToAdd.setX(pipeToAdd.getX() + dx);
-            pipeToAdd.setY(pipeToAdd.getY() + dy);
+            pipeToAdd.setX(pipeToAdd.getX() + touch1.dX/width);
+            pipeToAdd.setY(pipeToAdd.getY() + touch1.dY/height);
         }
 
         if(touch2.id >= 0) {
@@ -538,10 +512,11 @@ public class PlayingArea {
              */
             float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
             float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
-            float da = angle2 - angle1;
+            float da = (angle2 - angle1);
+
             rotate(da, touch1.x, touch1.y);
-            touch1.lastX = touch1.x;
-            touch1.lastY = touch1.y;
+           // touch1.lastX = touch1.x;
+           // touch1.lastY = touch1.y;
         }
     }
 
