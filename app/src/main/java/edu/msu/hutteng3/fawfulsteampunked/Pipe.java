@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
+import android.os.Bundle;
 
 import java.io.Serializable;
 
@@ -265,6 +266,27 @@ public class Pipe {
         // We are within the rectangle of the piece.
         // Are we touching actual picture?
              return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
+    }
+
+
+    /**
+     * Save the view state to a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to save to
+     */
+    public void putToBundle(String key, Bundle bundle) {
+
+
+    }
+
+    /**
+     * Get the view state from a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to load from
+     */
+    public void getFromBundle(String key, Bundle bundle) {
+
+
     }
 
 

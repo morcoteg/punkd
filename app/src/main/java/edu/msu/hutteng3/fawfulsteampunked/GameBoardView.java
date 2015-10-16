@@ -95,6 +95,6 @@ public class GameBoardView extends View {
     }
 
 
-
+    public PlayingArea getPlayingArea(){return playingArea;}
 
 }
