@@ -529,7 +529,6 @@ public class PlayingArea {
         if(touch2.id >= 0) {
             // Two touches
 
-
             /*
              * Rotation
              */
@@ -537,6 +536,8 @@ public class PlayingArea {
             float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
             float da = angle2 - angle1;
             rotate(da, touch1.x, touch1.y);
+            touch1.lastX = touch1.x;
+            touch1.lastY = touch1.y;
         }
     }
 
@@ -557,8 +558,8 @@ public class PlayingArea {
         float xp = (pipeToAdd.getX()*width - x1) * ca - (pipeToAdd.getY()*height - y1) * sa + x1;
         float yp = (pipeToAdd.getX()*width - x1) * sa + (pipeToAdd.getY()*height - y1) * ca + y1;
 
-        pipeToAdd.setX(xp/width );
-        pipeToAdd.setY(yp/height);
+        pipeToAdd.setX(xp / width);
+        pipeToAdd.setY(yp / height);
     }
 
     //////////////////////////////////////////////// NESTED CLASS touch ///////////////////////////
