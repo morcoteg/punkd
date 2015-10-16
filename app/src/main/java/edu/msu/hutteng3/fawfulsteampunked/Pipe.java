@@ -262,8 +262,8 @@ public class Pipe {
         float xp = (x - x1) * ca - (y - y1) * sa + x1;
         float yp = (x - x1) * sa + (y - y1) * ca + y1;
 
-        x = xp;
-        y = yp;
+        //x += xp;
+        //y += yp;
     }
 
 

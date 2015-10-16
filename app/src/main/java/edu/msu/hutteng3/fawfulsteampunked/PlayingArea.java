@@ -366,20 +366,22 @@ public class PlayingArea {
 
             case MotionEvent.ACTION_POINTER_DOWN:
 
-                if(touch2.id >= 0) {
-                    // Two touches
+
+                if(touch1.id >= 0 && touch2.id < 0) {
+                    touch2.id = id;
+                    if(touch2.id >= 0) {
+                        // Two touches
 
                     /*
                     * Rotation
                     */
-                    float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
-                    float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
-                    float da = angle2 - angle1;
-                    pipeToAdd.rotate(da, touch1.x, touch1.y);
-                }
+                        float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+                        float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
+                        float da = angle2 - angle1;
+                        pipeToAdd.rotate(da, touch1.x, touch1.y);
 
-                if(touch1.id >= 0 && touch2.id < 0) {
-                    touch2.id = id;
+                        view.invalidate();
+                    }
                     getPositions(event, view);
                     touch2.copyToLast();
                     return true;
