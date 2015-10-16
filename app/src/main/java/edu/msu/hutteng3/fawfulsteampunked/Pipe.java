@@ -55,6 +55,9 @@ public class Pipe {
     public void setY(float newY){ y = newY; }
 
     public float getAngle(){return mAngle;}
+    public void setAngle(float angle){
+        mAngle = angle;
+    }
 
 
     /**
@@ -233,41 +236,6 @@ public class Pipe {
     private Bitmap bitmap;
     public void setBitmap(Bitmap newMap){bitmap=newMap;}
     public Bitmap getBitmap() {return bitmap;}
-
-
-    /**
-     * Move the puzzle piece by dx, dy
-     * @param dx x amount to move
-     * @param dy y amount to move
-     */
-    public void move(float dx, float dy) {
-        x += dx;
-        y += dy;
-    }
-
-    /**
-     * Rotate the image around the point x1, y1
-     * @param dAngle Angle to rotate in degrees
-     * @param x1 rotation point x
-     * @param y1 rotation point y
-     */
-    public void rotate(float dAngle, float x1, float y1) {
-        mAngle += dAngle;
-        //params.hatAngle += dAngle;
-
-        // Compute the radians angle
-        double rAngle = Math.toRadians(dAngle);
-        float ca = (float) Math.cos(rAngle);
-        float sa = (float) Math.sin(rAngle);
-        float xp = (x - x1) * ca - (y - y1) * sa + x1;
-        float yp = (x - x1) * sa + (y - y1) * ca + y1;
-
-        //x += xp;
-        //y += yp;
-    }
-
-
-
 
 
 

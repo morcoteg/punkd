@@ -197,7 +197,7 @@ public class PlayingArea {
 
             canvas.save();
 
-            canvas.rotate(pipeToAdd.getAngle(), x * wid, y * hit);
+            canvas.rotate(pipeToAdd.getAngle(), x*wid + pipeToAdd.getBitmap().getWidth()/2 , y*hit + pipeToAdd.getBitmap().getHeight()/2);
             pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
             canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid, pipeToAdd.getY() * hit, paint);
             canvas.restore();
@@ -366,22 +366,8 @@ public class PlayingArea {
 
             case MotionEvent.ACTION_POINTER_DOWN:
 
-
                 if(touch1.id >= 0 && touch2.id < 0) {
                     touch2.id = id;
-                    if(touch2.id >= 0) {
-                        // Two touches
-
-                    /*
-                    * Rotation
-                    */
-                        float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
-                        float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
-                        float da = angle2 - angle1;
-                        pipeToAdd.rotate(da, touch1.x, touch1.y);
-
-                        view.invalidate();
-                    }
                     getPositions(event, view);
                     touch2.copyToLast();
                     return true;
@@ -412,16 +398,15 @@ public class PlayingArea {
             case MotionEvent.ACTION_MOVE:
                 getPositions(event, view);
 
-                int touch1id = touch1.id;
-                int touch2id = touch1.id;
                 if(pipeToAdd.getBitmap() != null) {
 
-                    pipeToAdd.move(relX - lastRelX, relY - lastRelY);
+                    move(relX - lastRelX, relY - lastRelY);
                     lastRelX = relX;
                     lastRelY = relY;
                     view.invalidate();
                     return true;
                 }
+                view.invalidate();
                 break;
 
         }
@@ -519,6 +504,62 @@ public class PlayingArea {
         return (float) Math.toDegrees(Math.atan2(dy, dx));
     }
 
+
+    /**
+     * Move the puzzle piece by dx, dy
+     * @param dx x amount to move
+     * @param dy y amount to move
+     */
+    public void move(float dx, float dy) {
+
+
+        if (touch1.id < 0){
+            return;
+        }
+
+        if (touch1.id >= 0){
+            //At least one touch
+            //We are moving
+            touch1.computeDeltas();
+
+            pipeToAdd.setX(pipeToAdd.getX() + dx);
+            pipeToAdd.setY(pipeToAdd.getY() + dy);
+        }
+
+        if(touch2.id >= 0) {
+            // Two touches
+
+
+            /*
+             * Rotation
+             */
+            float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+            float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
+            float da = angle2 - angle1;
+            rotate(da, touch1.x, touch1.y);
+        }
+    }
+
+
+    /**
+     * Rotate the image around the point x1, y1
+     * @param dAngle Angle to rotate in degrees
+     * @param x1 rotation point x
+     * @param y1 rotation point y
+     */
+    public void rotate(float dAngle, float x1, float y1) {
+        pipeToAdd.setAngle(dAngle + pipeToAdd.getAngle());
+
+        // Compute the radians angle
+        double rAngle = Math.toRadians(dAngle);
+        float ca = (float) Math.cos(rAngle);
+        float sa = (float) Math.sin(rAngle);
+        float xp = (pipeToAdd.getX()*width - x1) * ca - (pipeToAdd.getY()*height - y1) * sa + x1;
+        float yp = (pipeToAdd.getX()*width - x1) * sa + (pipeToAdd.getY()*height - y1) * ca + y1;
+
+        pipeToAdd.setX(xp/width );
+        pipeToAdd.setY(yp/height);
+    }
 
     //////////////////////////////////////////////// NESTED CLASS touch ///////////////////////////
 
