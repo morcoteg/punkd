@@ -41,7 +41,7 @@ public class Pipe {
      */
     private float x = 0;
 
-    private float mAngle = (1/3);
+    private float mAngle = 0;
 
     /**
      * Y location in the playing area

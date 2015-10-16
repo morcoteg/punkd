@@ -191,17 +191,18 @@ public class PlayingArea {
 
 
         //resize and draw the pipe we are adding
-            if (toAdd == true && pipeToAdd != null) {
-                float x=pipeToAdd.getX();
-                float y=pipeToAdd.getY();
-                canvas.save();
-                canvas.translate(x,y);
-                canvas.rotate(pipeToAdd.getAngle());
-                pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
-                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid, pipeToAdd.getY()*hit, paint);
-                canvas.restore();
+        if (toAdd == true && pipeToAdd.getBitmap() != null) {
+            float x = pipeToAdd.getX();
+            float y = pipeToAdd.getY();
+
+            canvas.save();
+
+            canvas.rotate(pipeToAdd.getAngle(), x * wid, y * hit);
+            pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
+            canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid, pipeToAdd.getY() * hit, paint);
+            canvas.restore();
         }
-        canvas.restore();
+
     }
 
 
@@ -365,6 +366,18 @@ public class PlayingArea {
 
             case MotionEvent.ACTION_POINTER_DOWN:
 
+                if(touch2.id >= 0) {
+                    // Two touches
+
+                    /*
+                    * Rotation
+                    */
+                    float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+                    float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
+                    float da = angle2 - angle1;
+                    pipeToAdd.rotate(da, touch1.x, touch1.y);
+                }
+
                 if(touch1.id >= 0 && touch2.id < 0) {
                     touch2.id = id;
                     getPositions(event, view);
@@ -399,7 +412,7 @@ public class PlayingArea {
 
                 int touch1id = touch1.id;
                 int touch2id = touch1.id;
-                if(pipeToAdd != null) {
+                if(pipeToAdd.getBitmap() != null) {
 
                     pipeToAdd.move(relX - lastRelX, relY - lastRelY);
                     lastRelX = relX;
