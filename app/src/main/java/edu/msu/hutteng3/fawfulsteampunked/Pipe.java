@@ -250,14 +250,14 @@ public class Pipe {
      * @param scaleFactor the amount to scale a piece by
      * @return true if we hit the piece
      */
-    public boolean hit(float testX, float testY, int puzzleSize, float scaleFactor) {
+    public boolean hit(float testX, float testY, int puzzleSize, float scaleFactor,int wid, int hit) {
 
         // Make relative to the location and size to the piece size
 
         //MAY NEED TO CHANGE WHEN BOARD IS UNIFORM SIZE
 
-        int pX = (int)((testX -x) * puzzleSize) + bitmap.getWidth()/8; //I have no idea why /2 failed but /8 works
-        int pY = (int)((testY-y ) * puzzleSize) + bitmap.getHeight()/8;
+        int pX = (int)((testX -x*wid) * .8f) + bitmap.getWidth()/2; //I have no idea why /2 failed but /8 works
+        int pY = (int)((testY-y *hit) * .8f) + bitmap.getHeight()/2;
 
 
         if(pX < 0 || pX >= bitmap.getWidth() || pY < 0 || pY >= bitmap.getHeight())
@@ -265,7 +265,8 @@ public class Pipe {
         else
         // We are within the rectangle of the piece.
         // Are we touching actual picture?
-             return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
+            // return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
+        return true;
     }
 
 

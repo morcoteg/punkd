@@ -144,10 +144,14 @@ public class GameBoard extends AppCompatActivity {
                                 getGameBoardView().setAddPipe(false);
                                 getPipeSelectView().setDiscard(false);
                                 getGameBoardView().setOpened(true,currentPlayer);
+
+                                //test to make sure it works for both player
+                                //TAKE OUT OF FINAL VERSION
                                 getGameBoardView().invalidate();
                                 String temp=currentPlayer;
                                 currentPlayer=otherPlayer;
                                 otherPlayer=temp;
+
                                 break;
                         }
                     }
