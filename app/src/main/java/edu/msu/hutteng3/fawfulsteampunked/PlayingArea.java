@@ -492,6 +492,7 @@ public class PlayingArea {
             case MotionEvent.ACTION_CANCEL:
                 touch1.id = -1;
                 touch2.id = -1;
+                snap();
                 view.invalidate();
                 return true;
 
@@ -556,7 +557,28 @@ public class PlayingArea {
 
 
 
+    public void snap(){
 
+        float x=pipeToAdd.getX();
+        float y=pipeToAdd.getY();
+
+        float relGridSize=1/((float)gridSize);
+
+        float xTest=x%relGridSize;
+        float yTest=y%relGridSize;
+
+        if(xTest >=relGridSize/2)
+            pipeToAdd.setX(x+(relGridSize-xTest));
+        else
+            pipeToAdd.setX(x-xTest);
+
+        if(yTest >=relGridSize/2)
+            pipeToAdd.setY(y+(relGridSize-yTest));
+        else
+            pipeToAdd.setY(y-yTest);
+
+
+    }
 
 
 
