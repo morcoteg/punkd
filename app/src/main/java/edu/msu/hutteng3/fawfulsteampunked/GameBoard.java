@@ -131,7 +131,7 @@ public class GameBoard extends AppCompatActivity {
         otherPlayer=temp;
 
         getGameBoardView().setAddPipe(true);
-        
+
         Toast toast = Toast.makeText(this, currentPlayer + "\'s turn", Toast.LENGTH_LONG);
         toast.show();
     }
@@ -156,10 +156,14 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
+
     public void open(View view){
         getGameBoardView().setAddPipe(false);
         getPipeSelectView().setDiscard(false);
         getGameBoardView().setOpened(true, currentPlayer);
+        if(!getGameBoardView().checkForLeaks(currentPlayer))
+           //getGameBoardView().getLeaks();
+
         getGameBoardView().invalidate();
     }
 

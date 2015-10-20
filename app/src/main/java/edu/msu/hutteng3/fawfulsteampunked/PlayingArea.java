@@ -18,7 +18,6 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import java.io.Serializable;
 import java.util.Vector;
 
 /**
@@ -43,11 +42,6 @@ public class PlayingArea {
      * First level: X, second level Y
      */
     private Pipe [][] pipes;
-
-    /**
-     * The current parameters
-     */
-    private Parameters params = new Parameters();
 
 
    // public Vector<Vector<Pipe>> pipes=new Vector<Vector<Pipe>>();
@@ -81,7 +75,7 @@ public class PlayingArea {
 
 
     private Pipe pipeToAdd;
-    public void setPipeToAdd(Bitmap pipe){ pipeToAdd.setBitmap(pipe); }
+    public void setPipeToAdd(Bitmap pipe){pipeToAdd.setBitmap(pipe);}
 
 
 
@@ -356,9 +350,6 @@ public class PlayingArea {
             float x = pipeToAdd.getX();
             float y = pipeToAdd.getY();
 
-            //update params PipeToAdd
-            params.pipeToAdd = pipeToAdd;
-
             canvas.save();
 
             canvas.rotate(pipeToAdd.getAngle(), x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2);
@@ -630,13 +621,7 @@ public class PlayingArea {
            pipes[xInd][yInd].setAngle(pipeToAdd.getAngle());
            pipes[xInd][yInd].set(this, xInd, yInd);
 
-           //saving the added pipe to params.pipes for Bundles          //////////////////////////////////////DONT FORGET THIS SHIT TODO
-           //params.pipes[xInd][yInd]=new Pipe(context,currentId);
-           //params.pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
-           //params.pipes[xInd][yInd].setX(pipeToAdd.getX());
-           //params.pipes[xInd][yInd].setY(pipeToAdd.getY());
-           //params.pipes[xInd][yInd].setAngle(pipeToAdd.getAngle());
-           //params.pipes[xInd][yInd].set(this, xInd, yInd);              ///////////////////////////////////////////////////////////
+
 
            pipeToAdd.setBitmap(null);
            pipeToAdd.setX(0.5f);
@@ -813,7 +798,12 @@ public class PlayingArea {
      */
     public void putToBundle(String key, Bundle bundle ) {
 
-        bundle.putSerializable(key, params);
+        //iterate through the existing pipes urine
+        for (Pipe[] pipeArray : pipes){
+            for (Pipe pipe  : pipeArray){
+                //pipe.putToBundle(PARAMETERS, outState);
+            }
+        }
 
     }
 
@@ -823,10 +813,8 @@ public class PlayingArea {
      * @param bundle bundle to load from
      */
     public void getFromBundle(String key, Bundle bundle) {
-        params = (Parameters)bundle.getSerializable(key);
 
-        pipeToAdd = params.pipeToAdd;
-        //pipes = params.pipes;
+
     }
 
     //////////////////////////////////////////////// NESTED CLASS touch ///////////////////////////
@@ -890,36 +878,5 @@ public class PlayingArea {
     }
 
 
-/////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
 
-    /**
-     * Parameters class for the Pipe's coordinates x, y and the rotation angle
-     */
-    private static class Parameters implements Serializable {
-
-
-        /**
-         * X location of Pipe relative to the image
-         */
-        public float pipeX = 0;
-
-        /**
-         * Y location of Pipe relative to the image
-         */
-        public float pipeY = 0;
-
-
-        /**
-         * Pipe rotation angle
-         */
-        public float pipeAngle = 0;
-
-        /**
-         * Storage for the pipes
-         * First level: X, second level Y
-         */
-        public Pipe [][] pipes;
-
-        public Pipe pipeToAdd;
-    }
 }

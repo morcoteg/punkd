@@ -56,22 +56,24 @@ public class Pipe {
     public void setY(float newY){ y = newY; }
 
     public float getAngle(){return mAngle;}
-    public void setAngle(float angle){
-        mAngle = angle;
-    }
+    public void setAngle(float angle){mAngle = angle;}
+
+
+
+
 
 
     /**
      * X location in the playing area (index into array)
      */
     private int xIndex = 0;
-
+    public int getXIndex(){return xIndex;}
 
     /**
      * Y location in the playing area (index into array)
      */
     private int yIndex = 0;
-
+    public int getYIndex(){return yIndex;}
 
 
 
@@ -101,6 +103,37 @@ public class Pipe {
      * The pipe ID
      */
     private int id;
+
+
+
+    public void setConnect(boolean north, boolean east, boolean south, boolean west) {
+        connect[0] = north;
+        connect[1] = east;
+        connect[2] = south;
+        connect[3] = west;
+    }
+
+
+
+    public boolean getNorth() {
+       return connect[0];
+    }
+
+    public boolean getEast() {
+        return connect[1];
+    }
+
+    public boolean getSouth() {
+        return connect[2];
+    }
+
+    public boolean getWest() {
+        return connect[3];
+    }
+
+
+
+
 
 
 
@@ -175,6 +208,107 @@ public class Pipe {
         // Yah, no leaks
         return true;
     }
+
+
+
+
+
+    private boolean leakArea=false;
+    public void setLeak(boolean leak){leakArea=leak;}
+
+
+
+    /**
+     * Search to see if there are any downstream of this pipe
+     *
+     * This does a simple depth-first search to find any connections
+     * that are not, in turn, connected to another pipe. It also
+     * set the visited flag in all pipes it does visit, so you can
+     * tell if a pipe is reachable from this pipe by checking that flag.
+     * @return True if no leaks in the pipe
+     */
+    public boolean searchForAllLeaks() {
+        visited = true;
+
+        for(int d=0; d<4; d++) {
+            /*
+             * If no connection this direction, ignore
+             */
+            if (!connect[d]) {
+                continue;
+            }
+
+            Pipe n = neighbor(d);
+            if (n == null) {
+                // We leak
+                // We have a connection with nothing on the other side
+                //north is empty
+                if(d==0) {
+                    playingArea.getLeakArea().add(xIndex);
+                    playingArea.getLeakArea().add(yIndex-1);
+                }
+                //east is empty
+                else if(d==1){
+                    playingArea.getLeakArea().add(xIndex+1);
+                    playingArea.getLeakArea().add(yIndex);
+
+                }
+
+                //south is empty
+                else if(d==2){
+                    playingArea.getLeakArea().add(xIndex);
+                    playingArea.getLeakArea().add(yIndex+1);
+
+                }
+
+                //west is empty
+                else if(d==3){
+                    playingArea.getLeakArea().add(xIndex-1);
+                    playingArea.getLeakArea().add(yIndex);
+
+                }
+                //return false;
+                continue;
+            }
+
+            // What is the matching location on
+            // the other pipe. For example, if
+            // we are looking in direction 1 (east),
+            // the other pipe must have a connection
+            // in direction 3 (west)
+            int dp = (d + 2) % 4;
+            if (!n.connect[dp]) {
+                // We have a bad connection, the other side is not
+                // a flange to connect to
+               // playingArea.getLeakArea().add(n.getXIndex());
+               // playingArea.getLeakArea().add(n.getYIndex());
+                //return false;
+                continue;
+            }
+
+            if (n.visited) {
+                // Already visited this one, so no leaks this way
+                continue;
+            } else {
+                // Is there a lead in that direction
+                if (!n.searchForAllLeaks()) {
+                    // We found a leak downstream of this pipe
+                   // playingArea.getLeakArea().add(n.getXIndex());
+                    //playingArea.getLeakArea().add(n.getYIndex());
+                    return false;
+                   // continue;
+                }
+            }
+        }
+
+        // Yah, no leaks
+        return true;
+    }
+
+
+
+
+
 
     /**
      * Find the neighbor of this pipe
