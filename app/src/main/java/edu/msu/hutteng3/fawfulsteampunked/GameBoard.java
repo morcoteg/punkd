@@ -53,6 +53,14 @@ public class GameBoard extends AppCompatActivity {
 
         //give the pipe select view a path to the game board view
         getPipeSelectView().setGameBoardView(getGameBoardView());
+
+        /*
+        *   Save any state
+        */
+        if (savedInstanceState !=  null){
+            getGameBoardView().getPlayingArea().getFromBundle(PARAMETERS, savedInstanceState);
+
+        }
     }
 
     @Override
@@ -172,7 +180,7 @@ public class GameBoard extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        //getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
+        getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
     }
 
 }

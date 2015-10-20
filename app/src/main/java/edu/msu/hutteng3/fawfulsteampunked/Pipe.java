@@ -22,7 +22,7 @@ public class Pipe {
     /**
      * The current parameters
      */
-    private Parameters params = new Parameters();
+    //private Parameters params = new Parameters();
 
 
 
@@ -296,28 +296,6 @@ public class Pipe {
 
     ///////////////////////////////////////////////// NESTED CLASSES parameters ///////////////////////////
 
-    /**
-     * Parameters class for the Pipe's coordinates x, y and the rotation angle
-     */
-    private static class Parameters implements Serializable {
 
-
-        /**
-         * X location of Pipe relative to the image
-         */
-        public float pipeX = 0;
-
-        /**
-         * Y location of Pipe relative to the image
-         */
-        public float pipeY = 0;
-
-
-        /**
-         * Pipe rotation angle
-         */
-        public float hatAngle = 0;
-
-    }
 
 }
