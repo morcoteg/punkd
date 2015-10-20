@@ -79,11 +79,12 @@ public class PlayingArea {
 
 
 
-    private boolean toAdd = false;
+    private boolean toAdd = true;
+    //private boolean toAdd = false;
     public void setAddPipe(boolean on){
         toAdd = on;
-        pipeToAdd.setX(0.5f);
-        pipeToAdd.setY(0.5f);
+        //pipeToAdd.setX(0.5f);
+       // pipeToAdd.setY(0.5f);
     }
 
 
@@ -131,6 +132,13 @@ public class PlayingArea {
     final static float SCALE_IN_VIEW = 0.8f;
 
 
+
+    public int xMargin=0;
+    public int yMargin=0;
+
+
+
+
     public PlayingArea(Context context) {
 
         // Load the start pipes
@@ -154,7 +162,7 @@ public class PlayingArea {
 
 
 
-        startP2= new Pipe(context,2);
+        startP2= new Pipe(context, 2);
         startP2.setBitmap(pipeStraight);
         startP2.setAngle(0);
         startP2.set(this, 0, 2);
@@ -178,8 +186,27 @@ public class PlayingArea {
 
 
 
-        pipeToAdd=new Pipe(context,-1);
+        pipeToAdd=new Pipe(context, -1);
+        pipeToAdd.setX(0.5f);
+        pipeToAdd.setY(0.5f);
+
+
+
+
+
+
+
     }
+
+
+
+    private int currentId=4;
+
+
+
+
+
+
 
 
     private boolean opened=false;
@@ -201,10 +228,21 @@ public class PlayingArea {
         // Determine the minimum of the two dimensions
         int minDim = wid < hit ? wid : hit;
 
-       // wid=minDim;
-        //hit=minDim;
+
         width=wid ;
         height=hit ;
+
+
+        if(minDim==wid){
+           // yMargin=Math.abs(wid-hit)/2;
+           // hit=minDim;
+            //height=width;
+        }
+        else{
+           // xMargin=Math.abs(wid-hit)/2;
+           // wid=hit;
+           // width=height;
+        }
 
 
         gridPix = (int) (minDim * SCALE_IN_VIEW); //that scale in view may only hold for the 7, need to check 4 and S
@@ -216,10 +254,10 @@ public class PlayingArea {
 
 
         //pipeStart height to get below +42f for text size
-        canvas.drawText(player1name, 0, pipeStart.getHeight() + 42f, paint);
+        canvas.drawText(player1name, 0+xMargin, pipeStart.getHeight() + 42f+yMargin, paint);
 
         //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
-        canvas.drawText(player2name, 0, 2 * hit / gridSize + pipeStart.getHeight() + 42f, paint);
+        canvas.drawText(player2name, 0+xMargin, 2 * hit / gridSize + pipeStart.getHeight() + 42f+yMargin, paint);
 
 
 
@@ -255,7 +293,7 @@ public class PlayingArea {
                     //speacial case for end pipe to add the diff
                     if (currPipe.getBitmap().sameAs(pipeEnd)) {
                         currPipe.setBitmap( Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false));
-                        canvas.drawBitmap(currPipe.getBitmap(), wid - pipeEnd.getWidth(), j * hit / gridSize + diff, paint);
+                        canvas.drawBitmap(currPipe.getBitmap(), wid - pipeEnd.getWidth()+xMargin, j * hit / gridSize + diff+yMargin, paint);
                     }
                     else {
                         canvas.save();
@@ -266,7 +304,7 @@ public class PlayingArea {
 
 
                         currPipe.setBitmap(Bitmap.createScaledBitmap(currPipe.getBitmap(), wid / gridSize, hit / gridSize, false));
-                        canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize, j * hit / gridSize, paint);
+                        canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize+xMargin, j * hit / gridSize+yMargin, paint);
                         canvas.restore();
                     }
                 }
@@ -281,26 +319,27 @@ public class PlayingArea {
             //Draw a rotated hadle for P1 and an unrotated for P2
             if(openingPlayer==player1name) {
                 canvas.save();
-                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2);
-                canvas.drawBitmap(handle, 0, 0, paint);
+                canvas.rotate(-90, handle.getHeight() / 2+yMargin, handle.getWidth() / 2);
+                canvas.drawBitmap(handle, 0, 0+xMargin, paint);
                 canvas.restore();
-                canvas.drawBitmap(handle, 0, 2 * hit / gridSize, paint);
+                canvas.drawBitmap(handle, 0+xMargin, 2 * hit / gridSize+yMargin, paint);
             }
             //Draw a rotated hadle for P2 and an unrotated for P1
             else {
                 canvas.save();
-                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2+2 * hit / gridSize);
-                canvas.drawBitmap(handle, 0, 2 * hit / gridSize, paint);
+                canvas.rotate(-90, handle.getHeight() / 2 + yMargin, handle.getWidth() / 2 + 2 * hit / gridSize + xMargin);
+                canvas.drawCircle(0, 2 *( hit +xMargin)/ gridSize+xMargin,10,paint);
+                canvas.drawBitmap(handle, 0, 2 * (hit+xMargin) / gridSize+xMargin, paint);
                 canvas.restore();
-                canvas.drawBitmap(handle, 0, 0, paint);
+                canvas.drawBitmap(handle, 0+xMargin, 0+yMargin, paint);
 
             }
 
         }
         else {
             //Draw the handles for the start pipes unrotated
-            canvas.drawBitmap(handle, 0, 0, paint);
-            canvas.drawBitmap(handle, 0, 2 * hit / gridSize, paint);
+            canvas.drawBitmap(handle, 0+xMargin, 0+yMargin, paint);
+            canvas.drawBitmap(handle, 0+xMargin, 2 * hit / gridSize+yMargin, paint);
        }
 
 
@@ -319,7 +358,7 @@ public class PlayingArea {
             canvas.drawCircle( x * wid+pipeToAdd.getBitmap().getWidth()/2, y * hit +pipeToAdd.getBitmap().getHeight()/2,10,paint);
 
             pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
-            canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid, pipeToAdd.getY() * hit, paint);
+            canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid+xMargin, pipeToAdd.getY() * hit+yMargin, paint);
             canvas.restore();
         }
 
@@ -492,7 +531,7 @@ public class PlayingArea {
             case MotionEvent.ACTION_CANCEL:
                 touch1.id = -1;
                 touch2.id = -1;
-                snap();
+                //snap();
                 view.invalidate();
                 return true;
 
@@ -557,6 +596,46 @@ public class PlayingArea {
 
 
 
+   public boolean addToGrid(Context context,View view){
+       if(pipeToAdd.getBitmap() !=null) {
+           snap();
+           view.invalidate();
+
+
+           int xInd = (int)(pipeToAdd.getX() / (1 / (float)gridSize));
+           int yInd = (int)(pipeToAdd.getY() / (1 / (float)gridSize));
+
+            if (pipes[xInd][yInd] !=null){
+
+                Toast toast = Toast.makeText(context, R.string.badMove, Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+            }
+
+
+           currentId+=1;
+           pipes[xInd][yInd]=new Pipe(context,currentId);
+           pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
+           pipes[xInd][yInd].setX(pipeToAdd.getX());
+           pipes[xInd][yInd].setY(pipeToAdd.getY());
+           pipes[xInd][yInd].setAngle(pipeToAdd.getAngle());
+           pipes[xInd][yInd].set(this, xInd, yInd);
+
+
+
+           pipeToAdd.setBitmap(null);
+           pipeToAdd.setX(0.5f);
+           pipeToAdd.setY(0.5f);
+
+
+           return true;
+       }
+       return false;
+   }
+
+
+
+
     public void snap(){
 
         float x=pipeToAdd.getX();
@@ -567,15 +646,19 @@ public class PlayingArea {
         float xTest=x%relGridSize;
         float yTest=y%relGridSize;
 
+
+        float xOffset=((float)xMargin)/((float)width);
+        float yOffset=((float)yMargin)/((float)height);
+
         if(xTest >=relGridSize/2)
-            pipeToAdd.setX(x+(relGridSize-xTest));
+            pipeToAdd.setX(x+(relGridSize-xTest)-xOffset);
         else
-            pipeToAdd.setX(x-xTest);
+            pipeToAdd.setX(x-xTest-xOffset);
 
         if(yTest >=relGridSize/2)
-            pipeToAdd.setY(y+(relGridSize-yTest));
+            pipeToAdd.setY(y+(relGridSize-yTest)-yOffset);
         else
-            pipeToAdd.setY(y-yTest);
+            pipeToAdd.setY(y-yTest-yOffset);
 
 
     }

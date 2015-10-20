@@ -103,8 +103,9 @@ public class Pipe {
     private int id;
 
 
+
     /**
-     * THe image for the actual pipe.
+     * The image for the actual pipe.
      */
     private Bitmap pipe;
 
@@ -114,6 +115,8 @@ public class Pipe {
 
         pipe = BitmapFactory.decodeResource(context.getResources(), id);
     }
+
+
 
 
 

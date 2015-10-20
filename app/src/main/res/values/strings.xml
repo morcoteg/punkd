@@ -21,7 +21,16 @@
     <string name="title_activity_end_game">EndGame</string>
 
 
-    <string name="buttonNewGame">New Game</string>
+    <string name="buttonAddPipe">Add a pipe</string>
+    <string name="buttonDisPipe">Discard a pipe</string>
+    <string name="buttonOpen">Open valve</string>
+    <string name="buttonSurrender">Surrender</string>
 
-    <string name="sim_turn">Simulate turn</string>
+
+    <string name="buttonNewGame">NewGame</string>
+
+
+
+    <string name="badMove">Invalid Move</string>
+
 </resources>

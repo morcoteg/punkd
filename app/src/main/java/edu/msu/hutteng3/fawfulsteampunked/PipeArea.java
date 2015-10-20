@@ -204,8 +204,12 @@ public class PipeArea {
 
         touchedPipe = order.elementAt(touchedPipePos);
 
-        if(!discard)
-            touchedPipePos=-1;
+        if(!discard) {
+            touchedPipePos = -1;
+            pipeSelect.setTouchedPipe(touchedPipe);
+        }
+        else
+            pipeSelect.setTouchedPipe(null);
         return true;
     }
 
@@ -246,8 +250,14 @@ public class PipeArea {
 
         //set the new pipe to the old location
         order.set(touchedPipePos, newPipe);
-
+        pipeSelect.newTurn();
     }
+
+
+
+
+    private PipeSelectView pipeSelect;
+    public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
 
 
 
