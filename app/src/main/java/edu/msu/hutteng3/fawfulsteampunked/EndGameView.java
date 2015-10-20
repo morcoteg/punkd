@@ -24,8 +24,8 @@ public class EndGameView extends View {
 
     public EndGameView(Context context) {
         super(context);
-        pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
+       // pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        //steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
 
         int x=0;
 
@@ -34,15 +34,15 @@ public class EndGameView extends View {
 
     public EndGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-        pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
+       // pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        //steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
         init(attrs, 0);
     }
 
     public EndGameView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-        pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
+       // pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+       // steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
         init(attrs, defStyle);
     }
 
@@ -77,15 +77,15 @@ public class EndGameView extends View {
         //hit=orentation;
 
 
-        pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
-        steam = Bitmap.createScaledBitmap(steam, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
-        canvas.save();
+      //  pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
+      //  steam = Bitmap.createScaledBitmap(steam, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
+       // canvas.save();
 
 
-        canvas.rotate(90, canvas.getWidth() / 3 - 3 * pipe.getWidth() / 2, 5*canvas.getHeight() / 12-pipe.getHeight());
+        //canvas.rotate(90, canvas.getWidth() / 3 - 3 * pipe.getWidth() / 2, 5*canvas.getHeight() / 12-pipe.getHeight());
 
-        canvas.drawBitmap(pipe, canvas.getWidth() / 3 -  pipe.getWidth() , 5 * canvas.getHeight() / 24-pipe.getHeight(), paint);
-        canvas.drawBitmap(pipe, canvas.getWidth() / 3 -  pipe.getWidth() , 5 * canvas.getHeight() / 24-pipe.getHeight()-wid/1.9f, paint);
+        //canvas.drawBitmap(pipe, canvas.getWidth() / 3 -  pipe.getWidth() , 5 * canvas.getHeight() / 24-pipe.getHeight(), paint);
+        //canvas.drawBitmap(pipe, canvas.getWidth() / 3 -  pipe.getWidth() , 5 * canvas.getHeight() / 24-pipe.getHeight()-wid/1.9f, paint);
         //we are in portrait
      //   if (orentation == hit) {
             //subtract (pipeStraight.getHeight()-hit)/2 due to the rotation and the translation done
@@ -94,7 +94,7 @@ public class EndGameView extends View {
         //we are in landscape
       //  else
         //     canvas.drawBitmap(pipe,  hit / 5, 0, null);
-        canvas.restore();
+       // canvas.restore();
 
 
 

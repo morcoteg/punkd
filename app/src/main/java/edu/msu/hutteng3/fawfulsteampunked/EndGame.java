@@ -72,4 +72,10 @@ public class EndGame extends AppCompatActivity {
     }
 
 
+
+    //disables the back button
+    @Override
+    public void onBackPressed() {
+    }
+
 }

@@ -18,6 +18,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import java.io.Serializable;
 import java.util.Vector;
 
 /**
@@ -43,8 +44,13 @@ public class PlayingArea {
      */
     private Pipe [][] pipes;
 
+    /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
 
-   // public Vector<Vector<Pipe>> pipes=new Vector<Vector<Pipe>>();
+
+    // public Vector<Vector<Pipe>> pipes=new Vector<Vector<Pipe>>();
 
 
     /**
@@ -75,7 +81,60 @@ public class PlayingArea {
 
 
     private Pipe pipeToAdd;
-    public void setPipeToAdd(Bitmap pipe){pipeToAdd.setBitmap(pipe);}
+
+
+
+
+    //there was another way to change a pipes connect but it is simpler to just store the ooriginals and set on rotate
+    private boolean pipeToAddOGNorth=false;
+    private boolean pipeToAddOGEast=false;
+    private boolean pipeToAddOGSouth=false;
+    private boolean pipeToAddOGWest=false;
+
+    public void setPipeToAdd(Bitmap pipe){
+        pipeToAdd.setBitmap(pipe);
+        pipeToAdd.setAngle(0);//<keep position but reset angle
+
+        //do the pip!=null error checks to avoid segfualts when its null
+        if (pipe !=null) {
+            //set the connects for the pipe we are adding
+            if (pipe.sameAs(pipe90)) {
+                pipeToAdd.setConnect(false, true, true, false);
+
+                pipeToAddOGNorth = false;
+                pipeToAddOGEast = true;
+                pipeToAddOGSouth = true;
+                pipeToAddOGWest = false;
+
+            } else if (pipe.sameAs(pipeCap)) {
+                pipeToAdd.setConnect(false, false, true, false);
+
+                pipeToAddOGNorth = false;
+                pipeToAddOGEast = false;
+                pipeToAddOGSouth = true;
+                pipeToAddOGWest = false;
+
+            } else if (pipe.sameAs(pipeTee)) {
+                pipeToAdd.setConnect(true, true, true, false);
+
+                pipeToAddOGNorth = true;
+                pipeToAddOGEast = true;
+                pipeToAddOGSouth = true;
+                pipeToAddOGWest = false;
+
+            } else if (pipe.sameAs(pipeStraight)) {
+                pipeToAdd.setConnect(false, true, false, true);
+
+                pipeToAddOGNorth = false;
+                pipeToAddOGEast = true;
+                pipeToAddOGSouth = false;
+                pipeToAddOGWest = true;
+
+            }
+        }
+
+    }
+
 
 
 
@@ -84,7 +143,7 @@ public class PlayingArea {
     public void setAddPipe(boolean on){
         toAdd = on;
         //pipeToAdd.setX(0.5f);
-       // pipeToAdd.setY(0.5f);
+        // pipeToAdd.setY(0.5f);
     }
 
 
@@ -115,6 +174,7 @@ public class PlayingArea {
     private Bitmap pipeCap;
     private Bitmap pipe90;
     private Bitmap pipeTee;
+    private Bitmap leak;
 
 
 
@@ -149,6 +209,7 @@ public class PlayingArea {
         pipeCap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cap);
         pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
         pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
+        leak=BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
 
 
 
@@ -159,7 +220,7 @@ public class PlayingArea {
         startP1.set(this, 0, 0);
         startP1.setX(0);
         startP1.setY(0);
-
+        startP1.setConnect(false, true, false, false);
 
 
         startP2= new Pipe(context, 2);
@@ -167,8 +228,8 @@ public class PlayingArea {
         startP2.setAngle(0);
         startP2.set(this, 0, 2);
         startP2.setX(0);
-        startP2.setY(2*gridSize/5);
-
+        startP2.setY(2 * gridSize / 5);
+        startP2.setConnect(false, true, false, false);
 
 
 
@@ -176,13 +237,14 @@ public class PlayingArea {
         endP1.setBitmap(pipeEnd);
         endP1.setAngle(0);
         endP1.set(this, gridSize - 1, 1);
+        endP1.setConnect(false, false, false, true);
 
 
         endP2= new Pipe(context, 4);
         endP2.setBitmap(pipeEnd);
         endP2.setAngle(0);
         endP2.set(this, gridSize - 1, 3);
-
+        endP2.setConnect(false, false,false,true);
 
 
 
@@ -234,14 +296,14 @@ public class PlayingArea {
 
 
         if(minDim==wid){
-           // yMargin=Math.abs(wid-hit)/2;
-           // hit=minDim;
-            //height=width;
+            // yMargin=Math.abs(wid-hit)/2;
+            hit=minDim;
+            height=width;
         }
         else{
-           // xMargin=Math.abs(wid-hit)/2;
-           // wid=hit;
-           // width=height;
+            // xMargin=Math.abs(wid-hit)/2;
+            wid=hit;
+            width=height;
         }
 
 
@@ -283,8 +345,11 @@ public class PlayingArea {
 
 
 
+        //draw the leaks if there are any
+        if(leakAreas.size()!=0)
+            drawLeaks(canvas, wid, hit, paint);
 
-        //draw aall the pipes in the grid
+        //draw all the pipes in the grid
         for(int i=0; i<gridSize; i++) {
             for (int j = 0; j < gridSize; j++) {
                 if(pipes[i][j] != null) {
@@ -340,7 +405,10 @@ public class PlayingArea {
             //Draw the handles for the start pipes unrotated
             canvas.drawBitmap(handle, 0+xMargin, 0+yMargin, paint);
             canvas.drawBitmap(handle, 0+xMargin, 2 * hit / gridSize+yMargin, paint);
-       }
+        }
+
+
+
 
 
 
@@ -349,6 +417,9 @@ public class PlayingArea {
         if (toAdd == true && pipeToAdd.getBitmap() != null) {
             float x = pipeToAdd.getX();
             float y = pipeToAdd.getY();
+
+            //update params PipeToAdd
+            params.pipeToAdd = pipeToAdd;
 
             canvas.save();
 
@@ -363,6 +434,74 @@ public class PlayingArea {
         }
 
     }
+
+
+
+
+    public void drawLeaks(Canvas canvas, int wid, int hit, Paint paint){
+        //draw the leaks after the valve i open if any are found
+
+        leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
+
+        for (int i = 0; i < leakAreas.size(); i+=2){
+            int xLeakInd=leakAreas.elementAt(i);
+            int yLeakInd=leakAreas.elementAt(i + 1);
+
+            //the leak is coming from the bottom so draw normally
+            //first error check is for out of index
+            //second is to make sure the pipe we try to work with isnt null
+            if(yLeakInd!=4&&pipes[xLeakInd][yLeakInd+1]!=null &&pipes[xLeakInd][yLeakInd +1].getNorth())
+                canvas.drawBitmap(leak, xLeakInd*wid/gridSize, yLeakInd*hit/gridSize, paint);
+
+                //the leak is coming from above
+                // first error check is for out of index
+                // second is to make sure the pipe we try to work with isnt null
+            else if(yLeakInd!=0&&pipes[xLeakInd][yLeakInd-1]!=null &&pipes[xLeakInd][yLeakInd-1].getSouth()) {
+                canvas.save();
+
+                canvas.rotate(180,xLeakInd * wid / gridSize+leak.getWidth()/2, yLeakInd * hit / gridSize+leak.getHeight()/2);
+
+                canvas.drawBitmap(leak, xLeakInd*wid/gridSize, yLeakInd*hit/gridSize, paint);
+                canvas.restore();
+
+            }
+
+            //the leak is coming from the left
+            //first error check is for out of index
+            //second is to make sure the pipe we try to work with isnt null
+            else if(xLeakInd!=0&&pipes[xLeakInd-1][yLeakInd]!=null &&pipes[xLeakInd-1][yLeakInd].getEast()) {
+                canvas.save();
+
+                canvas.rotate(90, 0, 0);
+                leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
+                canvas.drawBitmap(leak, yLeakInd*hit/gridSize, -xLeakInd*wid/gridSize-pipeStart.getWidth(), paint);
+                canvas.restore();
+
+            }
+
+
+
+            //the leak is coming from the right
+            //first error check is for out of index
+            //second is to make sure the pipe we try to work with isnt null
+            else if(xLeakInd!=5&&pipes[xLeakInd+1][yLeakInd]!=null &&pipes[xLeakInd+1][yLeakInd].getWest()) {
+                canvas.save();
+
+                canvas.rotate(-90, 0, 0);
+                leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
+                canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStart.getHeight(), xLeakInd*wid/gridSize, paint);
+                canvas.restore();
+
+            }
+
+
+        }
+
+    }
+
+
+
+
 
 
 
@@ -408,7 +547,7 @@ public class PlayingArea {
      * @return Reference to Pipe object or null if none exists
      */
     public Pipe getPipe(int x, int y) {
-        if (x < 0 || x >= width || y < 0 || y >= height) {
+        if (x < 0 || x > gridSize || y < 0 || y > gridSize) {
             return null;
         }
 
@@ -505,8 +644,8 @@ public class PlayingArea {
         // puzzle.
         //
 
-       // float relX = (event.getX(0)) / width;
-       // float relY = (event.getY(0)) / height;
+        // float relX = (event.getX(0)) / width;
+        // float relY = (event.getY(0)) / height;
 
         switch(event.getActionMasked()) {
 
@@ -563,7 +702,7 @@ public class PlayingArea {
                     return true;
                 }
 
-               // break;
+                // break;
 
         }
 
@@ -579,31 +718,45 @@ public class PlayingArea {
         if (currAngle<0)
             currAngle+=360;
 
+        if(currAngle>360)
+            currAngle-=360;
+
         float normalizedAngle=currAngle%90;
 
 
 
 
-            if (normalizedAngle >= 45)
-                pipeToAdd.setAngle(currAngle + (90 - normalizedAngle));
-            else if (normalizedAngle < 45)
-                pipeToAdd.setAngle(currAngle - normalizedAngle);
+        if (normalizedAngle >= 45)
+            pipeToAdd.setAngle(currAngle + (90 - normalizedAngle));
+        else if (normalizedAngle < 45)
+            pipeToAdd.setAngle(currAngle - normalizedAngle);
 
 
+
+        if(pipeToAdd.getAngle()==270)
+            pipeToAdd.setConnect(pipeToAddOGEast,pipeToAddOGSouth,pipeToAddOGWest,pipeToAddOGNorth);
+
+        else if(pipeToAdd.getAngle()==180)
+            pipeToAdd.setConnect(pipeToAddOGSouth, pipeToAddOGWest, pipeToAddOGNorth, pipeToAddOGEast);
+
+        else if(pipeToAdd.getAngle()==90)
+            pipeToAdd.setConnect(pipeToAddOGWest,pipeToAddOGNorth,pipeToAddOGEast,pipeToAddOGSouth);
+        else if(pipeToAdd.getAngle()==0)
+            pipeToAdd.setConnect(pipeToAddOGNorth,pipeToAddOGEast,pipeToAddOGSouth,pipeToAddOGWest);
 
     }
 
 
 
 
-   public boolean addToGrid(Context context,View view){
-       if(pipeToAdd.getBitmap() !=null) {
-           snap();
-           view.invalidate();
+    public boolean addToGrid(Context context,View view){
+        if(pipeToAdd.getBitmap() !=null) {
+            snap();
+            view.invalidate();
 
 
-           int xInd = (int)(pipeToAdd.getX() / (1 / (float)gridSize));
-           int yInd = (int)(pipeToAdd.getY() / (1 / (float)gridSize));
+            int xInd = (int)(pipeToAdd.getX() / (1 / (float)gridSize));
+            int yInd = (int)(pipeToAdd.getY() / (1 / (float)gridSize));
 
             if (pipes[xInd][yInd] !=null){
 
@@ -613,25 +766,87 @@ public class PlayingArea {
             }
 
 
-           currentId+=1;
-           pipes[xInd][yInd]=new Pipe(context,currentId);
-           pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
-           pipes[xInd][yInd].setX(pipeToAdd.getX());
-           pipes[xInd][yInd].setY(pipeToAdd.getY());
-           pipes[xInd][yInd].setAngle(pipeToAdd.getAngle());
-           pipes[xInd][yInd].set(this, xInd, yInd);
+            if(!checkNeighbors(xInd, yInd)){
+                Toast toast = Toast.makeText(context, R.string.badMove, Toast.LENGTH_LONG);
+                toast.show();
+                return false;
+
+
+            }
+
+            currentId+=1;
+            pipes[xInd][yInd]=new Pipe(context,currentId);
+            pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
+            pipes[xInd][yInd].setX(pipeToAdd.getX());
+            pipes[xInd][yInd].setY(pipeToAdd.getY());
+            pipes[xInd][yInd].setAngle(pipeToAdd.getAngle());
+            pipes[xInd][yInd].set(this, xInd, yInd);
+
+
+            //saving the added pipe to params.pipes for Bundles          //////////////////////////////////////DONT FORGET THIS SHIT TODO
+            //params.pipes[xInd][yInd]=new Pipe(context,currentId);
+            //params.pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
+            //params.pipes[xInd][yInd].setX(pipeToAdd.getX());
+            //params.pipes[xInd][yInd].setY(pipeToAdd.getY());
+            //params.pipes[xInd][yInd].setAngle(pipeToAdd.getAngle());
+            //params.pipes[xInd][yInd].set(this, xInd, yInd);              ///////////////////////////////////////////////////////////
+
+            pipes[xInd][yInd].setConnect(pipeToAdd.getNorth(), pipeToAdd.getEast(),
+                    pipeToAdd.getSouth(),pipeToAdd.getWest());
+
+
+            pipeToAdd.setBitmap(null);
+            pipeToAdd.setX(0.5f);
+            pipeToAdd.setY(0.5f);
+            pipeToAdd.setAngle(0);
 
 
 
-           pipeToAdd.setBitmap(null);
-           pipeToAdd.setX(0.5f);
-           pipeToAdd.setY(0.5f);
+
+            return true;
+        }
+        return false;
+    }
 
 
-           return true;
-       }
-       return false;
-   }
+
+
+
+    public boolean checkNeighbors(int xInd, int yInd){
+
+
+        Pipe northNeighbor=null;
+        Pipe eastNeighbor=null;
+        Pipe southNeighbor=null;
+        Pipe westNeighbor=null;
+
+
+        //get the four neighbors if they exist
+        if(yInd !=0)
+            northNeighbor = pipes[xInd][yInd - 1];
+        if(xInd !=gridSize-1)
+            eastNeighbor=pipes[xInd+1][yInd];
+        if(yInd !=gridSize-1)
+            southNeighbor=pipes[xInd][yInd+1];
+        if(xInd !=0)
+            westNeighbor=pipes[xInd-1][yInd];
+
+
+
+        if(northNeighbor!=null &&pipeToAdd.getNorth()&&northNeighbor.getSouth())
+            return true;
+        else if(eastNeighbor!=null &&pipeToAdd.getEast()&& eastNeighbor.getWest())
+            return true;
+        else if (southNeighbor!=null &&pipeToAdd.getSouth()&&southNeighbor.getNorth())
+            return true;
+        else if(westNeighbor!=null &&pipeToAdd.getWest()&&westNeighbor.getEast())
+            return true;
+
+
+        return false;
+    }
+
+
 
 
 
@@ -655,12 +870,18 @@ public class PlayingArea {
         else
             pipeToAdd.setX(x-xTest-xOffset);
 
-        if(yTest >=relGridSize/2)
-            pipeToAdd.setY(y+(relGridSize-yTest)-yOffset);
+        if(yTest >= relGridSize / 2)
+            pipeToAdd.setY(y + (relGridSize - yTest) - yOffset);
         else
-            pipeToAdd.setY(y-yTest-yOffset);
+            pipeToAdd.setY(y - yTest - yOffset);
 
 
+        //from this point on are error checks for out of bounds
+        if(pipeToAdd.getX()==1.0f)
+            pipeToAdd.setX(0.8f);
+
+        if(pipeToAdd.getY()==1.0f)
+            pipeToAdd.setY(0.8f);
     }
 
 
@@ -763,8 +984,8 @@ public class PlayingArea {
             float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
             float da = (angle2 - angle1);
 
-           // if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height))
-                rotate(da, touch1.x, touch1.y);
+            // if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height))
+            rotate(da, touch1.x, touch1.y);
 
         }
     }
@@ -791,6 +1012,71 @@ public class PlayingArea {
     }
 
 
+
+
+
+
+    public boolean checkForLeaks(String player){
+
+        if(player==player1name) {
+            searchForAllLeaks(pipes[0][0]);
+            return search(pipes[0][0]);
+        }
+
+        else {
+            searchForAllLeaks(pipes[0][2]);
+            return search(pipes[0][2]);
+        }
+    }
+
+
+
+
+
+
+
+
+
+    private Vector<Integer> leakAreas=new Vector<Integer>();
+    public Vector<Integer> getLeakArea(){return leakAreas;}
+
+
+
+    /**
+     * Search to determine if this pipe has no leaks
+     * @param start Starting pipe to search from
+     * @return true if no leaks
+     */
+    public boolean searchForAllLeaks(Pipe start) {
+        /*
+         * Set the visited flags to false
+         */
+        for(Pipe[] row: pipes) {
+            for(Pipe pipe : row) {
+                if (pipe != null) {
+                    pipe.setVisited(false);
+                }
+            }
+        }
+
+        /*
+         * The pipe itself does the actual search
+         */
+        return start.searchForAllLeaks();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
     /**
      * Save the view state to a bundle
      * @param key key name to use in the bundle
@@ -798,12 +1084,7 @@ public class PlayingArea {
      */
     public void putToBundle(String key, Bundle bundle ) {
 
-        //iterate through the existing pipes urine
-        for (Pipe[] pipeArray : pipes){
-            for (Pipe pipe  : pipeArray){
-                //pipe.putToBundle(PARAMETERS, outState);
-            }
-        }
+        bundle.putSerializable(key, params);
 
     }
 
@@ -813,9 +1094,30 @@ public class PlayingArea {
      * @param bundle bundle to load from
      */
     public void getFromBundle(String key, Bundle bundle) {
+        params = (Parameters)bundle.getSerializable(key);
 
-
+        pipeToAdd = params.pipeToAdd;
+        //pipes = params.pipes;
     }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     //////////////////////////////////////////////// NESTED CLASS touch ///////////////////////////
 
@@ -878,5 +1180,36 @@ public class PlayingArea {
     }
 
 
+/////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
 
+    /**
+     * Parameters class for the Pipe's coordinates x, y and the rotation angle
+     */
+    private static class Parameters implements Serializable {
+
+
+        /**
+         * X location of Pipe relative to the image
+         */
+        public float pipeX = 0;
+
+        /**
+         * Y location of Pipe relative to the image
+         */
+        public float pipeY = 0;
+
+
+        /**
+         * Pipe rotation angle
+         */
+        public float pipeAngle = 0;
+
+        /**
+         * Storage for the pipes
+         * First level: X, second level Y
+         */
+        public Pipe [][] pipes;
+
+        public Pipe pipeToAdd;
+    }
 }

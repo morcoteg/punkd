@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -61,6 +62,9 @@ public class GameBoard extends AppCompatActivity {
             getGameBoardView().getPlayingArea().getFromBundle(PARAMETERS, savedInstanceState);
 
         }
+
+
+
     }
 
     @Override
@@ -134,6 +138,8 @@ public class GameBoard extends AppCompatActivity {
 
         Toast toast = Toast.makeText(this, currentPlayer + "\'s turn", Toast.LENGTH_LONG);
         toast.show();
+
+        this.setTitle(currentPlayer);
     }
 
 
@@ -157,24 +163,78 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-    public void open(View view){
-        getGameBoardView().setAddPipe(false);
-        getPipeSelectView().setDiscard(false);
-        getGameBoardView().setOpened(true, currentPlayer);
-        if(!getGameBoardView().checkForLeaks(currentPlayer))
-           //getGameBoardView().getLeaks();
 
-        getGameBoardView().invalidate();
+
+    /**
+     * The color select button
+     */
+    private Button getAddButton() {
+        return (Button)findViewById(R.id.buttonAdd);
+    }
+
+    /**
+     * The color select button
+     */
+    private Button getDiscardButton() {
+        return (Button)findViewById(R.id.buttonDis);
+    }
+
+
+    /**
+     * The color select button
+     */
+    private Button getOpenButton() {
+        return (Button)findViewById(R.id.buttonOpen);
+    }
+
+
+    /**
+     * The color select button
+     */
+    private Button getSurrenderButton() {
+        return (Button)findViewById(R.id.buttonSurrender);
     }
 
 
 
+    public void open(View view){
+        getGameBoardView().setAddPipe(false);
+        getPipeSelectView().setDiscard(false);
+        getGameBoardView().setOpened(true, currentPlayer);
+        if(getGameBoardView().checkForLeaks(currentPlayer))
+           won=true;
+        getAddButton().setEnabled(false);
+        getDiscardButton().setEnabled(false);
+        getOpenButton().setEnabled(false);
+        getSurrenderButton().setText(R.string.openedValve);
+        getGameBoardView().invalidate();
+    }
+
+
+    private boolean won=false;
+
+
+
     public void surrender(View view) {
+
+        getGameBoardView().clear();
+
         Intent intent = new Intent(this, EndGame.class);
 
-        intent.putExtra("WINNER", otherPlayer);
-        intent.putExtra("LOSER", currentPlayer);
+        //the pipe was fully connected and there were no leaks
+        if(won){
+            intent.putExtra("WINNER", currentPlayer);
+            intent.putExtra("LOSER", otherPlayer);
+        }
+        //either the current player surrendered or he had leaks in his path
+        else {
+            intent.putExtra("WINNER", otherPlayer);
+            intent.putExtra("LOSER", currentPlayer);
+        }
 
+
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
     }
 
@@ -184,8 +244,21 @@ public class GameBoard extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
 
-        getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
+        if(getGameBoardView().getPlayingArea()!=null)
+            getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
     }
+
+
+
+
+
+
+    //disables the back button
+    @Override
+    public void onBackPressed() {
+    }
+
+
 
 }
 

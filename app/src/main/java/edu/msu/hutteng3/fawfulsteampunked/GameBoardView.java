@@ -113,6 +113,11 @@ public class GameBoardView extends View {
 
     public boolean checkForLeaks(String player){return playingArea.checkForLeaks(player);}
 
+    public void clear(){
+        playingArea=null;
+    }
+
+
 
 
 
