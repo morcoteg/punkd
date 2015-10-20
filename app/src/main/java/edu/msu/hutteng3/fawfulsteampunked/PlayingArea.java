@@ -86,10 +86,10 @@ public class PlayingArea {
 
 
     //there was another way to change a pipes connect but it is simpler to just store the ooriginals and set on rotate
-    private boolean pipeToAddOGNorth=false;
-    private boolean pipeToAddOGEast=false;
-    private boolean pipeToAddOGSouth=false;
-    private boolean pipeToAddOGWest=false;
+    //private boolean pipeToAddOGNorth=false;
+    //private boolean pipeToAddOGEast=false;
+    //private boolean pipeToAddOGSouth=false;
+    //private boolean pipeToAddOGWest=false;
 
     public void setPipeToAdd(Bitmap pipe){
         pipeToAdd.setBitmap(pipe);
@@ -101,34 +101,34 @@ public class PlayingArea {
             if (pipe.sameAs(pipe90)) {
                 pipeToAdd.setConnect(false, true, true, false);
 
-                pipeToAddOGNorth = false;
-                pipeToAddOGEast = true;
-                pipeToAddOGSouth = true;
-                pipeToAddOGWest = false;
+                params.pipeToAddOGNorth = false;
+                params.pipeToAddOGEast = true;
+                params.pipeToAddOGSouth = true;
+                params.pipeToAddOGWest = false;
 
             } else if (pipe.sameAs(pipeCap)) {
                 pipeToAdd.setConnect(false, false, true, false);
 
-                pipeToAddOGNorth = false;
-                pipeToAddOGEast = false;
-                pipeToAddOGSouth = true;
-                pipeToAddOGWest = false;
+                params.pipeToAddOGNorth = false;
+                params.pipeToAddOGEast = false;
+                params.pipeToAddOGSouth = true;
+                params.pipeToAddOGWest = false;
 
             } else if (pipe.sameAs(pipeTee)) {
                 pipeToAdd.setConnect(true, true, true, false);
 
-                pipeToAddOGNorth = true;
-                pipeToAddOGEast = true;
-                pipeToAddOGSouth = true;
-                pipeToAddOGWest = false;
+                params.pipeToAddOGNorth = true;
+                params.pipeToAddOGEast = true;
+                params.pipeToAddOGSouth = true;
+                params.pipeToAddOGWest = false;
 
             } else if (pipe.sameAs(pipeStraight)) {
                 pipeToAdd.setConnect(false, true, false, true);
 
-                pipeToAddOGNorth = false;
-                pipeToAddOGEast = true;
-                pipeToAddOGSouth = false;
-                pipeToAddOGWest = true;
+                params.pipeToAddOGNorth = false;
+                params.pipeToAddOGEast = true;
+                params.pipeToAddOGSouth = false;
+                params.pipeToAddOGWest = true;
 
             }
         }
@@ -734,15 +734,19 @@ public class PlayingArea {
 
 
         if(pipeToAdd.getAngle()==270)
-            pipeToAdd.setConnect(pipeToAddOGEast,pipeToAddOGSouth,pipeToAddOGWest,pipeToAddOGNorth);
+            pipeToAdd.setConnect(params.pipeToAddOGEast,params.pipeToAddOGSouth,
+                    params.pipeToAddOGWest,params.pipeToAddOGNorth);
 
         else if(pipeToAdd.getAngle()==180)
-            pipeToAdd.setConnect(pipeToAddOGSouth, pipeToAddOGWest, pipeToAddOGNorth, pipeToAddOGEast);
+            pipeToAdd.setConnect(params.pipeToAddOGSouth, params.pipeToAddOGWest,
+                    params.pipeToAddOGNorth, params.pipeToAddOGEast);
 
         else if(pipeToAdd.getAngle()==90)
-            pipeToAdd.setConnect(pipeToAddOGWest,pipeToAddOGNorth,pipeToAddOGEast,pipeToAddOGSouth);
+            pipeToAdd.setConnect(params.pipeToAddOGWest,params.pipeToAddOGNorth,
+                    params.pipeToAddOGEast,params.pipeToAddOGSouth);
         else if(pipeToAdd.getAngle()==0)
-            pipeToAdd.setConnect(pipeToAddOGNorth,pipeToAddOGEast,pipeToAddOGSouth,pipeToAddOGWest);
+            pipeToAdd.setConnect(params.pipeToAddOGNorth,params.pipeToAddOGEast
+                    ,params.pipeToAddOGSouth,params.pipeToAddOGWest);
 
     }
 
@@ -794,6 +798,7 @@ public class PlayingArea {
             pipes[xInd][yInd].setConnect(pipeToAdd.getNorth(), pipeToAdd.getEast(),
                     pipeToAdd.getSouth(),pipeToAdd.getWest());
 
+            params.pipes=pipes;
 
             pipeToAdd.setBitmap(null);
             pipeToAdd.setX(0.5f);
@@ -877,10 +882,10 @@ public class PlayingArea {
 
 
         //from this point on are error checks for out of bounds
-        if(pipeToAdd.getX()==1.0f)
+        if(pipeToAdd.getX()>=1.0f)
             pipeToAdd.setX(0.8f);
 
-        if(pipeToAdd.getY()==1.0f)
+        if(pipeToAdd.getY()>=1.0f)
             pipeToAdd.setY(0.8f);
     }
 
@@ -1062,7 +1067,11 @@ public class PlayingArea {
         /*
          * The pipe itself does the actual search
          */
-        return start.searchForAllLeaks();
+
+        boolean found= start.searchForAllLeaks();
+        //params.leakAreas=leakAreas;
+        return found;
+
     }
 
 
@@ -1096,8 +1105,11 @@ public class PlayingArea {
     public void getFromBundle(String key, Bundle bundle) {
         params = (Parameters)bundle.getSerializable(key);
 
-        pipeToAdd = params.pipeToAdd;
-        //pipes = params.pipes;
+        if(params.pipeToAdd!=null)
+             pipeToAdd = params.pipeToAdd;
+        if(params.pipes!=null)
+             pipes = params.pipes;
+        //leakAreas =params.leakAreas;
     }
 
 
@@ -1211,5 +1223,17 @@ public class PlayingArea {
         public Pipe [][] pipes;
 
         public Pipe pipeToAdd;
+
+
+
+        public boolean pipeToAddOGNorth=false;
+        public boolean pipeToAddOGEast=false;
+        public boolean pipeToAddOGSouth=false;
+        public boolean pipeToAddOGWest=false;
+
+
+        //Vector<Integer> leakAreas;
+
+
     }
 }
