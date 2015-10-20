@@ -10,6 +10,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class GameBoard extends AppCompatActivity {
 
@@ -110,57 +111,57 @@ public class GameBoard extends AppCompatActivity {
     private String otherPlayer;
 
 
-    public void newTurn(View view){
-        //Needs to be moved somewhere else to not have the player name come up as NULL
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
 
-        // Parameterize the builder
-        builder.setTitle(currentPlayer + "\'s turn");
 
-        String thing=player1name;
-        builder.setItems(new CharSequence[]
-                        {"Add a pipe", "Discard a pipe", "Surrender", "Open valve"},
-                new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int which) {
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                        switch (which) {
-                            case 0:
-                                //add
-                                getGameBoardView().setAddPipe(true);
-                                getPipeSelectView().setDiscard(false);
-                                break;
-                            case 1:
-                                //delete
-                                getGameBoardView().setAddPipe(false);
-                                getPipeSelectView().setDiscard(true);
-                                break;
-                            case 2:
-                                //surrender
-                                surrender(otherPlayer,currentPlayer);
-                                break;
-                            case 3:
-                                //open valve
-                                getGameBoardView().setAddPipe(false);
-                                getPipeSelectView().setDiscard(false);
-                                getGameBoardView().setOpened(true,currentPlayer);
-                                getGameBoardView().invalidate();
-                                String temp=currentPlayer;
-                                currentPlayer=otherPlayer;
-                                otherPlayer=temp;
-                                break;
-                        }
-                    }
-                });
-        builder.create().show();
+
+
+    public void switchTurn(){
+        getGameBoardView().invalidate();
+        getPipeSelectView().invalidate();
+        String temp=currentPlayer;
+        currentPlayer=otherPlayer;
+        otherPlayer=temp;
+
+        getGameBoardView().setAddPipe(true);
+        
+        Toast toast = Toast.makeText(this, currentPlayer + "\'s turn", Toast.LENGTH_LONG);
+        toast.show();
     }
 
 
-    public void surrender(String winner, String loser) {
+
+
+    public void addPipe(View view){
+        getGameBoardView().setAddPipe(true);
+        getPipeSelectView().setDiscard(false);
+
+        if(getGameBoardView().addToGrid(this)) {
+            switchTurn();
+        }
+    }
+
+
+
+    public void discardPipe(View view) {
+        getPipeSelectView().setDiscard(true);
+        getGameBoardView().setPipeToAdd(null);
+    }
+
+
+    public void open(View view){
+        getGameBoardView().setAddPipe(false);
+        getPipeSelectView().setDiscard(false);
+        getGameBoardView().setOpened(true, currentPlayer);
+        getGameBoardView().invalidate();
+    }
+
+
+
+    public void surrender(View view) {
         Intent intent = new Intent(this, EndGame.class);
 
-        intent.putExtra("WINNER", winner);
-        intent.putExtra("LOSER", loser);
+        intent.putExtra("WINNER", otherPlayer);
+        intent.putExtra("LOSER", currentPlayer);
 
         startActivity(intent);
     }

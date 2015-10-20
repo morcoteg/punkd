@@ -11,8 +11,8 @@
         android:id="@+id/gameBoardView"
         android:background="@android:color/white"
         android:layout_toRightOf="@+id/pipeSelectView"
-        android:layout_toLeftOf="@+id/buttonSim"
-        android:layout_toStartOf="@+id/buttonSim" />
+        android:layout_toStartOf="@+id/buttonAdd"
+        android:layout_toLeftOf="@+id/buttonSurrender" />
 
     <edu.msu.hutteng3.fawfulsteampunked.PipeSelectView
         android:layout_width="100dp"
@@ -25,11 +25,42 @@
     <Button
         android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="@string/sim_turn"
-        android:id="@+id/buttonSim"
-        android:onClick="newTurn"
-        android:layout_alignParentTop="true"
+        android:text="@string/buttonDisPipe"
+        android:id="@+id/buttonDis"
+        android:onClick="discardPipe"
+        android:layout_below="@+id/buttonAdd"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonAddPipe"
+        android:id="@+id/buttonAdd"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:onClick="addPipe" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonOpen"
+        android:id="@+id/buttonOpen"
+        android:layout_above="@+id/buttonSurrender"
+        android:layout_toRightOf="@+id/gameBoardView"
+        android:layout_toEndOf="@+id/gameBoardView"
+        android:onClick="open" />
+
+    <Button
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        android:text="@string/buttonSurrender"
+        android:id="@+id/buttonSurrender"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/buttonDis"
+        android:layout_alignStart="@+id/buttonDis"
+        android:textSize="12dp"
+        android:onClick="surrender" />
 
 </RelativeLayout>

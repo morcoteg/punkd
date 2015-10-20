@@ -71,6 +71,14 @@ public class GameBoardView extends View {
 
 
 
+
+    public void newTurn(){
+        GameBoard gameBoard = (GameBoard) this.getContext();
+        gameBoard.switchTurn();
+    }
+
+
+
     public void setAddPipe(boolean on){playingArea.setAddPipe(on);}
 
 
@@ -100,4 +108,5 @@ public class GameBoardView extends View {
 
     public void setOpened(boolean toOpen,String currentPlayer){playingArea.setOpened(toOpen,currentPlayer);}
 
+    public boolean addToGrid(Context context){return playingArea.addToGrid(context,this);}
 }

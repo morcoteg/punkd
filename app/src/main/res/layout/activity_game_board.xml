@@ -10,7 +10,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/gameBoardView"
         android:background="@android:color/white"
-        android:layout_above="@+id/buttonSim"
+        android:layout_above="@+id/buttonDis"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/pipeSelectView" />
@@ -25,12 +25,46 @@
         android:layout_alignParentStart="true" />
 
     <Button
-        android:layout_width="wrap_content"
+        android:layout_width="75dp"
         android:layout_height="100dp"
-        android:text="@string/sim_turn"
-        android:id="@+id/buttonSim"
-        android:onClick="newTurn"
+        android:text="@string/buttonDisPipe"
+        android:id="@+id/buttonDis"
+        android:onClick="discardPipe"
         android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true" />
+        android:layout_toRightOf="@+id/buttonAdd"
+        android:layout_toEndOf="@+id/buttonAdd"
+        android:textSize="12dp" />
+
+    <Button
+        android:layout_width="66dp"
+        android:layout_height="100dp"
+        android:text="@string/buttonAddPipe"
+        android:id="@+id/buttonAdd"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:onClick="addPipe" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:text="@string/buttonOpen"
+        android:id="@+id/buttonOpen"
+        android:layout_alignParentBottom="true"
+        android:layout_toLeftOf="@+id/buttonSurrender"
+        android:layout_toStartOf="@+id/buttonSurrender"
+        android:onClick="open" />
+
+    <Button
+        android:layout_width="70dp"
+        android:layout_height="100dp"
+        android:text="@string/buttonSurrender"
+        android:id="@+id/buttonSurrender"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textSize="8dp"
+        android:nestedScrollingEnabled="false"
+        android:onClick="surrender" />
 
 </RelativeLayout>
