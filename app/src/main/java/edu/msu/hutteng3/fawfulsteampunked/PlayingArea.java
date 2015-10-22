@@ -1200,21 +1200,6 @@ public class PlayingArea {
     private static class Parameters implements Serializable {
 
 
-        /**
-         * X location of Pipe relative to the image
-         */
-        public float pipeX = 0;
-
-        /**
-         * Y location of Pipe relative to the image
-         */
-        public float pipeY = 0;
-
-
-        /**
-         * Pipe rotation angle
-         */
-        public float pipeAngle = 0;
 
         /**
          * Storage for the pipes
