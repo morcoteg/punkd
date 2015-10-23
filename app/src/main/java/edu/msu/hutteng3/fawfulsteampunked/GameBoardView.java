@@ -98,6 +98,10 @@ public class GameBoardView extends View {
         playingArea.setPlayer2Name(name);
     }
 
+
+
+    public void setCurrentPlayer(String player){playingArea.setCurrentPlayer(player);}
+
     public void setGridSize(int scale){
         playingArea.setGridSize(scale);
     }
@@ -106,7 +110,7 @@ public class GameBoardView extends View {
     public PlayingArea getPlayingArea(){return playingArea;}
 
 
-    public void setOpened(boolean toOpen,String currentPlayer){playingArea.setOpened(toOpen,currentPlayer);}
+    public void setOpened(boolean toOpen){playingArea.setOpened(toOpen);}
 
     public boolean addToGrid(Context context){return playingArea.addToGrid(context,this);}
 
@@ -118,7 +122,7 @@ public class GameBoardView extends View {
     }
 
 
-
+    public void setWon(boolean won){playingArea.setWon(won);}
 
 
 }

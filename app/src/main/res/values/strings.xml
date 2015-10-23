@@ -31,7 +31,15 @@
 
 
 
-    <string name="badMove">Invalid Move</string>
+    <string name="badMoveOnTop">Invalid Move: there is already a pipe in that location.</string>
+    <string name="badMoveNoConnect">Invalid Move: there is no connection point between this pipe
+        and another pipe on your path.</string>
+    <string name="badMoveOpponentsPath">Invalid Move: you may not place a pipe on
+        your opponents path.</string>
+    <string name="badMoveConnectToEnd">Invalid Move: you may not place directly to the end pipe
+        without connecting to another pipe.</string>
+
+
     <string name="openedValve">Continue</string>
 
 

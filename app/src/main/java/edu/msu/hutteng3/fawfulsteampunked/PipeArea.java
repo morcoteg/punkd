@@ -6,9 +6,11 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 
+import java.io.Serializable;
 import java.util.Random;
 import java.util.Vector;
 
@@ -38,18 +40,20 @@ public class PipeArea {
 
 
         order.setSize(5);
-        order.add(0,pipeCap);
-        order.add(1,pipe90);
-        order.add(2,pipe90);
-        order.add(3,pipeTee);
-        order.add(4, pipeStraight);
+        params.order.setSize(5);
+
+        order.set(0, pipeCap);
+        order.set(1, pipe90);
+        order.set(2, pipe90);
+        order.set(3, pipeTee);
+        order.set(4, pipeStraight);
     }
 
 
 
     private int cwidth;
     private int cheight;
-    private int margin=20;
+    private static final int margin=20;
 
 
     public void draw(Canvas canvas) {
@@ -72,9 +76,9 @@ public class PipeArea {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
 
-        if (discard && touchedPipePos!=-1) {
+        if (params.discard && touchedPipePos!=-1) {
             discardPipe();
-            discard = false; //need to set to false because you can oly generate 1 new pipe at a time
+            params.discard = false; //need to set to false because you can oly generate 1 new pipe at a time
             touchedPipePos =- 1;
         }
 
@@ -204,7 +208,7 @@ public class PipeArea {
 
         touchedPipe = order.elementAt(touchedPipePos);
 
-        if(!discard) {
+        if(!params.discard) {
             touchedPipePos = -1;
             pipeSelect.setTouchedPipe(touchedPipe);
         }
@@ -220,9 +224,9 @@ public class PipeArea {
 
     public void setTouchedPipePos(int pos){touchedPipePos=pos;}
 
-    public boolean discard=false;
 
-    public void setDiscard(boolean disc){discard=disc;}
+
+    public void setDiscard(boolean disc){params.discard=disc;}
 
 
     public void discardPipe(){
@@ -258,6 +262,118 @@ public class PipeArea {
 
     private PipeSelectView pipeSelect;
     public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
+
+
+
+
+
+
+
+
+    /**
+     * Save the view state to a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to save to
+     */
+    public void putToBundle(String key, Bundle bundle ) {
+
+
+
+
+       /* for (int i=0;i<order.size();i++) {
+            int id=-1;
+            if(order.elementAt(i).sameAs(pipe90))
+                id=1;
+            else if(order.elementAt(i).sameAs(pipeCap))
+                id=2;
+            else if(order.elementAt(i).sameAs(pipeStraight))
+                id=3;
+            else if(order.elementAt(i).sameAs(pipeTee))
+                id=4;
+
+            if(id!=-1)
+                params.order.set(i,id) ;
+        }
+*/
+
+        params.order=order;
+        bundle.putSerializable(key, params);
+
+    }
+
+    /**
+     * Get the view state from a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to load from
+     */
+    public void getFromBundle(String key, Bundle bundle) {
+        params = (Parameters)bundle.getSerializable(key);
+
+        if(params.order !=null) {
+           /* for(int i=0; i<params.order.size();i++)
+            {
+                if(params.order.elementAt(i).equals(1))
+                    order.set(i, pipe90);
+                else if(params.order.elementAt(i).equals(2))
+                    order.set(i, pipeCap);
+                else if(params.order.elementAt(i).equals(3))
+                    order.set(i, pipeStraight);
+                else if(params.order.elementAt(i).equals(4))
+                    order.set(i, pipeTee);
+
+            }*/
+
+            order=params.order;
+        }
+    }
+
+
+
+
+
+
+
+
+
+
+
+/////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
+
+    /**
+     * Parameters class for the Pipe's coordinates x, y and the rotation angle
+     */
+    private static class Parameters implements Serializable {
+
+
+
+        public boolean discard=false;
+
+        //public Vector<Integer> order=new Vector<Integer>();
+        public Vector<Bitmap> order=new Vector<Bitmap>();
+
+
+    }
+
+
+
+
 
 
 

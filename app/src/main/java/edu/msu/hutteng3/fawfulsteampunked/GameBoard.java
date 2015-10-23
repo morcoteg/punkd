@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -12,6 +13,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import java.io.Serializable;
 
 public class GameBoard extends AppCompatActivity {
 
@@ -25,7 +28,9 @@ public class GameBoard extends AppCompatActivity {
     public static final int GRID_10 = 1;
     public static final int GRID_20 = 2;
 
-    private static final String PARAMETERS = "parameters";
+    private static final String PARAMETERS_PLAYINGAREA = "parametersPA";
+    private static final String PARAMETERS_GAMEBOARD = "parametersGB";
+    private static final String PARAMETERS_PIPESELECT = "parametersPS";
 
 
     @Override
@@ -41,12 +46,10 @@ public class GameBoard extends AppCompatActivity {
         int gridSize = extras.getInt("GRID_SIZE");
 
 
-        player1name = p1;
-        player2name = p2;
 
-        //set these to initially be p1 for curerent and p2 for other to give the first player the first move
-        currentPlayer = p1;
-        otherPlayer = p2;
+
+
+
 
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);
@@ -59,13 +62,28 @@ public class GameBoard extends AppCompatActivity {
         *   Save any state
         */
         if (savedInstanceState !=  null){
-            getGameBoardView().getPlayingArea().getFromBundle(PARAMETERS, savedInstanceState);
+            getGameBoardView().getPlayingArea().getFromBundle(PARAMETERS_PLAYINGAREA, savedInstanceState);
+            getPipeSelectView().getPipeArea().getFromBundle(PARAMETERS_PIPESELECT,savedInstanceState);
+            this.getFromBundle(PARAMETERS_GAMEBOARD , savedInstanceState);
 
         }
 
 
 
+        if(params.firstTurn) {
+            //set these to initially be p1 for curerent and p2 for other to give the first player the first move
+            params.currentPlayer = p1;
+            params.otherPlayer = p2;
+            this.setTitle(params.currentPlayer);
+            params.firstTurn=false;
+            getGameBoardView().setCurrentPlayer(params.currentPlayer);
+        }
+
+
     }
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,20 +125,12 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-    public void setP1Name(){
-        getGameBoardView().setPlayer1name(Integer.toString(R.id.player1));
-    }
-
-    public void setP2Name(View view){
-        getGameBoardView().setPlayer2name(Integer.toString(R.id.player2));
-    }
 
 
 
-    private String player1name;
-    private String player2name;
-    private String currentPlayer;
-    private String otherPlayer;
+
+
+
 
 
 
@@ -130,23 +140,26 @@ public class GameBoard extends AppCompatActivity {
     public void switchTurn(){
         getGameBoardView().invalidate();
         getPipeSelectView().invalidate();
-        String temp=currentPlayer;
-        currentPlayer=otherPlayer;
-        otherPlayer=temp;
+        String temp=params.currentPlayer;
+        params.currentPlayer=params.otherPlayer;
+        params.otherPlayer=temp;
 
-        getGameBoardView().setAddPipe(true);
+        params.setAddPipe=true;
+        getGameBoardView().setAddPipe(params.setAddPipe);
 
-        Toast toast = Toast.makeText(this, currentPlayer + "\'s turn", Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this, params.currentPlayer + "\'s turn", Toast.LENGTH_LONG);
         toast.show();
 
-        this.setTitle(currentPlayer);
+        this.setTitle(params.currentPlayer);
+        getGameBoardView().setCurrentPlayer(params.currentPlayer);
     }
 
 
 
 
     public void addPipe(View view){
-        getGameBoardView().setAddPipe(true);
+        params.setAddPipe=true;
+        getGameBoardView().setAddPipe(params.setAddPipe);
         getPipeSelectView().setDiscard(false);
 
         if(getGameBoardView().addToGrid(this)) {
@@ -158,6 +171,8 @@ public class GameBoard extends AppCompatActivity {
 
     public void discardPipe(View view) {
         getPipeSelectView().setDiscard(true);
+        params.setAddPipe=false;
+        getGameBoardView().setAddPipe(params.setAddPipe);
         getGameBoardView().setPipeToAdd(null);
     }
 
@@ -198,38 +213,50 @@ public class GameBoard extends AppCompatActivity {
 
 
     public void open(View view){
-        getGameBoardView().setAddPipe(false);
+        params.setAddPipe=false;
+        getGameBoardView().setAddPipe(params.setAddPipe);
+
         getPipeSelectView().setDiscard(false);
-        getGameBoardView().setOpened(true, currentPlayer);
-        if(getGameBoardView().checkForLeaks(currentPlayer))
-           won=true;
-        getAddButton().setEnabled(false);
-        getDiscardButton().setEnabled(false);
-        getOpenButton().setEnabled(false);
-        getSurrenderButton().setText(R.string.openedValve);
+        getGameBoardView().setOpened(true);
+        if(getGameBoardView().checkForLeaks(params.currentPlayer)) {
+            params.won = true;
+            getGameBoardView().setWon(params.won);
+        }
+        params.addEnabled=false;
+        params.discardEnabled=false;
+        params.openEnabled=false;
+
+        getAddButton().setEnabled(params.addEnabled);
+        getDiscardButton().setEnabled(params.discardEnabled);
+        getOpenButton().setEnabled(params.openEnabled);
+
+
+        params.surrenderString=R.string.openedValve;
+        getSurrenderButton().setText(params.surrenderString);
         getGameBoardView().invalidate();
     }
 
 
-    private boolean won=false;
+
 
 
 
     public void surrender(View view) {
 
         getGameBoardView().clear();
+        getPipeSelectView().clear();
 
         Intent intent = new Intent(this, EndGame.class);
 
         //the pipe was fully connected and there were no leaks
-        if(won){
-            intent.putExtra("WINNER", currentPlayer);
-            intent.putExtra("LOSER", otherPlayer);
+        if(params.won){
+            intent.putExtra("WINNER", params.currentPlayer);
+            intent.putExtra("LOSER", params.otherPlayer);
         }
         //either the current player surrendered or he had leaks in his path
         else {
-            intent.putExtra("WINNER", otherPlayer);
-            intent.putExtra("LOSER", currentPlayer);
+            intent.putExtra("WINNER", params.otherPlayer);
+            intent.putExtra("LOSER", params.currentPlayer);
         }
 
 
@@ -245,7 +272,12 @@ public class GameBoard extends AppCompatActivity {
         super.onSaveInstanceState(outState);
 
         if(getGameBoardView().getPlayingArea()!=null)
-            getGameBoardView().getPlayingArea().putToBundle(PARAMETERS, outState);
+            getGameBoardView().getPlayingArea().putToBundle(PARAMETERS_PLAYINGAREA, outState);
+
+        if(getPipeSelectView().getPipeArea() !=null)
+            getPipeSelectView().getPipeArea().putToBundle(PARAMETERS_PIPESELECT, outState);
+
+        this.putToBundle(PARAMETERS_GAMEBOARD, outState);
     }
 
 
@@ -260,7 +292,89 @@ public class GameBoard extends AppCompatActivity {
 
 
 
+
+
+
+
+    /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
+
+
+
+
+
+
+
+
+    /**
+     * Save the view state to a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to save to
+     */
+    public void putToBundle(String key, Bundle bundle ) {
+
+        bundle.putSerializable(key, params);
+
+    }
+
+    /**
+     * Get the view state from a bundle
+     * @param key key name to use in the bundle
+     * @param bundle bundle to load from
+     */
+    public void getFromBundle(String key, Bundle bundle) {
+        params = (Parameters) bundle.getSerializable(key);
+
+        getAddButton().setEnabled(params.addEnabled);
+        getDiscardButton().setEnabled(params.discardEnabled);
+        getOpenButton().setEnabled(params.openEnabled);
+        this.setTitle(params.currentPlayer);
+
+        getSurrenderButton().setText(params.surrenderString);
+
+
+        getGameBoardView().setAddPipe(params.setAddPipe);
+    }
+
+
+
+
+        /////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
+
+    /**
+     * Parameters class for the Pipe's coordinates x, y and the rotation angle
+     */
+    private static class Parameters implements Serializable {
+
+
+        public boolean addEnabled=true;
+        public boolean discardEnabled=true;
+        public boolean openEnabled=true;
+
+        public String currentPlayer;
+        public String otherPlayer;
+        public boolean firstTurn=true;
+        public boolean setAddPipe=true;
+        public int surrenderString=R.string.buttonSurrender;
+
+
+        public boolean won=false;
+    }
+
+
 }
+
+
+
+
+
+
+
+
+
+
 
 
 

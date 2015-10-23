@@ -11,7 +11,7 @@ import java.io.Serializable;
 /**
  * Created by Tyler on 10/10/2015.
  */
-public class Pipe {
+public class Pipe{
 
 
     /**
@@ -62,6 +62,10 @@ public class Pipe {
 
 
 
+    private String placingPlayer;
+    public String getPlacingPlayer(){return placingPlayer;}
+    public void setPlacingPlayer(String player){placingPlayer=player;}
+
 
     /**
      * X location in the playing area (index into array)
@@ -103,7 +107,8 @@ public class Pipe {
      * The pipe ID
      */
     private int id;
-
+    public void setID(int newID){id=newID;}
+    public int getID(){return id;}
 
 
     public void setConnect(boolean north, boolean east, boolean south, boolean west) {
@@ -140,13 +145,13 @@ public class Pipe {
     /**
      * The image for the actual pipe.
      */
-    private Bitmap pipe;
+   // private Bitmap pipe;
 
 
     public Pipe(Context context, int id) {
         this.id = id;
 
-        pipe = BitmapFactory.decodeResource(context.getResources(), id);
+       // pipe = BitmapFactory.decodeResource(context.getResources(), id);
     }
 
 
@@ -213,8 +218,6 @@ public class Pipe {
 
 
 
-    private boolean leakArea=false;
-    public void setLeak(boolean leak){leakArea=leak;}
 
 
 
@@ -407,29 +410,60 @@ public class Pipe {
     }
 
 
-    /**
+
+
+/*
+
+
+     * The current parameters
+
+    private Parameters params = new Parameters();
+
+
+
+
+
      * Save the view state to a bundle
      * @param key key name to use in the bundle
      * @param bundle bundle to save to
-     */
-    public void putToBundle(String key, Bundle bundle) {
 
+    public void putToBundle(String key, Bundle bundle ) {
+
+        bundle.putSerializable(key, params);
 
     }
 
-    /**
+
      * Get the view state from a bundle
      * @param key key name to use in the bundle
      * @param bundle bundle to load from
-     */
+
     public void getFromBundle(String key, Bundle bundle) {
+        params = (Parameters) bundle.getSerializable(key);
 
 
     }
 
 
-    ///////////////////////////////////////////////// NESTED CLASSES parameters ///////////////////////////
 
+
+    /////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
+
+
+     * Parameters class for the Pipe's coordinates x, y and the rotation angle
+
+    private static class Parameters implements Serializable {
+
+
+        public boolean visied;
+
+
+
+
+
+    }
+
+*/
 
 
 }
