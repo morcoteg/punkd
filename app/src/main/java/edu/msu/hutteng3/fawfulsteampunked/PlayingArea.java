@@ -33,6 +33,11 @@ public class PlayingArea {
     private int height;
 
     /**
+     *  Scale variable for when user scales the screen, zoom in/out
+     */
+    private float scale = 1.0f;
+
+    /**
      * Storage for the pipes
      * First level: X, second level Y
      */
@@ -303,28 +308,32 @@ public class PlayingArea {
 
     public void draw(Canvas canvas) {
 
-        int wid = canvas.getWidth();
-        int hit = canvas.getHeight();
+        int wid = (canvas.getWidth());
+        int hit = (canvas.getHeight());
 
+        if (this.scale != 0.0f) {
+            wid = (int) Math.ceil((canvas.getWidth() * this.scale));
+            hit = (int) Math.ceil((canvas.getHeight()) * this.scale);
+        }
 
 
         // Determine the minimum of the two dimensions
         int minDim = wid < hit ? wid : hit;
 
 
-        width=wid ;
-        height=hit ;
+        width = wid ;
+        height = hit ;
 
 
-        if(minDim==wid){
+        if(minDim == wid){
             // yMargin=Math.abs(wid-hit)/2;
-            hit=minDim;
-            height=width;
+            hit = minDim;
+            height = width;
         }
         else{
             // xMargin=Math.abs(wid-hit)/2;
-            wid=hit;
-            width=height;
+            wid = hit;
+            width = height;
         }
 
 
@@ -1083,6 +1092,23 @@ public class PlayingArea {
 
 
     /**
+     * Determine the angle for two touches
+     * @param x1 Touch 1 x
+     * @param y1 Touch 1 y
+     * @param x2 Touch 2 x
+     * @param y2 Touch 2 y
+     * @return computed distance in ... floats?
+     */
+    private float distance(float x1, float y1, float x2, float y2) {
+        float dx = x2 - x1;
+        float dy = y2 - y1;
+
+        //Now that we have the change in x and y, the hypotenuse is the distance!
+        return (float)Math.sqrt((dx * dx) + (dy * dy));
+    }
+
+
+    /**
      * Move the puzzle piece by dx, dy
 
      */
@@ -1117,6 +1143,21 @@ public class PlayingArea {
             // if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height))
             rotate(da, touch1.x, touch1.y);
 
+
+            // if we aren't hitting a pipe, allow SCALING
+            if (! pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height)) {
+
+                /*
+                * Scaling
+                */
+                float distance1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+                float distance2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
+                float scaleFloat = distance2 / distance1;
+                //float dist = distance2 - distance1;
+                scale(scaleFloat);
+
+            }
+
         }
     }
 
@@ -1139,6 +1180,15 @@ public class PlayingArea {
 
         pipeToAdd.setX(xp / width);
         pipeToAdd.setY(yp / height);
+    }
+
+
+    /**
+     * Scale the image based on distance between the point x1, y1
+     * @param distance Distance to scale in... float?
+     */
+    public void scale(float distance) {
+        this.scale *= distance;
     }
 
 
@@ -1236,18 +1286,6 @@ public class PlayingArea {
         if(params.leakAreas!=null)
             leakAreas =params.leakAreas;
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
