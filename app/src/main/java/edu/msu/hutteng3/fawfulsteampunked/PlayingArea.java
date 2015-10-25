@@ -94,7 +94,7 @@ public class PlayingArea {
         pipeToAdd.setBitmap(pipe);
         pipeToAdd.setAngle(0);//<keep position but reset angle
 
-        //do the pip!=null error checks to avoid segfualts when its null
+        //do the pip!=null error checks to avoid segfaults when its null
         if (pipe !=null) {
             //set the connects for the pipe we are adding
             if (pipe.sameAs(pipe90)) {
@@ -308,6 +308,7 @@ public class PlayingArea {
 
     public void draw(Canvas canvas) {
 
+
         int wid = (canvas.getWidth());
         int hit = (canvas.getHeight());
 
@@ -318,23 +319,18 @@ public class PlayingArea {
         int minDim = wid < hit ? wid : hit;
 
 
-        if(minDim == wid){
-            // yMargin=Math.abs(wid-hit)/2;
+        if(minDim == wid)
             hit = wid;
-
-        }
-        else{
-            // xMargin=Math.abs(wid-hit)/2;
+        else
             wid = hit;
 
-        }
 
 
-        if (this.scale != 0.0f) {
+       /* if (this.scale != 0.0f) {
             wid = (int) Math.ceil((wid * this.scale));
             hit = (int) Math.ceil((hit * this.scale));
         }
-
+*/
 
 
         width = wid;
@@ -349,6 +345,11 @@ public class PlayingArea {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
         paint.setTextSize(42f);
+
+
+
+        canvas.save();
+        canvas.scale(this.scale, this.scale);
 
 
         //pipeStart height to get below +42f for text size
@@ -400,7 +401,8 @@ public class PlayingArea {
 
                     //special case for end pipe to add the diff
                     if (currPipe.getBitmap().sameAs(pipeEnd)) {
-                        currPipe.setBitmap( Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false));
+
+                        currPipe.setBitmap( Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, true));
                         canvas.drawBitmap(currPipe.getBitmap(), wid - pipeEnd.getWidth()+xMargin, j * hit / gridSize + diff+yMargin, paint);
                     }
                     else {
@@ -433,6 +435,7 @@ public class PlayingArea {
 
 
         //draws tha handles and their positions
+        //handle = Bitmap.createScaledBitmap(handle, 50,50, false);
         handle = Bitmap.createScaledBitmap(handle, wid/ gridSize,hit/gridSize, false);
         if (params.opened) {
             //Draw a rotated handle for P1 and an unrotated for P2
@@ -541,6 +544,10 @@ public class PlayingArea {
 
 
 
+
+
+
+        canvas.restore();
     }
 
 
@@ -937,7 +944,6 @@ public class PlayingArea {
 
 
 
-
     }
 
 
@@ -1210,18 +1216,15 @@ public class PlayingArea {
         float yTest=y%relGridSize;
 
 
-        float xOffset=((float)xMargin)/((float)width);
-        float yOffset=((float)yMargin)/((float)height);
-
         if(xTest >=relGridSize/2)
-            pipeToAdd.setX(x+(relGridSize-xTest)-xOffset);
+            pipeToAdd.setX(x+(relGridSize-xTest));
         else
-            pipeToAdd.setX(x-xTest-xOffset);
+            pipeToAdd.setX(x-xTest);
 
         if(yTest >= relGridSize / 2)
-            pipeToAdd.setY(y + (relGridSize - yTest) - yOffset);
+            pipeToAdd.setY(y + (relGridSize - yTest) );
         else
-            pipeToAdd.setY(y - yTest - yOffset);
+            pipeToAdd.setY(y - yTest );
 
 
         //from this point on are error checks for out of bounds
@@ -1230,6 +1233,15 @@ public class PlayingArea {
 
         if(pipeToAdd.getY()>=1.0f)
             pipeToAdd.setY(0.8f);
+
+        if(pipeToAdd.getX()<=0.0f)
+            pipeToAdd.setX(0.0f);
+
+        if(pipeToAdd.getY()<=0.0f)
+            pipeToAdd.setY(0.0f);
+
+
+
     }
 
 
