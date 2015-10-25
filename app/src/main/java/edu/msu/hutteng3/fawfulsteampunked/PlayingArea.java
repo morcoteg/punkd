@@ -311,30 +311,36 @@ public class PlayingArea {
         int wid = (canvas.getWidth());
         int hit = (canvas.getHeight());
 
-        if (this.scale != 0.0f) {
-            wid = (int) Math.ceil((canvas.getWidth() * this.scale));
-            hit = (int) Math.ceil((canvas.getHeight()) * this.scale);
-        }
+
 
 
         // Determine the minimum of the two dimensions
         int minDim = wid < hit ? wid : hit;
 
 
-        width = wid ;
-        height = hit ;
-
-
         if(minDim == wid){
             // yMargin=Math.abs(wid-hit)/2;
-            hit = minDim;
-            height = width;
+            hit = wid;
+
         }
         else{
             // xMargin=Math.abs(wid-hit)/2;
             wid = hit;
-            width = height;
+
         }
+
+
+        if (this.scale != 0.0f) {
+            wid = (int) Math.ceil((wid * this.scale));
+            hit = (int) Math.ceil((hit * this.scale));
+        }
+
+
+
+        width = wid;
+        height=hit;
+
+
 
 
         gridPix = (int) (minDim * SCALE_IN_VIEW); //that scale in view may only hold for the 7, need to check 4 and S
@@ -392,7 +398,7 @@ public class PlayingArea {
                 if(pipes[i][j] != null) {
                     Pipe currPipe = pipes[i][j];
 
-                    //speacial case for end pipe to add the diff
+                    //special case for end pipe to add the diff
                     if (currPipe.getBitmap().sameAs(pipeEnd)) {
                         currPipe.setBitmap( Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false));
                         canvas.drawBitmap(currPipe.getBitmap(), wid - pipeEnd.getWidth()+xMargin, j * hit / gridSize + diff+yMargin, paint);
@@ -406,7 +412,18 @@ public class PlayingArea {
 
 
                         currPipe.setBitmap(Bitmap.createScaledBitmap(currPipe.getBitmap(), wid / gridSize, hit / gridSize, false));
-                        canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize+xMargin, j * hit / gridSize+yMargin, paint);
+
+                        float angle=currPipe.getAngle();
+
+                        if(angle==180.0f)
+                            canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize-xMargin, j * hit / gridSize-yMargin, paint);
+                        else if(angle== 90.0f)
+                            canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize+yMargin, j * hit / gridSize-xMargin, paint);
+                        else if(angle== 270.0f)
+                            canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize-yMargin, j * hit / gridSize+xMargin, paint);
+                        else
+                            canvas.drawBitmap(currPipe.getBitmap(), i * wid / gridSize+xMargin, j * hit / gridSize+yMargin, paint);
+
                         canvas.restore();
                     }
                 }
@@ -421,17 +438,16 @@ public class PlayingArea {
             //Draw a rotated handle for P1 and an unrotated for P2
             if(params.currentPlayer.contentEquals(player1name)) {
                 canvas.save();
-                canvas.rotate(-90, handle.getHeight() / 2+yMargin, handle.getWidth() / 2);
-                canvas.drawBitmap(handle, 0, 0+xMargin, paint);
+                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2);
+                canvas.drawBitmap(handle, 0-yMargin, 0+xMargin, paint);
                 canvas.restore();
                 canvas.drawBitmap(handle, 0+xMargin, 2 * hit / gridSize+yMargin, paint);
             }
             //Draw a rotated handle for P2 and an unrotated for P1
             else {
                 canvas.save();
-                canvas.rotate(-90, handle.getHeight() / 2 + yMargin, handle.getWidth() / 2 + 2 * hit / gridSize + xMargin);
-                canvas.drawCircle(0, 2 *( hit +xMargin)/ gridSize+xMargin,10,paint);
-                canvas.drawBitmap(handle, 0, 2 * (hit+xMargin) / gridSize+xMargin, paint);
+                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2 + 2 * hit / gridSize);
+                canvas.drawBitmap(handle, 0-yMargin, 2 * (hit) / gridSize+xMargin, paint);
                 canvas.restore();
                 canvas.drawBitmap(handle, 0+xMargin, 0+yMargin, paint);
 
@@ -460,13 +476,29 @@ public class PlayingArea {
 
             canvas.save();
 
-            canvas.rotate(pipeToAdd.getAngle(), x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2);
+            float angle=pipeToAdd.getAngle();
+            canvas.rotate(angle, x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2);
 
             canvas.drawCircle(x * wid, y * hit, 10, paint);
-            canvas.drawCircle( x * wid+pipeToAdd.getBitmap().getWidth()/2, y * hit +pipeToAdd.getBitmap().getHeight()/2,10,paint);
+            canvas.drawCircle(x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2, 10, paint);
 
             pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
-            canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid+xMargin, pipeToAdd.getY() * hit+yMargin, paint);
+
+
+
+
+
+            if(angle==180.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid-xMargin, pipeToAdd.getY() * hit-yMargin, paint);
+            else if(angle== 90.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid +yMargin, pipeToAdd.getY() * hit - xMargin, paint);
+            else if(angle== 270.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid -yMargin, pipeToAdd.getY() * hit + xMargin, paint);
+            else
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid+xMargin, pipeToAdd.getY() * hit+yMargin, paint);
+
+
+
             canvas.restore();
         }
 
@@ -486,29 +518,25 @@ public class PlayingArea {
 
 
         if(params.won &&params.currentPlayer.contentEquals(player1name))
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f, hit / gridSize + diff / 5f,
-                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f, hit / gridSize - diff / 6.1f, paint);
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, hit / gridSize + diff / 5f+yMargin,
+                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f+xMargin, hit / gridSize - diff / 6.1f+yMargin, paint);
 
         else
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f, hit / gridSize + diff / 5f,
-                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f, hit / gridSize - diff / 6.1f, paint);
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, hit / gridSize + diff / 5f+yMargin,
+                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin, hit / gridSize - diff / 6.1f+yMargin, paint);
 
 
 
 
         if(params.won &&params.currentPlayer.contentEquals(player2name))
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f, 3 * hit / gridSize + diff / 5f,
-                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f, 3 * hit / gridSize - diff / 6.1f, paint);
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, 3 * hit / gridSize + diff / 5f+yMargin,
+                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f+xMargin, 3 * hit / gridSize - diff / 6.1f+yMargin, paint);
 
 
 
         else
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f, 3 * hit / gridSize + diff / 5f,
-                (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f, 3 * hit / gridSize - diff / 6.1f, paint);
-
-
-
-
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, 3 * hit / gridSize + diff / 5f+yMargin,
+                (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin, 3 * hit / gridSize - diff / 6.1f+yMargin, paint);
 
 
 
@@ -539,7 +567,7 @@ public class PlayingArea {
             //first error check is for out of index
             //second is to make sure the pipe we try to work with isnt null
             if(yLeakInd!=4&&pipes[xLeakInd][yLeakInd+1]!=null &&pipes[xLeakInd][yLeakInd +1].getNorth())
-                canvas.drawBitmap(leak, xLeakInd*wid/gridSize, yLeakInd*hit/gridSize, paint);
+                canvas.drawBitmap(leak, xLeakInd*wid/gridSize+xMargin, yLeakInd*hit/gridSize+yMargin, paint);
 
                 //the leak is coming from above
                 // first error check is for out of index
@@ -547,7 +575,7 @@ public class PlayingArea {
             if(yLeakInd!=0&&pipes[xLeakInd][yLeakInd-1]!=null &&pipes[xLeakInd][yLeakInd-1].getSouth()) {
                 canvas.save();
                 canvas.rotate(180,xLeakInd * wid / gridSize+leak.getWidth()/2, yLeakInd * hit / gridSize+leak.getHeight()/2);
-                canvas.drawBitmap(leak, xLeakInd*wid/gridSize, yLeakInd*hit/gridSize, paint);
+                canvas.drawBitmap(leak, xLeakInd*wid/gridSize-xMargin, yLeakInd*hit/gridSize-yMargin, paint);
                 canvas.restore();
             }
 
@@ -558,7 +586,7 @@ public class PlayingArea {
                 canvas.save();
                 canvas.rotate(90, 0, 0);
                 leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
-                canvas.drawBitmap(leak, yLeakInd*hit/gridSize, -xLeakInd*wid/gridSize-pipeStraight.getWidth(), paint);
+                canvas.drawBitmap(leak, yLeakInd*hit/gridSize+yMargin, -xLeakInd*wid/gridSize-pipeStraight.getWidth()-xMargin, paint);
                 canvas.restore();
             }
 
@@ -569,7 +597,7 @@ public class PlayingArea {
                 canvas.save();
                 canvas.rotate(-90, 0, 0);
                 leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
-                canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStraight.getHeight(), xLeakInd*wid/gridSize, paint);
+                canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStraight.getHeight()+yMargin, xLeakInd*wid/gridSize+xMargin, paint);
                 canvas.restore();
             }
         }
@@ -706,6 +734,25 @@ public class PlayingArea {
         view.invalidate();
     }
 
+
+
+
+
+
+
+
+
+
+    public Pipe getPipeToAdd(){return pipeToAdd;}
+
+
+
+
+
+
+
+
+
     /**
      * Handle a touch event from the view.
      *
@@ -760,28 +807,145 @@ public class PlayingArea {
                     touch2 = t;
                     touch2.id = -1;
                 }
-                if(pipeToAdd.getBitmap() !=null)
+                if(pipeToAdd !=null && pipeToAdd.getBitmap() !=null)
                     snapPipeAngle();
                 view.invalidate();
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-
-
-                if(pipeToAdd.getBitmap() != null ) {
+                if(pipeToAdd!=null &&pipeToAdd.getBitmap() != null &&pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width, height)) {
                     getPositions(event, view);
                     move();
                     view.invalidate();
                     return true;
                 }
-
-                // break;
-
+                else {
+                    getPositions(event, view);
+                    playingAreaMove();
+                    view.invalidate();
+                    return true;
+                }
         }
 
 
         return false;
     }
+
+
+
+
+
+    /**
+     * Move the puzzle piece by dx, dy
+
+     */
+    public void move() {
+
+
+        if (touch1.id < 0){
+            return;
+        }
+
+        if (touch1.id >= 0){
+            //At least one touch
+            //We are moving
+            touch1.computeDeltas();
+
+            if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width, height)) {
+                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width);
+                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height);
+            }
+        }
+
+        if(touch2.id >= 0) {
+            // Two touches
+
+            /*
+             * Rotation
+             */
+            float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+            float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
+            float da = (angle2 - angle1);
+
+             if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height))
+                rotate(da, touch1.x, touch1.y);
+
+
+
+        }
+    }
+
+
+
+    public float shiftWidth=0;
+    public float shiftHeight=0;
+
+
+
+    /**
+     * Move the puzzle piece by dx, dy
+
+     */
+    public void playingAreaMove() {
+
+
+        if (touch1.id < 0){
+            return;
+        }
+
+        if (touch1.id >= 0){
+            //At least one touch
+            //We are moving
+            touch1.computeDeltas();
+
+            //panning
+
+
+            float thingx=touch1.dX ;
+            float thingy=touch1.dY ;
+
+            xMargin+= touch1.dX ;
+            yMargin+= touch1.dY ;
+
+
+        }
+
+        if(touch2.id >= 0) {
+
+
+            /*
+            * Scaling
+            */
+            float distance1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
+            float distance2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
+            float scaleFloat = distance2 / distance1;
+            //float dist = distance2 - distance1;
+            scale(scaleFloat);
+        }
+
+    }
+
+
+
+    /**
+     * Scale the image based on distance between the point x1, y1
+     * @param distance Distance to scale in... float?
+     */
+    public void scale(float distance) {
+
+        this.scale *= distance;
+
+
+
+
+    }
+
+
+
+
+
+
+
 
 
     public void snapPipeAngle(){
@@ -1108,58 +1272,7 @@ public class PlayingArea {
     }
 
 
-    /**
-     * Move the puzzle piece by dx, dy
 
-     */
-    public void move() {
-
-
-        if (touch1.id < 0){
-            return;
-        }
-
-        if (touch1.id >= 0){
-            //At least one touch
-            //We are moving
-            touch1.computeDeltas();
-
-            if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width, height)) {
-                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width);
-                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height);
-            }
-        }
-
-        if(touch2.id >= 0) {
-            // Two touches
-
-            /*
-             * Rotation
-             */
-            float angle1 = angle(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
-            float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
-            float da = (angle2 - angle1);
-
-            // if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height))
-            rotate(da, touch1.x, touch1.y);
-
-
-            // if we aren't hitting a pipe, allow SCALING
-            if (! pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height)) {
-
-                /*
-                * Scaling
-                */
-                float distance1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
-                float distance2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
-                float scaleFloat = distance2 / distance1;
-                //float dist = distance2 - distance1;
-                scale(scaleFloat);
-
-            }
-
-        }
-    }
 
 
     /**
@@ -1183,13 +1296,7 @@ public class PlayingArea {
     }
 
 
-    /**
-     * Scale the image based on distance between the point x1, y1
-     * @param distance Distance to scale in... float?
-     */
-    public void scale(float distance) {
-        this.scale *= distance;
-    }
+
 
 
 

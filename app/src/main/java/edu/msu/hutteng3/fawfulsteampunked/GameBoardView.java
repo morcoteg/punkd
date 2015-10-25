@@ -54,39 +54,26 @@ public class GameBoardView extends View {
     }
 
 
+
+
+
+
+
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
        // GameBoard host = (GameBoard) this.getContext();
 
-        /**
-         * We need to handle a touch here, MAKE SURE we don't touch a pipe
-         *
-         */
-        int id = event.getPointerId(event.getActionIndex());
-        switch(event.getActionMasked()) {
-
-            case MotionEvent.ACTION_DOWN:
-                break;
-
-            case MotionEvent.ACTION_POINTER_DOWN:
-                break;
-
-            case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_CANCEL:
-                break;
-
-            case MotionEvent.ACTION_POINTER_UP:
-                break;
-
-            case MotionEvent.ACTION_MOVE:
-                break;
-
-        }
-
-
-
         return playingArea.onTouchEvent(this,event);
     }
+
+
+
+
+
+
+
+
+
 
 
     @Override
@@ -155,4 +142,6 @@ public class GameBoardView extends View {
 
 
 
-}
+
+
+   }
