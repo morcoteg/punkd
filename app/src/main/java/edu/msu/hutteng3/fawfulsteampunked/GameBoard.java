@@ -66,6 +66,7 @@ public class GameBoard extends AppCompatActivity {
             getPipeSelectView().getPipeArea().getFromBundle(PARAMETERS_PIPESELECT,savedInstanceState);
             this.getFromBundle(PARAMETERS_GAMEBOARD , savedInstanceState);
 
+            getGameBoardView().invalidate();
         }
 
 
@@ -81,6 +82,11 @@ public class GameBoard extends AppCompatActivity {
 
 
     }
+
+
+
+
+
 
 
 
@@ -131,7 +137,12 @@ public class GameBoard extends AppCompatActivity {
 
 
 
+    public void onResume(){
+        super.onResume();
 
+        getGameBoardView().getPlayingArea().setBitmaps();
+        
+    }
 
 
 

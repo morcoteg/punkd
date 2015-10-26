@@ -11,13 +11,17 @@ import java.io.Serializable;
 /**
  * Created by Tyler on 10/10/2015.
  */
-public class Pipe{
+public class Pipe implements Serializable{
 
 
     /**
      * Playing area this pipe is a member of
      */
     private PlayingArea playingArea = null;
+
+    public void setPlayingArea(PlayingArea toSet){playingArea=toSet;}
+
+
 
     /**
      * The current parameters
@@ -400,8 +404,16 @@ public class Pipe{
 
         //MAY NEED TO CHANGE WHEN BOARD IS UNIFORM SIZE
 
-        int pX = (int)((testX -x*wid) * .8f) + bitmap.getWidth()/2; //I have no idea why /2 failed but /8 works
-        int pY = (int)((testY-y *hit) * .8f) + bitmap.getHeight()/2;
+
+
+
+
+
+
+        int pX = (int) ((testX - x * wid) * .8f) + bitmap.getWidth() / 2; //I have no idea why /2 failed but /8 works
+        int pY = (int) ((testY - y * hit) * .8f) + bitmap.getHeight() / 2;
+
+
 
 
         if(pX < 0 || pX >= bitmap.getWidth() || pY < 0 || pY >= bitmap.getHeight())
@@ -411,6 +423,8 @@ public class Pipe{
         // Are we touching actual picture?
             // return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
         return true;
+
+
     }
 
 

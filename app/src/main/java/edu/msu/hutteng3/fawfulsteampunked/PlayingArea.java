@@ -84,11 +84,6 @@ public class PlayingArea {
 
 
 
-    //there was another way to change a pipes connect but it is simpler to just store the ooriginals and set on rotate
-    //private boolean pipeToAddOGNorth=false;
-    //private boolean pipeToAddOGEast=false;
-    //private boolean pipeToAddOGSouth=false;
-    //private boolean pipeToAddOGWest=false;
 
     public void setPipeToAdd(Bitmap pipe){
         pipeToAdd.setBitmap(pipe);
@@ -476,6 +471,22 @@ public class PlayingArea {
 
             //update params PipeToAdd
             params.pipeToAdd = pipeToAdd;
+
+
+
+
+           /* int id=pipeToAdd.getID();
+
+            if(id==1)
+                pipeToAdd.setBitmap(pipe90);
+            else if(id==2)
+                pipeToAdd.setBitmap(pipeCap);
+            else if(id==3)
+                pipeToAdd.setBitmap(pipeStraight);
+            else if(id==4)
+                pipeToAdd.setBitmap(pipeTee);
+
+*/
 
             canvas.save();
 
@@ -1035,7 +1046,7 @@ public class PlayingArea {
 
 
             //placing directly to your end with no connection
-            if(!checkDirectEnd(xInd, yInd)){
+            if(!checkDirectEnd(xInd, yInd)) {
                 Toast toast = Toast.makeText(context, R.string.badMoveConnectToEnd, Toast.LENGTH_LONG);
                 toast.show();
                 return false;
@@ -1045,8 +1056,7 @@ public class PlayingArea {
 
 
 
-            currentId+=1;
-            pipes[xInd][yInd]=new Pipe(context,currentId);
+            pipes[xInd][yInd]=new Pipe(context,pipeToAdd.getID());
             pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
             pipes[xInd][yInd].setX(pipeToAdd.getX());
             pipes[xInd][yInd].setY(pipeToAdd.getY());
@@ -1063,16 +1073,11 @@ public class PlayingArea {
 
 
 
-            params.pipes=pipes;
-
-
-
-
             pipeToAdd.setBitmap(null);
             pipeToAdd.setX(0.5f);
             pipeToAdd.setY(0.5f);
             pipeToAdd.setAngle(0);
-
+            pipeToAdd.setID(-1);
 
 
 
@@ -1386,6 +1391,33 @@ public class PlayingArea {
     public void putToBundle(String key, Bundle bundle ) {
 
         params.leakAreas=leakAreas;
+
+
+        params.pipeToAdd=pipeToAdd;
+        params.pipeToAdd.setBitmap(null);
+
+
+
+
+        params.pipes=pipes;
+
+
+        if(params.pipes !=null)
+        for(int i=0; i<gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if (params.pipes[i][j] != null) {
+                    params.pipes[i][j].setBitmap(null);
+                    params.pipes[i][j].setPlayingArea(null);
+
+                }
+            }
+        }
+
+
+
+
+
+
         bundle.putSerializable(key, params);
 
     }
@@ -1399,14 +1431,70 @@ public class PlayingArea {
         params = (Parameters)bundle.getSerializable(key);
 
         if(params.pipeToAdd!=null)
-             pipeToAdd = params.pipeToAdd;
+            pipeToAdd = params.pipeToAdd;
         if(params.pipes!=null)
              pipes = params.pipes;
         if(params.leakAreas!=null)
             leakAreas =params.leakAreas;
+
+
+        setBitmaps();
     }
 
 
+
+
+
+    public void setBitmaps(){
+
+        if(pipeToAdd!=null) {
+
+            int id=pipeToAdd.getID();
+
+            if(id==1)
+                pipeToAdd.setBitmap(pipe90);
+            else if(id==2)
+                pipeToAdd.setBitmap(pipeCap);
+            else if(id==3)
+                pipeToAdd.setBitmap(pipeStraight);
+            else if(id==4)
+                pipeToAdd.setBitmap(pipeTee);
+
+        }
+
+
+
+        if(pipes!=null)
+            for(int i=0; i<gridSize; i++) {
+                for (int j = 0; j < gridSize; j++) {
+                    if(pipes[i][j] != null) {
+                        Pipe currPipe = pipes[i][j];
+
+                        pipes[i][j].setPlayingArea(this);
+
+                        int id=currPipe.getID();
+
+                        if(id==1)
+                            pipes[i][j].setBitmap(pipe90);
+                        else if(id==2)
+                            pipes[i][j].setBitmap(pipeCap);
+                        else if(id==3)
+                            pipes[i][j].setBitmap(pipeStraight);
+                        else if(id==4)
+                            pipes[i][j].setBitmap(pipeTee);
+                        else if(id==5)
+                            pipes[i][j].setBitmap(pipeEnd);
+
+                    }
+                }
+        }
+
+
+
+
+
+
+    }
 
 
 

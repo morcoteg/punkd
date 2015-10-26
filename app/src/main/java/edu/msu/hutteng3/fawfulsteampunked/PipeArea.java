@@ -297,7 +297,7 @@ public class PipeArea {
 
 
 
-       /* for (int i=0;i<order.size();i++) {
+        for (int i=0;i<order.size();i++) {
             int id=-1;
             if(order.elementAt(i).sameAs(pipe90))
                 id=1;
@@ -311,9 +311,9 @@ public class PipeArea {
             if(id!=-1)
                 params.order.set(i,id) ;
         }
-*/
 
-        params.order=order;
+
+       // params.order=order;
         bundle.putSerializable(key, params);
 
     }
@@ -324,10 +324,10 @@ public class PipeArea {
      * @param bundle bundle to load from
      */
     public void getFromBundle(String key, Bundle bundle) {
-        params = (Parameters)bundle.getSerializable(key);
+        params = (Parameters) bundle.getSerializable(key);
 
-        if(params.order !=null) {
-           /* for(int i=0; i<params.order.size();i++)
+        if (params.order != null) {
+            for(int i=0; i<params.order.size();i++)
             {
                 if(params.order.elementAt(i).equals(1))
                     order.set(i, pipe90);
@@ -338,12 +338,12 @@ public class PipeArea {
                 else if(params.order.elementAt(i).equals(4))
                     order.set(i, pipeTee);
 
-            }*/
+            }
 
-            order=params.order;
+           // order = params.order;
         }
-    }
 
+    }
 
 
 
@@ -365,8 +365,8 @@ public class PipeArea {
 
         public boolean discard=false;
 
-        //public Vector<Integer> order=new Vector<Integer>();
-        public Vector<Bitmap> order=new Vector<Bitmap>();
+        public Vector<Integer> order=new Vector<Integer>();
+        //public Vector<Bitmap> order=new Vector<Bitmap>();
 
 
     }
