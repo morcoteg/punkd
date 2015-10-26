@@ -321,16 +321,20 @@ public class Pipe{
     private Pipe neighbor(int d) {
         switch(d) {
             case 0:
-                return playingArea.getPipe(xIndex, yIndex-1);
+                if(yIndex!=0)
+                    return playingArea.getPipe(xIndex, yIndex-1);
 
             case 1:
-                return playingArea.getPipe(xIndex+1, yIndex);
+                if(this.getPlayingArea().getGridSize()!=xIndex+1)
+                    return playingArea.getPipe(xIndex+1, yIndex);
 
             case 2:
-                return playingArea.getPipe(xIndex, yIndex+1);
+                if(this.getPlayingArea().getGridSize()!=yIndex+1)
+                    return playingArea.getPipe(xIndex, yIndex+1);
 
             case 3:
-                return playingArea.getPipe(xIndex-1, yIndex);
+                if(xIndex!=0)
+                    return playingArea.getPipe(xIndex-1, yIndex);
         }
 
         return null;

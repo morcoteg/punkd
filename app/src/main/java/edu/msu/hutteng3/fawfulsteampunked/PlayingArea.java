@@ -604,7 +604,7 @@ public class PlayingArea {
                 canvas.save();
                 canvas.rotate(-90, 0, 0);
                 leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
-                canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStraight.getHeight()+yMargin, xLeakInd*wid/gridSize+xMargin, paint);
+                canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStraight.getHeight()-yMargin, xLeakInd*wid/gridSize+xMargin, paint);
                 canvas.restore();
             }
         }
@@ -1370,7 +1370,7 @@ public class PlayingArea {
 
 
 
-
+    public int getGridSize(){return gridSize;}
 
 
 
