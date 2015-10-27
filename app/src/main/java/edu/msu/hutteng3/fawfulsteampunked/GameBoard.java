@@ -1,17 +1,12 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
-import android.app.AlertDialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.Toast;
 
 import java.io.Serializable;
@@ -38,18 +33,11 @@ public class GameBoard extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_board);
 
-
         Bundle extras = getIntent().getExtras();
 
         String p1 = extras.getString("PLAYER_1_NAME");
         String p2 = extras.getString("PLAYER_2_NAME");
         int gridSize = extras.getInt("GRID_SIZE");
-
-
-
-
-
-
 
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);
@@ -141,7 +129,7 @@ public class GameBoard extends AppCompatActivity {
         super.onResume();
 
         getGameBoardView().getPlayingArea().setBitmaps();
-        
+
     }
 
 
@@ -156,9 +144,10 @@ public class GameBoard extends AppCompatActivity {
         params.otherPlayer=temp;
 
         params.setAddPipe=true;
-        getGameBoardView().setAddPipe(params.setAddPipe);
+        getGameBoardView().setAddPipe(true);
 
-        Toast toast = Toast.makeText(this, params.currentPlayer + "\'s turn", Toast.LENGTH_LONG);
+
+        Toast toast = Toast.makeText(this, params.currentPlayer +getResources().getString(R.string.titleSet), Toast.LENGTH_LONG);
         toast.show();
 
         this.setTitle(params.currentPlayer);
@@ -170,7 +159,7 @@ public class GameBoard extends AppCompatActivity {
 
     public void addPipe(View view){
         params.setAddPipe=true;
-        getGameBoardView().setAddPipe(params.setAddPipe);
+        getGameBoardView().setAddPipe(true);
         getPipeSelectView().setDiscard(false);
 
         if(getGameBoardView().addToGrid(this)) {
@@ -183,7 +172,7 @@ public class GameBoard extends AppCompatActivity {
     public void discardPipe(View view) {
         getPipeSelectView().setDiscard(true);
         params.setAddPipe=false;
-        getGameBoardView().setAddPipe(params.setAddPipe);
+        getGameBoardView().setAddPipe(false);
         getGameBoardView().setPipeToAdd(null);
     }
 
@@ -225,19 +214,19 @@ public class GameBoard extends AppCompatActivity {
 
     public void open(View view){
         params.setAddPipe=false;
-        getGameBoardView().setAddPipe(params.setAddPipe);
+        getGameBoardView().setAddPipe(false);
 
         getPipeSelectView().setDiscard(false);
         getGameBoardView().setOpened(true);
         if(getGameBoardView().checkForLeaks(params.currentPlayer)) {
             params.won = true;
-            getGameBoardView().setWon(params.won);
+            getGameBoardView().setWon(true);
         }
         params.addEnabled=false;
         params.discardEnabled=false;
         params.openEnabled=false;
 
-        getAddButton().setEnabled(params.addEnabled);
+        getAddButton().setEnabled(false);
         getDiscardButton().setEnabled(params.discardEnabled);
         getOpenButton().setEnabled(params.openEnabled);
 
@@ -338,6 +327,7 @@ public class GameBoard extends AppCompatActivity {
     public void getFromBundle(String key, Bundle bundle) {
         params = (Parameters) bundle.getSerializable(key);
 
+        assert params != null;
         getAddButton().setEnabled(params.addEnabled);
         getDiscardButton().setEnabled(params.discardEnabled);
         getOpenButton().setEnabled(params.openEnabled);

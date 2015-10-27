@@ -26,17 +26,15 @@ public class PipeArea {
     private Bitmap pipeCap;
     private Bitmap pipe90;
     private Bitmap pipeTee;
-    public Vector<Bitmap> order=new Vector<Bitmap>();
+    public Vector<Bitmap> order= new Vector<>();
 
     public PipeArea(Context context) {
-
 
         // Load the start pipes
         pipeStraight = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
         pipeCap = BitmapFactory.decodeResource(context.getResources(), R.drawable.cap);
         pipe90 = BitmapFactory.decodeResource(context.getResources(), R.drawable.pipe90);
         pipeTee = BitmapFactory.decodeResource(context.getResources(), R.drawable.tee);
-
 
 
         order.setSize(5);
@@ -51,8 +49,8 @@ public class PipeArea {
 
 
 
-    private int cwidth;
-    private int cheight;
+    private int cWidth;
+    private int cHeight;
     private static final int margin=20;
 
 
@@ -61,16 +59,11 @@ public class PipeArea {
         int wid = canvas.getWidth()-margin;
         int hit = canvas.getHeight()-margin;
 
-
-
-
-
-        int orentation=Math.max(hit, wid);
-
+        int orientation=Math.max(hit, wid);
 
         //used for on touch, the real canvas size )may need to remove the argin addition, needs to be tested on the 4 and S
-        cwidth=wid+margin;
-        cheight=hit+margin;
+        cWidth=wid+margin;
+        cHeight=hit+margin;
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -85,9 +78,9 @@ public class PipeArea {
         for (int count = 0; count < 5; count++){
             Bitmap pipe = order.elementAt(count);
             if (pipe.sameAs(pipeStraight))
-                drawStraightPipe(canvas,count, pipe,wid, hit, orentation, paint);
+                drawStraightPipe(canvas,count, pipe,wid, hit, orientation);
             else
-                drawNotStraightPipe(canvas,count, pipe,wid, hit, orentation, paint);
+                drawNotStraightPipe(canvas,count, pipe,wid, hit, orientation);
         }
 
 
@@ -103,19 +96,19 @@ public class PipeArea {
 
 
 
-    public void drawNotStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation, Paint paint) {
+    public void drawNotStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation) {
 
         pipe= Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
         if (orentation==wid)
-            canvas.drawBitmap(pipe, offset*wid/5, margin/2, paint);
+            canvas.drawBitmap(pipe, offset*wid/5, margin/2, null);
         //we are in landscape
         else
-            canvas.drawBitmap(pipe, margin/2, offset * hit / 5, paint);
+            canvas.drawBitmap(pipe, margin/2, offset * hit / 5, null);
 
     }
 
 
-    public void drawStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation, Paint paint){
+    public void drawStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation){
 
         pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
         canvas.save();
@@ -157,8 +150,8 @@ public class PipeArea {
         // puzzle.
         //
 
-        float relX = (event.getX(0) )/ cwidth;
-        float relY = (event.getY(0)) / cheight;
+        float relX = (event.getX(0) )/ cWidth;
+        float relY = (event.getY(0)) / cHeight;
 
         return onTouched(relX, relY);
 
@@ -185,7 +178,7 @@ public class PipeArea {
 
         float pressedLayout;
 
-        if(cwidth> cheight)
+        if(cWidth> cHeight)
             pressedLayout=x;
         else
             pressedLayout=y;
@@ -218,13 +211,6 @@ public class PipeArea {
     }
 
 
-    public Bitmap getTouched(){return touchedPipe;}
-
-
-
-    public void setTouchedPipePos(int pos){touchedPipePos=pos;}
-
-
 
     public void setDiscard(boolean disc){params.discard=disc;}
 
@@ -237,7 +223,7 @@ public class PipeArea {
 
         Bitmap newPipe=order.elementAt(touchedPipePos);
 
-        //put in a while to ensure the pipe thats generated is different from the one that was there
+        //put in a while to ensure the pipe that's generated is different from the one that was there
         while ((order.elementAt(touchedPipePos).sameAs(newPipe))) {
             if (randPipe == 0)
                 newPipe = pipe90;
@@ -258,21 +244,8 @@ public class PipeArea {
     }
 
 
-
-
     private PipeSelectView pipeSelect;
     public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
-
-
-
-
-
-
-
-
-
-
-
 
 
     /**
@@ -281,21 +254,12 @@ public class PipeArea {
     private Parameters params = new Parameters();
 
 
-
-
-
-
-
-
     /**
      * Save the view state to a bundle
      * @param key key name to use in the bundle
      * @param bundle bundle to save to
      */
     public void putToBundle(String key, Bundle bundle ) {
-
-
-
 
         for (int i=0;i<order.size();i++) {
             int id=-1;
@@ -312,8 +276,6 @@ public class PipeArea {
                 params.order.set(i,id) ;
         }
 
-
-       // params.order=order;
         bundle.putSerializable(key, params);
 
     }
@@ -326,6 +288,7 @@ public class PipeArea {
     public void getFromBundle(String key, Bundle bundle) {
         params = (Parameters) bundle.getSerializable(key);
 
+        assert params != null;
         if (params.order != null) {
             for(int i=0; i<params.order.size();i++)
             {
@@ -340,18 +303,9 @@ public class PipeArea {
 
             }
 
-           // order = params.order;
         }
 
     }
-
-
-
-
-
-
-
-
 
 
 /////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
@@ -361,20 +315,10 @@ public class PipeArea {
      */
     private static class Parameters implements Serializable {
 
-
-
         public boolean discard=false;
 
-        public Vector<Integer> order=new Vector<Integer>();
-        //public Vector<Bitmap> order=new Vector<Bitmap>();
-
-
+        public Vector<Integer> order= new Vector<>();
     }
-
-
-
-
-
 
 
 }

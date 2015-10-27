@@ -1,15 +1,9 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
 import android.support.annotation.NonNull;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.View;
@@ -63,10 +57,8 @@ public class PipeSelectView extends View {
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         pipeSelect.onTouchEvent(this, event);
-
-        //gameBoardView.setPipeToAdd(pipeSelect.getTouched());
-
         invalidate();
+
         return false;
     }
 
@@ -84,7 +76,7 @@ public class PipeSelectView extends View {
     }
 
 
-    public void setGameBoardView(GameBoardView view){gameBoardView=view;};
+    public void setGameBoardView(GameBoardView view){gameBoardView=view;}
     private GameBoardView gameBoardView;
 
 

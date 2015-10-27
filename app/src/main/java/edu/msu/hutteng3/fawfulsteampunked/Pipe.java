@@ -1,10 +1,6 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.os.Bundle;
 
 import java.io.Serializable;
 
@@ -75,13 +71,13 @@ public class Pipe implements Serializable{
      * X location in the playing area (index into array)
      */
     private int xIndex = 0;
-    public int getXIndex(){return xIndex;}
+
 
     /**
      * Y location in the playing area (index into array)
      */
     private int yIndex = 0;
-    public int getYIndex(){return yIndex;}
+
 
 
 
@@ -92,19 +88,7 @@ public class Pipe implements Serializable{
     private boolean visited = false;
 
 
-    /**
-     * Constructor
-     * @param north True if connected north
-     * @param east True if connected east
-     * @param south True if connected south
-     * @param west True if connected west
-     */
-    public Pipe(boolean north, boolean east, boolean south, boolean west) {
-        connect[0] = north;
-        connect[1] = east;
-        connect[2] = south;
-        connect[3] = west;
-    }
+
 
 
     /**
@@ -146,15 +130,11 @@ public class Pipe implements Serializable{
 
 
 
-    /**
-     * The image for the actual pipe.
-     */
-   // private Bitmap pipe;
 
 
-    public Pipe(Context context, int id) {
+
+    public Pipe(int id) {
         this.id = id;
-
        // pipe = BitmapFactory.decodeResource(context.getResources(), id);
     }
 
@@ -327,18 +307,22 @@ public class Pipe implements Serializable{
             case 0:
                 if(yIndex!=0)
                     return playingArea.getPipe(xIndex, yIndex-1);
+                break;
 
             case 1:
                 if(this.getPlayingArea().getGridSize()!=xIndex+1)
                     return playingArea.getPipe(xIndex+1, yIndex);
+                break;
 
             case 2:
                 if(this.getPlayingArea().getGridSize()!=yIndex+1)
                     return playingArea.getPipe(xIndex, yIndex+1);
+                break;
 
             case 3:
                 if(xIndex!=0)
                     return playingArea.getPipe(xIndex-1, yIndex);
+                break;
         }
 
         return null;
@@ -390,39 +374,30 @@ public class Pipe implements Serializable{
 
 
 
+
+
+
+
+
     /**
      * Test to see if we have touched a pipe
      * @param testX X location as a normalized coordinate (0 to 1)
      * @param testY Y location as a normalized coordinate (0 to 1)
-     * @param puzzleSize the size of the puzzle in pixels
      * @param scaleFactor the amount to scale a piece by
      * @return true if we hit the piece
      */
-    public boolean hit(float testX, float testY, int puzzleSize, float scaleFactor,int wid, int hit) {
+    public boolean hit(float testX, float testY, float scaleFactor,int wid, int hit, int xMargin, int yMargin) {
 
         // Make relative to the location and size to the piece size
 
-        //MAY NEED TO CHANGE WHEN BOARD IS UNIFORM SIZE
+        float newWid=wid*scaleFactor;
+        float newHit=hit*scaleFactor;
+
+        float minDim = newWid < newHit ? newWid : newHit;
 
 
-
-
-
-
-
-        int pX = (int) ((testX - x * wid) * .8f) + bitmap.getWidth() / 2; //I have no idea why /2 failed but /8 works
-        int pY = (int) ((testY - y * hit) * .8f) + bitmap.getHeight() / 2;
-
-
-
-
-        if(pX < 0 || pX >= bitmap.getWidth() || pY < 0 || pY >= bitmap.getHeight())
-            return false;
-        else
-        // We are within the rectangle of the piece.
-        // Are we touching actual picture?
-            // return (bitmap.getPixel(pX, pY) & 0xff000000) != 0;
-        return true;
+        return !(testX < x * minDim + xMargin * scaleFactor || testX > x * minDim + bitmap.getWidth() * scaleFactor + xMargin * scaleFactor ||
+                testY < y * minDim + yMargin * scaleFactor || testY > y * minDim + bitmap.getHeight() * scaleFactor + yMargin * scaleFactor);
 
 
     }
@@ -430,58 +405,6 @@ public class Pipe implements Serializable{
 
 
 
-/*
-
-
-     * The current parameters
-
-    private Parameters params = new Parameters();
-
-
-
-
-
-     * Save the view state to a bundle
-     * @param key key name to use in the bundle
-     * @param bundle bundle to save to
-
-    public void putToBundle(String key, Bundle bundle ) {
-
-        bundle.putSerializable(key, params);
-
-    }
-
-
-     * Get the view state from a bundle
-     * @param key key name to use in the bundle
-     * @param bundle bundle to load from
-
-    public void getFromBundle(String key, Bundle bundle) {
-        params = (Parameters) bundle.getSerializable(key);
-
-
-    }
-
-
-
-
-    /////////////////////////////////////////// NESTED CLASS parameters ///////////////////////
-
-
-     * Parameters class for the Pipe's coordinates x, y and the rotation angle
-
-    private static class Parameters implements Serializable {
-
-
-        public boolean visied;
-
-
-
-
-
-    }
-
-*/
 
 
 }

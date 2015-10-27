@@ -49,7 +49,7 @@ public class PlayingArea {
     private Parameters params = new Parameters();
 
 
-    // public Vector<Vector<Pipe>> pipes=new Vector<Vector<Pipe>>();
+
 
 
     /**
@@ -80,6 +80,10 @@ public class PlayingArea {
 
 
     private Pipe pipeToAdd;
+
+
+    private int p1StartIndex=0;
+    private int p2StartIndex=1;
 
 
 
@@ -160,14 +164,24 @@ public class PlayingArea {
 
     private int gridSize = 5; //default to 5 to avoid divide by 0 error/
     public void setGridSize(int grid){
-        if (grid == 0)
+        if (grid == 0) {
             gridSize = 5;
-        else if(grid == 1)
+            p1StartIndex=0;
+            p2StartIndex=2;
+
+        }
+        else if(grid == 1) {
             gridSize = 10;
-        else
+            p1StartIndex=3;
+            p2StartIndex=6;
+
+        }
+        else {
             gridSize = 20;
+            p1StartIndex=7;
+            p2StartIndex=14;
 
-
+        }
         //need to set these pipes player names. Do it here because the player names have
         // already been set and we are just about to add the starts and ends to pipes
         startP1.setPlacingPlayer(player1name);
@@ -175,17 +189,22 @@ public class PlayingArea {
         endP1.setPlacingPlayer(player1name);
         endP2.setPlacingPlayer(player2name);
 
+
+        startP1.set(this, 0, p1StartIndex);
+        startP2.set(this, 0, p2StartIndex);
+        endP1.set(this, gridSize - 1, p1StartIndex + 1);
+        endP2.set(this, gridSize - 1, p2StartIndex + 1);
+
         pipes=new Pipe[gridSize][gridSize];
-        pipes[0][0]=startP1;
-        pipes[0][2]=startP2;
-        pipes[gridSize-1][1]=endP1;
-        pipes[gridSize-1][3]=endP2;
+        pipes[0][p1StartIndex]=startP1;
+        pipes[0][p2StartIndex]=startP2;
+        pipes[gridSize-1][p1StartIndex+1]=endP1;
+        pipes[gridSize-1][p2StartIndex+1]=endP2;
     }
 
     /**
      * Pipe bitmaps
      */
-    //private Bitmap pipeStart; //<may be able to combine these into one
     private Bitmap pipeStraight;
     private Bitmap pipeEnd;
     private Bitmap handle;
@@ -202,12 +221,6 @@ public class PlayingArea {
     private Pipe endP1;
     private Pipe endP2;
 
-    /*
-     * Percentage of the display width or height that
-     * is occupied by the playing area.
-     * since the button and the pipe select parts each take up 100dp a piece
-     */
-    final static float SCALE_IN_VIEW = 0.8f;
 
 
 
@@ -232,7 +245,7 @@ public class PlayingArea {
 
 
 
-        startP1= new Pipe(context,3);
+        startP1= new Pipe(3);
         startP1.setBitmap(pipeStraight);
         startP1.setAngle(0);
         startP1.set(this, 0, 0);
@@ -242,7 +255,7 @@ public class PlayingArea {
         startP1.setPlacingPlayer(player1name);
 
 
-        startP2= new Pipe(context, 3);
+        startP2= new Pipe(3);
         startP2.setBitmap(pipeStraight);
         startP2.setAngle(0);
         startP2.set(this, 0, 2);
@@ -253,7 +266,7 @@ public class PlayingArea {
 
 
 
-        endP1= new Pipe(context, 5);
+        endP1= new Pipe(5);
         endP1.setBitmap(pipeEnd);
         endP1.setAngle(0);
         endP1.set(this, gridSize - 1, 1);
@@ -261,20 +274,17 @@ public class PlayingArea {
         endP1.setPlacingPlayer(player1name);
 
 
-        endP2= new Pipe(context, 5);
+        endP2= new Pipe(5);
         endP2.setBitmap(pipeEnd);
         endP2.setAngle(0);
         endP2.set(this, gridSize - 1, 3);
-        endP2.setConnect(false, false,false, true);
+        endP2.setConnect(false, false, false, true);
         endP2.setPlacingPlayer(player2name);
 
 
-        pipeToAdd=new Pipe(context, -1);
+        pipeToAdd=new Pipe(-1);
         pipeToAdd.setX(0.5f);
         pipeToAdd.setY(0.5f);
-
-
-
 
 
 
@@ -283,7 +293,7 @@ public class PlayingArea {
 
 
 
-    private int currentId=4;
+
 
 
 
@@ -321,11 +331,7 @@ public class PlayingArea {
 
 
 
-       /* if (this.scale != 0.0f) {
-            wid = (int) Math.ceil((wid * this.scale));
-            hit = (int) Math.ceil((hit * this.scale));
-        }
-*/
+
 
 
         width = wid;
@@ -334,7 +340,7 @@ public class PlayingArea {
 
 
 
-        gridPix = (int) (minDim * SCALE_IN_VIEW); //that scale in view may only hold for the 7, need to check 4 and S
+
 
         Paint paint = new Paint();
         paint.setStyle(Paint.Style.FILL);
@@ -343,15 +349,18 @@ public class PlayingArea {
 
 
 
+
+
+
         canvas.save();
         canvas.scale(this.scale, this.scale);
 
 
         //pipeStart height to get below +42f for text size
-        canvas.drawText(player1name, 0 + xMargin, pipeStraight.getHeight() + 42f + yMargin, paint);
+        canvas.drawText(player1name, xMargin, p1StartIndex * hit / gridSize+pipeStraight.getHeight() + 42f + yMargin, paint);
 
         //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
-        canvas.drawText(player2name, 0 + xMargin, 2 * hit / gridSize + pipeStraight.getHeight() + 42f + yMargin, paint);
+        canvas.drawText(player2name, xMargin, p2StartIndex * hit / gridSize + pipeStraight.getHeight() + 42f + yMargin, paint);
 
 
 
@@ -367,9 +376,9 @@ public class PlayingArea {
 
         int newHeight = (int)(ratio*pipeStraight.getHeight());
         pipeEnd = Bitmap.createScaledBitmap(pipeEnd, wid/gridSize, newHeight, false);
-        pipes[gridSize-1][1].setBitmap(pipeEnd);
+        pipes[gridSize-1][p1StartIndex + 1].setBitmap(pipeEnd);
 
-        pipes[gridSize-1][3].setBitmap(pipeEnd);
+        pipes[gridSize-1][p2StartIndex + 1].setBitmap(pipeEnd);
 
 
 
@@ -436,26 +445,26 @@ public class PlayingArea {
             //Draw a rotated handle for P1 and an unrotated for P2
             if(params.currentPlayer.contentEquals(player1name)) {
                 canvas.save();
-                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2);
-                canvas.drawBitmap(handle, 0-yMargin, 0+xMargin, paint);
+                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2+ p1StartIndex * hit / gridSize);
+                canvas.drawBitmap(handle, 0-yMargin, p1StartIndex * (hit) / gridSize+xMargin, paint);
                 canvas.restore();
-                canvas.drawBitmap(handle, 0+xMargin, 2 * hit / gridSize+yMargin, paint);
+                canvas.drawBitmap(handle, xMargin, p2StartIndex * hit / gridSize+yMargin, paint);
             }
             //Draw a rotated handle for P2 and an unrotated for P1
             else {
                 canvas.save();
-                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2 + 2 * hit / gridSize);
-                canvas.drawBitmap(handle, 0-yMargin, 2 * (hit) / gridSize+xMargin, paint);
+                canvas.rotate(-90, handle.getHeight() / 2, handle.getWidth() / 2 + p2StartIndex * hit / gridSize);
+                canvas.drawBitmap(handle, -yMargin, p2StartIndex * (hit) / gridSize+xMargin, paint);
                 canvas.restore();
-                canvas.drawBitmap(handle, 0+xMargin, 0+yMargin, paint);
+                canvas.drawBitmap(handle, xMargin, p1StartIndex * hit / gridSize+yMargin, paint);
 
             }
 
         }
         else {
             //Draw the handles for the start pipes unrotated
-            canvas.drawBitmap(handle, 0+xMargin, 0+yMargin, paint);
-            canvas.drawBitmap(handle, 0+xMargin, 2 * hit / gridSize+yMargin, paint);
+            canvas.drawBitmap(handle, xMargin, p1StartIndex * hit / gridSize+yMargin, paint);
+            canvas.drawBitmap(handle, xMargin, p2StartIndex * hit / gridSize+yMargin, paint);
         }
 
 
@@ -465,59 +474,47 @@ public class PlayingArea {
 
 
         //resize and draw the pipe we are adding
-        if (params.toAdd == true && pipeToAdd.getBitmap() != null) {
+        if (params.toAdd && pipeToAdd.getBitmap() != null) {
             float x = pipeToAdd.getX();
             float y = pipeToAdd.getY();
-
-            //update params PipeToAdd
-            params.pipeToAdd = pipeToAdd;
-
-
-
-
-           /* int id=pipeToAdd.getID();
-
-            if(id==1)
-                pipeToAdd.setBitmap(pipe90);
-            else if(id==2)
-                pipeToAdd.setBitmap(pipeCap);
-            else if(id==3)
-                pipeToAdd.setBitmap(pipeStraight);
-            else if(id==4)
-                pipeToAdd.setBitmap(pipeTee);
-
-*/
 
             canvas.save();
 
             float angle=pipeToAdd.getAngle();
-            canvas.rotate(angle, x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2);
 
-            canvas.drawCircle(x * wid, y * hit, 10, paint);
-            canvas.drawCircle(x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2, 10, paint);
+            canvas.rotate(angle, x * wid + pipeToAdd.getBitmap().getWidth() / 2,
+                    y * hit + pipeToAdd.getBitmap().getHeight() / 2);
+
 
             pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
 
-
-
-
-
-            if(angle==180.0f)
-                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid-xMargin, pipeToAdd.getY() * hit-yMargin, paint);
-            else if(angle== 90.0f)
-                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid +yMargin, pipeToAdd.getY() * hit - xMargin, paint);
-            else if(angle== 270.0f)
-                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid -yMargin, pipeToAdd.getY() * hit + xMargin, paint);
+            if (angle == 180.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid - xMargin, pipeToAdd.getY() * hit - yMargin, paint);
+            else if (angle == 90.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid + yMargin, pipeToAdd.getY() * hit - xMargin, paint);
+            else if (angle == 270.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid - yMargin, pipeToAdd.getY() * hit + xMargin, paint);
             else
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid + xMargin, pipeToAdd.getY() * hit + yMargin, paint);
+
+            /*
+            if(angle<90.0f)
                 canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid+xMargin, pipeToAdd.getY() * hit+yMargin, paint);
+            else if(angle>=90.0f &&angle<180.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid +yMargin, pipeToAdd.getY() * hit - xMargin, paint);
+            else if(angle>=180.0f && angle<270.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid-xMargin, pipeToAdd.getY() * hit-yMargin, paint);
+            else if(angle>=270.0f && angle<360.0f)
+                canvas.drawBitmap(pipeToAdd.getBitmap(), pipeToAdd.getX() * wid -yMargin, pipeToAdd.getY() * hit + xMargin, paint);
+
+*/
 
 
-
+            canvas.drawCircle( x * wid + pipeToAdd.getBitmap().getWidth() , y * hit + pipeToAdd.getBitmap().getHeight() ,10,paint);
             canvas.restore();
+
+
         }
-
-
-
 
 
 
@@ -527,34 +524,26 @@ public class PlayingArea {
         paint.setStrokeWidth(2);
 
 
-
-
-
-
         if(params.won &&params.currentPlayer.contentEquals(player1name))
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, hit / gridSize + diff / 5f+yMargin,
-                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f+xMargin, hit / gridSize - diff / 6.1f+yMargin, paint);
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, (p1StartIndex+1)*hit / gridSize + diff / 5f+yMargin,
+                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f+xMargin,(p1StartIndex+1)* hit / gridSize - diff / 6.1f+yMargin, paint);
 
         else
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, hit / gridSize + diff / 5f+yMargin,
-                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin, hit / gridSize - diff / 6.1f+yMargin, paint);
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, (p1StartIndex+1)*hit / gridSize + diff / 5f+yMargin,
+                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin,(p1StartIndex+1)* hit / gridSize - diff / 6.1f+yMargin, paint);
 
 
 
 
         if(params.won &&params.currentPlayer.contentEquals(player2name))
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, 3 * hit / gridSize + diff / 5f+yMargin,
-                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f+xMargin, 3 * hit / gridSize - diff / 6.1f+yMargin, paint);
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, (p2StartIndex+1) * hit / gridSize + diff / 5f+yMargin,
+                    (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 1.5f+xMargin, (p2StartIndex+1) * hit / gridSize - diff / 6.1f+yMargin, paint);
 
 
 
         else
-            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, 3 * hit / gridSize + diff / 5f+yMargin,
-                (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin, 3 * hit / gridSize - diff / 6.1f+yMargin, paint);
-
-
-
-
+            canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, (p2StartIndex+1)* hit / gridSize + diff / 5f+yMargin,
+                (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin, (p2StartIndex+1) * hit / gridSize - diff / 6.1f+yMargin, paint);
 
 
 
@@ -574,7 +563,40 @@ public class PlayingArea {
 
 
 
-            //error check if we are trying to draw stream off the board
+            //leak off the top
+            if(yLeakInd==-1)
+                canvas.drawBitmap(leak, xLeakInd*wid/gridSize+xMargin, yLeakInd*hit/gridSize+yMargin, paint);
+
+            //leak off the bottom
+            if(yLeakInd==gridSize) {
+                canvas.save();
+                canvas.rotate(180,xLeakInd * wid / gridSize+leak.getWidth()/2, yLeakInd * hit / gridSize+leak.getHeight()/2);
+                canvas.drawBitmap(leak, xLeakInd*wid/gridSize-xMargin, yLeakInd*hit/gridSize-yMargin, paint);
+                canvas.restore();
+            }
+
+            //leak off the left side
+            if(xLeakInd==-1) {
+                canvas.save();
+                canvas.rotate(-90, 0, 0);
+                leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
+                canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStraight.getHeight()-yMargin, xLeakInd*wid/gridSize+xMargin, paint);
+                canvas.restore();
+
+            }
+
+
+            //leak off the right side
+            if(xLeakInd==gridSize) {
+                canvas.save();
+                canvas.rotate(90, 0, 0);
+                leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
+                canvas.drawBitmap(leak, yLeakInd*hit/gridSize+yMargin, -xLeakInd*wid/gridSize-pipeStraight.getWidth()-xMargin, paint);
+                canvas.restore();
+            }
+
+
+            //error check if we are trying to draw stream off the board, those leaks are already drawn
             if(xLeakInd<0 || xLeakInd>=gridSize)
                 continue;
             if(yLeakInd<0 || yLeakInd>=gridSize)
@@ -584,13 +606,15 @@ public class PlayingArea {
             //the leak is coming from the bottom so draw normally
             //first error check is for out of index
             //second is to make sure the pipe we try to work with isnt null
-            if(yLeakInd!=4&&pipes[xLeakInd][yLeakInd+1]!=null &&pipes[xLeakInd][yLeakInd +1].getNorth())
+            if(yLeakInd!=gridSize-1&&pipes[xLeakInd][yLeakInd+1]!=null &&pipes[xLeakInd][yLeakInd +1].getNorth() &&
+                    pipes[xLeakInd][yLeakInd +1].getPlacingPlayer().contentEquals(params.currentPlayer))
                 canvas.drawBitmap(leak, xLeakInd*wid/gridSize+xMargin, yLeakInd*hit/gridSize+yMargin, paint);
 
-                //the leak is coming from above
-                // first error check is for out of index
-                // second is to make sure the pipe we try to work with isnt null
-            if(yLeakInd!=0&&pipes[xLeakInd][yLeakInd-1]!=null &&pipes[xLeakInd][yLeakInd-1].getSouth()) {
+            //the leak is coming from above
+            // first error check is for out of index
+            // second is to make sure the pipe we try to work with isnt null
+            if(yLeakInd!=0&&pipes[xLeakInd][yLeakInd-1]!=null &&pipes[xLeakInd][yLeakInd-1].getSouth()&&
+                    pipes[xLeakInd][yLeakInd-1].getPlacingPlayer().contentEquals(params.currentPlayer)) {
                 canvas.save();
                 canvas.rotate(180,xLeakInd * wid / gridSize+leak.getWidth()/2, yLeakInd * hit / gridSize+leak.getHeight()/2);
                 canvas.drawBitmap(leak, xLeakInd*wid/gridSize-xMargin, yLeakInd*hit/gridSize-yMargin, paint);
@@ -600,7 +624,8 @@ public class PlayingArea {
             //the leak is coming from the left
             //first error check is for out of index
             //second is to make sure the pipe we try to work with isnt null
-            if(xLeakInd!=0&&pipes[xLeakInd-1][yLeakInd]!=null &&pipes[xLeakInd-1][yLeakInd].getEast()) {
+            if(xLeakInd!=0&&pipes[xLeakInd-1][yLeakInd]!=null &&pipes[xLeakInd-1][yLeakInd].getEast()&&
+                    pipes[xLeakInd-1][yLeakInd].getPlacingPlayer().contentEquals(params.currentPlayer)) {
                 canvas.save();
                 canvas.rotate(90, 0, 0);
                 leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
@@ -608,16 +633,31 @@ public class PlayingArea {
                 canvas.restore();
             }
 
+
+
+
+
+
+            //NEED TO GENERALIZE
+
+
+
+
+
             //the leak is coming from the right
             //first error check is for out of index
             //second is to make sure the pipe we try to work with isnt null
-            if(xLeakInd!=5&&pipes[xLeakInd+1][yLeakInd]!=null &&pipes[xLeakInd+1][yLeakInd].getWest()) {
+            if(xLeakInd!=gridSize-1&&pipes[xLeakInd+1][yLeakInd]!=null &&pipes[xLeakInd+1][yLeakInd].getWest()&&
+                    pipes[xLeakInd+1][yLeakInd ].getPlacingPlayer().contentEquals(params.currentPlayer)) {
                 canvas.save();
                 canvas.rotate(-90, 0, 0);
                 leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
                 canvas.drawBitmap(leak, -yLeakInd*hit/gridSize-pipeStraight.getHeight()-yMargin, xLeakInd*wid/gridSize+xMargin, paint);
                 canvas.restore();
             }
+
+
+
         }
     }
 
@@ -626,40 +666,6 @@ public class PlayingArea {
 
 
 
-
-
-    /**
-     * Construct a playing area
-     * @param width Width (integer number of cells)
-     * @param height Height (integer number of cells)
-     */
-    public PlayingArea(int width, int height) {
-        this.width = width;
-        this.height = height;
-
-        // Allocate the playing area
-        // Java automatically initializes all of the locations to null
-        pipes = new Pipe[width][height];
-
-
-
-    }
-
-    /**
-     * Get the playing area height
-     * @return Height
-     */
-    public int getHeight() {
-        return height;
-    }
-
-    /**
-     * Get the playing area width
-     * @return Width
-     */
-    public int getWidth() {
-        return width;
-    }
 
     /**
      * Get the pipe at a given location.
@@ -707,7 +713,7 @@ public class PlayingArea {
         /*
          * The pipe itself does the actual search
          */
-        return start.search();
+        return (start.search()&&(pipes[gridSize-1][p1StartIndex+1].beenVisited() ||pipes[gridSize-1][p2StartIndex+1].beenVisited()));
     }
 
 
@@ -717,10 +723,7 @@ public class PlayingArea {
 
 
 
-    /**
-     * The size of the grid in pixels
-     */
-    private int gridPix;
+
 
 
     /**
@@ -736,7 +739,7 @@ public class PlayingArea {
 
             // Get coordinates
             float x = event.getX(i);
-            float y = event.getY(i)-200;
+            float y = event.getY(i);
 
             if(id == touch1.id) {
                 touch1.copyToLast();
@@ -751,24 +754,6 @@ public class PlayingArea {
 
         view.invalidate();
     }
-
-
-
-
-
-
-
-
-
-
-    public Pipe getPipeToAdd(){return pipeToAdd;}
-
-
-
-
-
-
-
 
 
     /**
@@ -831,7 +816,7 @@ public class PlayingArea {
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                if(pipeToAdd!=null &&pipeToAdd.getBitmap() != null &&pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width, height)) {
+                if(pipeToAdd!=null &&pipeToAdd.getBitmap() != null &&pipeToAdd.hit(touch1.x, touch1.y,scale,width, height,xMargin,yMargin)) {
                     getPositions(event, view);
                     move();
                     view.invalidate();
@@ -869,9 +854,10 @@ public class PlayingArea {
             //We are moving
             touch1.computeDeltas();
 
-            if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width, height)) {
-                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width);
-                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height);
+            if(pipeToAdd.hit(touch1.x, touch1.y,scale,width, height,xMargin,yMargin)) {
+                //multiply by 1/scale or wwe move too fast when we are zoomed in and too slow zoomed out
+                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width*1/scale);
+                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height*1/scale);
             }
         }
 
@@ -885,7 +871,7 @@ public class PlayingArea {
             float angle2 = angle(touch1.x, touch1.y, touch2.x, touch2.y);
             float da = (angle2 - angle1);
 
-             if(pipeToAdd.hit(touch1.x, touch1.y,gridPix,1,width,height))
+             if(pipeToAdd.hit(touch1.x, touch1.y,scale,width, height,xMargin,yMargin))
                 rotate(da, touch1.x, touch1.y);
 
 
@@ -895,8 +881,7 @@ public class PlayingArea {
 
 
 
-    public float shiftWidth=0;
-    public float shiftHeight=0;
+
 
 
 
@@ -919,11 +904,20 @@ public class PlayingArea {
             //panning
 
 
-            float thingx=touch1.dX ;
-            float thingy=touch1.dY ;
+            //if we are not snapped don't do anything, used to avoid messy rotation
+            if(pipeToAdd.getAngle()==0.0f ||pipeToAdd.getAngle()==90.0f ||
+                    pipeToAdd.getAngle()==180.0f ||pipeToAdd.getAngle()==270.0f ) {
+                //multiply by 1/scale or wwe move too fast when we are zoomed in and too slow zoomed out
+                xMargin += (touch1.dX*1/scale);
+                yMargin += (touch1.dY*1/scale);
 
-            xMargin+= touch1.dX ;
-            yMargin+= touch1.dY ;
+            }
+
+
+           /* if(pipeToAdd.getBitmap() != null) {
+                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width);
+                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height);
+            }*/
 
 
         }
@@ -937,8 +931,11 @@ public class PlayingArea {
             float distance1 = distance(touch1.lastX, touch1.lastY, touch2.lastX, touch2.lastY);
             float distance2 = distance(touch1.x, touch1.y, touch2.x, touch2.y);
             float scaleFloat = distance2 / distance1;
-            //float dist = distance2 - distance1;
-            scale(scaleFloat);
+
+            //if we are not snapped don't do anything, used to avoid messy rotation
+            if(pipeToAdd.getAngle()==0.0f ||pipeToAdd.getAngle()==90.0f ||
+                    pipeToAdd.getAngle()==180.0f ||pipeToAdd.getAngle()==270.0f )
+                scale(scaleFloat);
         }
 
     }
@@ -950,11 +947,7 @@ public class PlayingArea {
      * @param distance Distance to scale in... float?
      */
     public void scale(float distance) {
-
         this.scale *= distance;
-
-
-
     }
 
 
@@ -1056,7 +1049,7 @@ public class PlayingArea {
 
 
 
-            pipes[xInd][yInd]=new Pipe(context,pipeToAdd.getID());
+            pipes[xInd][yInd]=new Pipe(pipeToAdd.getID());
             pipes[xInd][yInd].setBitmap(pipeToAdd.getBitmap());
             pipes[xInd][yInd].setX(pipeToAdd.getX());
             pipes[xInd][yInd].setY(pipeToAdd.getY());
@@ -1064,13 +1057,11 @@ public class PlayingArea {
             pipes[xInd][yInd].set(this, xInd, yInd);
 
 
-
             pipes[xInd][yInd].setConnect(pipeToAdd.getNorth(), pipeToAdd.getEast(),
                     pipeToAdd.getSouth(), pipeToAdd.getWest());
 
 
             pipes[xInd][yInd].setPlacingPlayer(params.currentPlayer);
-
 
 
             pipeToAdd.setBitmap(null);
@@ -1173,16 +1164,16 @@ public class PlayingArea {
 
 
 
-    //NEED TO GENERALIZE ONCE 10 AND 20 DONT DRAW IN 0 AND 2
+
     public boolean checkDirectEnd(int xInd, int yInd){
 
-        //check for correct xpos
+        //check for correct xPos
         if(xInd!=gridSize-2) {
             return true;
         }
 
-        //check for correct ypos
-        if(yInd!=1 && yInd!=3)
+        //check for correct yPos
+        if(yInd!=p1StartIndex+1 && yInd!=p2StartIndex+1)
             return true;
 
         //no need for east neighbor since the first check makes sure the east neighbor is an end pipe
@@ -1196,12 +1187,8 @@ public class PlayingArea {
         boolean checkWest=(westNeighbor!=null &&pipeToAdd.getWest()&&westNeighbor.getEast());
 
 
-        if((!(checkNorth || checkSouth || checkWest)))
-            return false;
+        return (checkNorth || checkSouth || checkWest);
 
-
-
-        return true;
 
     }
 
@@ -1212,8 +1199,10 @@ public class PlayingArea {
 
     public void snap(){
 
+
         float x=pipeToAdd.getX();
         float y=pipeToAdd.getY();
+
 
         float relGridSize=1/((float)gridSize);
 
@@ -1222,14 +1211,17 @@ public class PlayingArea {
 
 
         if(xTest >=relGridSize/2)
-            pipeToAdd.setX(x+(relGridSize-xTest));
+            pipeToAdd.setX(x + (relGridSize - xTest));
+
         else
-            pipeToAdd.setX(x-xTest);
+            pipeToAdd.setX(x - xTest);
+
 
         if(yTest >= relGridSize / 2)
-            pipeToAdd.setY(y + (relGridSize - yTest) );
+            pipeToAdd.setY(y + (relGridSize - yTest));
+
         else
-            pipeToAdd.setY(y - yTest );
+            pipeToAdd.setY(y - yTest);
 
 
         //from this point on are error checks for out of bounds
@@ -1242,9 +1234,9 @@ public class PlayingArea {
         if(pipeToAdd.getX()<=0.0f)
             pipeToAdd.setX(0.0f);
 
+
         if(pipeToAdd.getY()<=0.0f)
             pipeToAdd.setY(0.0f);
-
 
 
     }
@@ -1310,6 +1302,7 @@ public class PlayingArea {
 
         pipeToAdd.setX(xp / width);
         pipeToAdd.setY(yp / height);
+
     }
 
 
@@ -1323,13 +1316,13 @@ public class PlayingArea {
     public boolean checkForLeaks(String player){
 
         if(player.contentEquals(player1name)) {
-            searchForAllLeaks(pipes[0][0]);
-            return search(pipes[0][0]);
+            searchForAllLeaks(pipes[0][p1StartIndex]);
+            return search(pipes[0][p1StartIndex]);
         }
 
         else {
-            searchForAllLeaks(pipes[0][2]);
-            return search(pipes[0][2]);
+            searchForAllLeaks(pipes[0][p2StartIndex]);
+            return search(pipes[0][p2StartIndex]);
         }
     }
 
@@ -1339,9 +1332,7 @@ public class PlayingArea {
 
 
 
-
-
-    private Vector<Integer> leakAreas=new Vector<Integer>();
+    private Vector<Integer> leakAreas= new Vector<>();
     public Vector<Integer> getLeakArea(){return leakAreas;}
 
 
@@ -1430,6 +1421,7 @@ public class PlayingArea {
     public void getFromBundle(String key, Bundle bundle) {
         params = (Parameters)bundle.getSerializable(key);
 
+        assert params != null;
         if(params.pipeToAdd!=null)
             pipeToAdd = params.pipeToAdd;
         if(params.pipes!=null)
