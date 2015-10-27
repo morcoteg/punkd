@@ -10,16 +10,16 @@
         android:id="@+id/buttonStart"
         android:onClick="onStartGame"
         android:layout_below="@+id/spinnerGrid"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_toRightOf="@+id/spalshView"
+        android:layout_toEndOf="@+id/spalshView" />
 
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/spinnerGrid"
         android:layout_centerVertical="true"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView"
+        android:layout_toRightOf="@+id/spalshView"
+        android:layout_toEndOf="@+id/spalshView"
         android:layout_alignRight="@+id/player2" />
 
     <EditText
@@ -41,13 +41,13 @@
         android:ems="10"
         android:id="@+id/player2"
         android:layout_above="@+id/spinnerGrid"
-        android:layout_toRightOf="@+id/imageView"
-        android:layout_toEndOf="@+id/imageView" />
+        android:layout_toRightOf="@+id/spalshView"
+        android:layout_toEndOf="@+id/spalshView" />
 
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/imageView"
+        android:id="@+id/spalshView"
         android:src="@drawable/splash"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

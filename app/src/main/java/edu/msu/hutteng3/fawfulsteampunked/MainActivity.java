@@ -117,7 +117,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Handle a How To button press
-     * @param view
+     * @param view The current view
      */
     public void onHowTo(View view) {
 

@@ -47,7 +47,7 @@
     <ImageView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:id="@+id/imageView"
+        android:id="@+id/spalshView"
         android:src="@drawable/splash"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"

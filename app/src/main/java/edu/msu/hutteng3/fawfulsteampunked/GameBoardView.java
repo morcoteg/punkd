@@ -1,6 +1,5 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.res.Configuration;
 import android.graphics.Bitmap;

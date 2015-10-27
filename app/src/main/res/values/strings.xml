@@ -14,7 +14,16 @@
     <string name="buttonHowTo">How To Play</string>
 
     <string name="howToTitle">Rules of the game:</string>
-    <string name="rules">Currently, you may only simulate a turn by player 1 and can oly choose \'surrender\' thus making player 1 the loser and player 2 the winner.</string>
+    <string name="rules">At the start of a player\'s turn you have the ability to select any one of
+        the 5 pipes in the green pipe queue. Once a pipe is selected, it will be placed on the game
+        board and is available to move or rotate. There are also 4 buttons a player can use: \n\n
+    1. Add a pipe: adds the pipe that was selected from the queue to the current player\'s path, given the pipe is in a valid location.\n\n
+    2. Discard pipe: discards any pipe that was selected from the queue and allows you to touch one
+        of the 5 pipes in the queue to change it to one of the other 3 types of pipes
+        (used to strategically keep pipes your opponent needs out of the queue). A player can go back to adding
+        a pipe if they press the add pipe button before discarding a pipe from the queue.\n\n
+    3. Open valve: opens the current player\'s starting valve, resulting in a win if there is a leak free path from the start to the finish.\n\n
+    4. Surrender: the current player concedes the current game.</string>
 
 
     <color name="green"> #4caf50</color>
@@ -41,6 +50,11 @@
 
 
     <string name="openedValve">Continue</string>
+
+    <string name="titleSet">"\'s turn"</string>
+
+    <string name="winner">Winner: </string>
+    <string name="loser">Loser: </string>
 
 
 </resources>

@@ -1,14 +1,11 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.content.Context;
-import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.drawable.Drawable;
-import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -17,32 +14,30 @@ public class EndGameView extends View {
 
 
 
-
-
     private Bitmap pipe;
     private Bitmap steam;
 
+    private Paint paint = new Paint();
+
     public EndGameView(Context context) {
         super(context);
-       // pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        //steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
-
-        int x=0;
+        pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
 
         init(null, 0);
     }
 
     public EndGameView(Context context, AttributeSet attrs) {
         super(context, attrs);
-       // pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-        //steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
+        pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
         init(attrs, 0);
     }
 
     public EndGameView(Context context, AttributeSet attrs, int defStyle) {
         super(context, attrs, defStyle);
-       // pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
-       // steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
+        pipe = BitmapFactory.decodeResource(context.getResources(), R.drawable.straight);
+        steam = BitmapFactory.decodeResource(context.getResources(), R.drawable.leak);
         init(attrs, defStyle);
     }
 
@@ -57,57 +52,35 @@ public class EndGameView extends View {
         super.onDraw(canvas);
 
 
-        Paint paint = new Paint();
+
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
 
-
-
-
-
+        
         int wid = canvas.getWidth();
         int hit=canvas.getHeight();
 
 
+        pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
+        steam = Bitmap.createScaledBitmap(steam, Math.max(wid / 6, hit / 6), Math.min(wid / 6, hit / 6), false);
 
 
-        int orentation=Math.min(wid, hit);
+        canvas.drawBitmap(pipe, 0, 15*canvas.getHeight() / 32 - pipe.getHeight(), paint);
+        canvas.drawBitmap(steam, 0, 15*canvas.getHeight() / 32- 3*pipe.getHeight()/2, paint);
 
-        //wid=orentation;
-        //hit=orentation;
-
-
-      //  pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
-      //  steam = Bitmap.createScaledBitmap(steam, Math.max(wid / 6, hit / 6), Math.min(wid/6, hit/6), false);
-       // canvas.save();
-
-
-        //canvas.rotate(90, canvas.getWidth() / 3 - 3 * pipe.getWidth() / 2, 5*canvas.getHeight() / 12-pipe.getHeight());
-
-        //canvas.drawBitmap(pipe, canvas.getWidth() / 3 -  pipe.getWidth() , 5 * canvas.getHeight() / 24-pipe.getHeight(), paint);
-        //canvas.drawBitmap(pipe, canvas.getWidth() / 3 -  pipe.getWidth() , 5 * canvas.getHeight() / 24-pipe.getHeight()-wid/1.9f, paint);
-        //we are in portrait
-     //   if (orentation == hit) {
-            //subtract (pipeStraight.getHeight()-hit)/2 due to the rotation and the translation done
-     //       canvas.drawBitmap(pipe, -(pipe.getHeight() - hit) / 2 ,  wid / 5 - (pipe.getHeight()-hit)/2, null);
-      //  }
-        //we are in landscape
-      //  else
-        //     canvas.drawBitmap(pipe,  hit / 5, 0, null);
-       // canvas.restore();
-
-
+        canvas.drawBitmap(pipe, canvas.getWidth() - pipe.getWidth(),  15*canvas.getHeight() / 32 - pipe.getHeight(), paint);
+        canvas.drawBitmap(steam, canvas.getWidth() - pipe.getWidth(),  15*canvas.getHeight() / 32 - 3*pipe.getHeight()/2, paint);
 
 
 
 
         paint.setTextSize(wid/20);
-        canvas.drawText("Winner: " + winner, canvas.getWidth() / 3, 5*canvas.getHeight() / 12, paint);
+        canvas.drawText(getResources().getString(R.string.winner) + winner, canvas.getWidth() / 3, 5*canvas.getHeight() / 12, paint);
 
 
 
         paint.setTextSize(wid/30);
-        canvas.drawText("Loser: "+ loser, canvas.getWidth()/2.5f, 7*canvas.getHeight() / 12, paint);
+        canvas.drawText(getResources().getString(R.string.loser)+ loser, canvas.getWidth()/2.5f, 7*canvas.getHeight() / 12, paint);
 
 
     }
