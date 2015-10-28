@@ -26,8 +26,61 @@ public class PipeArea {
     private Bitmap pipeCap;
     private Bitmap pipe90;
     private Bitmap pipeTee;
+
+    /**
+     * The queue of pipes
+     */
     public Vector<Bitmap> order= new Vector<>();
 
+
+    /**
+     * The controlling view
+     */
+    private PipeSelectView pipeSelect;
+
+
+    /**
+     * The current parameters
+     */
+    private Parameters params = new Parameters();
+
+
+    /**
+     * The canvas width
+     */
+    private int cWidth;
+
+    /**
+     * The canvas height
+     */
+    private int cHeight;
+
+
+    /**
+     * The separation size for the queue pipes
+     */
+    private static final int margin=20;
+
+    /**
+     * The touched pipe's bitmap
+     */
+    public Bitmap touchedPipe;
+
+    /**
+     * The position in the queue of the touched pipe
+     */
+    public int touchedPipePos=-1;
+
+
+    /*general getters and setters*/
+    public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
+    public void setDiscard(boolean disc){params.discard=disc;}
+
+
+    /**
+     * Constructor, sets the sizes for the orders and fills the initial one
+     * @param context The current context
+     */
     public PipeArea(Context context) {
 
         // Load the start pipes
@@ -49,11 +102,11 @@ public class PipeArea {
 
 
 
-    private int cWidth;
-    private int cHeight;
-    private static final int margin=20;
 
-
+    /**
+     * Draws the queue
+     * @param canvas The canvas we are drawing on
+     */
     public void draw(Canvas canvas) {
 
         int wid = canvas.getWidth()-margin;
@@ -84,18 +137,18 @@ public class PipeArea {
         }
 
 
-
-
     }
 
 
-
-
-
-
-
-
-
+    /**
+     * Draws pipe90, pipeTee or pipeCap
+     * @param canvas The canvas we are drawing on
+     * @param offset The position of the pipe in the queue
+     * @param pipe The pipe image
+     * @param wid The canvas width
+     * @param hit The canvas height
+     * @param orentation Landscape or portrait
+     */
     public void drawNotStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation) {
 
         pipe= Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
@@ -108,6 +161,16 @@ public class PipeArea {
     }
 
 
+
+    /**
+     * Draws pipeStraight, which requires roation
+     * @param canvas The canvas we are drawing on
+     * @param offset The position of the pipe in the queue
+     * @param pipe The pipe image
+     * @param wid The canvas width
+     * @param hit The canvas height
+     * @param orentation Landscape or portrait
+     */
     public void drawStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation){
 
         pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
@@ -127,13 +190,6 @@ public class PipeArea {
             canvas.drawBitmap(pipe,  offset * hit / 5, -margin/2, null);
         canvas.restore();
     }
-
-
-
-
-
-
-
 
 
 
@@ -158,10 +214,6 @@ public class PipeArea {
 
     }
 
-
-
-    public Bitmap touchedPipe;
-    public int touchedPipePos=-1;
 
 
     /**
@@ -212,14 +264,12 @@ public class PipeArea {
 
 
 
-    public void setDiscard(boolean disc){params.discard=disc;}
-
-
+    /**
+     * Handles discarding a current pipe and filling it with a new random one
+     */
     public void discardPipe(){
         Random rand = new Random();
         int randPipe = rand.nextInt(5);
-
-
 
         Bitmap newPipe=order.elementAt(touchedPipePos);
 
@@ -243,15 +293,6 @@ public class PipeArea {
         pipeSelect.newTurn();
     }
 
-
-    private PipeSelectView pipeSelect;
-    public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
-
-
-    /**
-     * The current parameters
-     */
-    private Parameters params = new Parameters();
 
 
     /**
@@ -315,8 +356,15 @@ public class PipeArea {
      */
     private static class Parameters implements Serializable {
 
+        /**
+         * Storage for if we are trying to discard a pipe from the queue
+         */
         public boolean discard=false;
 
+
+        /**
+         * Storage for the pipe queue
+         */
         public Vector<Integer> order= new Vector<>();
     }
 
