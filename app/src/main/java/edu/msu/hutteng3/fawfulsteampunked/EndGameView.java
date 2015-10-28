@@ -17,6 +17,7 @@ public class EndGameView extends View {
     private Bitmap pipe;
     private Bitmap steam;
 
+    @SuppressWarnings("CanBeFinal")
     private Paint paint = new Paint();
 
     public EndGameView(Context context) {
@@ -41,7 +42,8 @@ public class EndGameView extends View {
         init(attrs, defStyle);
     }
 
-    private void init(AttributeSet attrs, int defStyle) {
+    @SuppressWarnings("EmptyMethod")
+    private void init(@SuppressWarnings("UnusedParameters") AttributeSet attrs, @SuppressWarnings("UnusedParameters") int defStyle) {
 
 
     }
@@ -88,8 +90,8 @@ public class EndGameView extends View {
 
 
 
-    public String winner;
-    public String loser;
+    private String winner;
+    private String loser;
 
     public void setWinner(String toSet){
         winner = toSet;

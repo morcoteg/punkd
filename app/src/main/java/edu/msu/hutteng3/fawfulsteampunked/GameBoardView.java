@@ -40,7 +40,7 @@ public class GameBoardView extends View {
         init(attrs, defStyle);
     }
 
-    private void init(AttributeSet attrs, int defStyle) {
+    private void init(@SuppressWarnings("UnusedParameters") AttributeSet attrs, @SuppressWarnings("UnusedParameters") int defStyle) {
         playingArea= new PlayingArea(getContext());
     }
 
@@ -101,7 +101,7 @@ public class GameBoardView extends View {
 
     public PlayingArea getPlayingArea(){return playingArea;}
 
-    public void setOpened(boolean toOpen){playingArea.setOpened(toOpen);}
+    public void setOpened(@SuppressWarnings("SameParameterValue") boolean toOpen){playingArea.setOpened(toOpen);}
 
     public boolean addToGrid(Context context){return playingArea.addToGrid(context,this);}
 
@@ -112,7 +112,7 @@ public class GameBoardView extends View {
     }
 
 
-    public void setWon(boolean won){playingArea.setWon(won);}
+    public void setWon(@SuppressWarnings("SameParameterValue") boolean won){playingArea.setWon(won);}
 
 
 

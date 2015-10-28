@@ -57,9 +57,9 @@ public class EndGame extends AppCompatActivity {
     }
 
     /*
-    *Handles the new game button prees
+    *Handles the new game button press
      */
-    public void onNewGame(View view) {
+    public void onNewGame(@SuppressWarnings("UnusedParameters") View view) {
         Intent intent = new Intent(this, MainActivity.class);
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //<clears the stack

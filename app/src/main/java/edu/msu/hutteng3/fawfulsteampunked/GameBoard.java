@@ -60,7 +60,7 @@ public class GameBoard extends AppCompatActivity {
 
 
         if(params.firstTurn) {
-            //set these to initially be p1 for curerent and p2 for other to give the first player the first move
+            //set these to initially be p1 for current and p2 for other to give the first player the first move
             params.currentPlayer = p1;
             params.otherPlayer = p2;
             this.setTitle(params.currentPlayer);
@@ -147,7 +147,7 @@ public class GameBoard extends AppCompatActivity {
     /**
      * Handles the add button press
      */
-    public void addPipe(View view){
+    public void addPipe(@SuppressWarnings("UnusedParameters") View view){
         params.setAddPipe=true;
         getGameBoardView().setAddPipe(true);
         getPipeSelectView().setDiscard(false);
@@ -205,7 +205,7 @@ public class GameBoard extends AppCompatActivity {
     /**
      * Handles the open valve button
      */
-    public void open(View view){
+    public void open(@SuppressWarnings("UnusedParameters") View view){
         params.setAddPipe=false;
         getGameBoardView().setAddPipe(false);
 
@@ -233,7 +233,7 @@ public class GameBoard extends AppCompatActivity {
     /**
      * Handles the surrender button
      */
-    public void surrender(View view) {
+    public void surrender(@SuppressWarnings("UnusedParameters") View view) {
 
         getGameBoardView().clear();
         getPipeSelectView().clear();
@@ -296,7 +296,8 @@ public class GameBoard extends AppCompatActivity {
      * @param key key name to use in the bundle
      * @param bundle bundle to save to
      */
-    public void putToBundle(String key, Bundle bundle ) {
+    @SuppressWarnings("WeakerAccess")
+    public void putToBundle(@SuppressWarnings("SameParameterValue") String key, Bundle bundle ) {
 
         bundle.putSerializable(key, params);
 
@@ -307,7 +308,8 @@ public class GameBoard extends AppCompatActivity {
      * @param key key name to use in the bundle
      * @param bundle bundle to load from
      */
-    public void getFromBundle(String key, Bundle bundle) {
+    @SuppressWarnings("WeakerAccess")
+    public void getFromBundle(@SuppressWarnings("SameParameterValue") String key, Bundle bundle) {
         params = (Parameters) bundle.getSerializable(key);
 
         assert params != null;
@@ -369,7 +371,7 @@ public class GameBoard extends AppCompatActivity {
         public boolean setAddPipe=true;
 
         /**
-         * Storage for the text for the surrender buttonm
+         * Storage for the text for the surrender button
          */
         public int surrenderString=R.string.buttonSurrender;
 

@@ -63,12 +63,13 @@ public class MainActivity extends AppCompatActivity {
      */
     private int gridSize = 0;
 
+    @SuppressWarnings("WeakerAccess")
     public void setGrid(int size) {
         gridSize = size;
     }
 
 
-    public void onStartGame(View view) {
+    public void onStartGame(@SuppressWarnings("UnusedParameters") View view) {
 
         Intent intent = new Intent(this, GameBoard.class);
 

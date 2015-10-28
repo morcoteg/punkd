@@ -6,6 +6,7 @@ import java.io.Serializable;
 
 /**
  * Created by Tyler on 10/10/2015.
+ * The actual pipes themselves
  */
 public class Pipe implements Serializable{
 
@@ -24,6 +25,7 @@ public class Pipe implements Serializable{
      *
      * false, true, true, true
      */
+    @SuppressWarnings("CanBeFinal")
     private boolean[] connect = {false, false, false, false};
 
     /**
@@ -85,6 +87,7 @@ public class Pipe implements Serializable{
     public Bitmap getBitmap() {return bitmap;}
 
     public void setPlayingArea(PlayingArea toSet){playingArea=toSet;}
+    @SuppressWarnings("WeakerAccess")
     public PlayingArea getPlayingArea() {
         return playingArea;
     }
@@ -121,7 +124,7 @@ public class Pipe implements Serializable{
 
     /**
      * Constructor
-     * @params id The id for what type of pipe this is
+     * @param id The id for what type of pipe this is
      */
     public Pipe(int id) {
         this.id = id;
@@ -169,6 +172,7 @@ public class Pipe implements Serializable{
 
             if (n.visited) {
                 // Already visited this one, so no leaks this way
+                //noinspection UnnecessaryContinue
                 continue;
             } else {
                 // Is there a lead in that direction
@@ -244,14 +248,37 @@ public class Pipe implements Serializable{
             if (!n.connect[dp]) {
                 // We have a bad connection, the other side is not
                 // a flange to connect to
-               // playingArea.getLeakArea().add(n.getXIndex());
-               // playingArea.getLeakArea().add(n.getYIndex());
+                if(dp==2) {
+                    playingArea.getLeakArea().add(xIndex);
+                    playingArea.getLeakArea().add(yIndex-1);
+                }
+                //east is empty
+                else if(dp==3){
+                    playingArea.getLeakArea().add(xIndex+1);
+                    playingArea.getLeakArea().add(yIndex);
+
+                }
+
+                //south is empty
+                else if(dp==0){
+                    playingArea.getLeakArea().add(xIndex);
+                    playingArea.getLeakArea().add(yIndex+1);
+
+                }
+
+                //west is empty
+                else if(dp==1){
+                    playingArea.getLeakArea().add(xIndex-1);
+                    playingArea.getLeakArea().add(yIndex);
+
+                }
                 //return false;
                 continue;
             }
 
             if (n.visited) {
                 // Already visited this one, so no leaks this way
+                //noinspection UnnecessaryContinue
                 continue;
             } else {
                 // Is there a lead in that direction
@@ -328,7 +355,7 @@ public class Pipe implements Serializable{
      * Set the visited flag for this pipe
      * @param visited Value to set
      */
-    public void setVisited(boolean visited) {
+    public void setVisited(@SuppressWarnings("SameParameterValue") boolean visited) {
         this.visited = visited;
     }
 

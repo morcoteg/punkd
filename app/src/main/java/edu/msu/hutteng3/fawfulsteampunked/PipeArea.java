@@ -16,21 +16,27 @@ import java.util.Vector;
 
 /**
  * Created by Tyler on 10/13/2015.
+ * The green queue area
  */
+@SuppressWarnings({"ALL", "FieldCanBeLocal"})
 public class PipeArea {
 
     /**
      * Pipe bitmaps
      */
+    @SuppressWarnings("CanBeFinal")
     private Bitmap pipeStraight;
     private Bitmap pipeCap;
+    @SuppressWarnings("CanBeFinal")
     private Bitmap pipe90;
+    @SuppressWarnings("CanBeFinal")
     private Bitmap pipeTee;
 
     /**
      * The queue of pipes
      */
-    public Vector<Bitmap> order= new Vector<>();
+    @SuppressWarnings("CanBeFinal")
+    private Vector<Bitmap> order= new Vector<>();
 
 
     /**
@@ -64,12 +70,13 @@ public class PipeArea {
     /**
      * The touched pipe's bitmap
      */
-    public Bitmap touchedPipe;
+    @SuppressWarnings("FieldCanBeLocal")
+    private Bitmap touchedPipe;
 
     /**
      * The position in the queue of the touched pipe
      */
-    public int touchedPipePos=-1;
+    private int touchedPipePos=-1;
 
 
     /*general getters and setters*/
@@ -114,7 +121,7 @@ public class PipeArea {
 
         int orientation=Math.max(hit, wid);
 
-        //used for on touch, the real canvas size )may need to remove the argin addition, needs to be tested on the 4 and S
+        //used for on touch, the real canvas size )may need to remove the margin addition, needs to be tested on the 4 and S
         cWidth=wid+margin;
         cHeight=hit+margin;
 
@@ -149,6 +156,7 @@ public class PipeArea {
      * @param hit The canvas height
      * @param orentation Landscape or portrait
      */
+    @SuppressWarnings("WeakerAccess")
     public void drawNotStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation) {
 
         pipe= Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
@@ -163,7 +171,7 @@ public class PipeArea {
 
 
     /**
-     * Draws pipeStraight, which requires roation
+     * Draws pipeStraight, which requires rotation
      * @param canvas The canvas we are drawing on
      * @param offset The position of the pipe in the queue
      * @param pipe The pipe image
@@ -171,6 +179,7 @@ public class PipeArea {
      * @param hit The canvas height
      * @param orentation Landscape or portrait
      */
+    @SuppressWarnings("WeakerAccess")
     public void drawStraightPipe(Canvas canvas, int offset, Bitmap pipe,int wid, int hit, int orentation){
 
         pipe = Bitmap.createScaledBitmap(pipe, Math.max(wid/5,hit/5),Math.min(wid, hit), false);
@@ -200,6 +209,7 @@ public class PipeArea {
      * @param event The motion event describing the touch
      * @return true if the touch is handled.
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean onTouchEvent(View view, MotionEvent event) {
         //
         // Convert an x,y location to a relative location in the
@@ -223,6 +233,7 @@ public class PipeArea {
      * @param y y location for the touch, relative to the puzzle - 0 to 1 over the puzzle
      * @return true if the touch is handled
      */
+    @SuppressWarnings("SameReturnValue")
     private boolean onTouched(float x, float y) {
 
         // Check each piece to see if it has been hit
@@ -267,6 +278,7 @@ public class PipeArea {
     /**
      * Handles discarding a current pipe and filling it with a new random one
      */
+    @SuppressWarnings("WeakerAccess")
     public void discardPipe(){
         Random rand = new Random();
         int randPipe = rand.nextInt(5);
@@ -300,7 +312,7 @@ public class PipeArea {
      * @param key key name to use in the bundle
      * @param bundle bundle to save to
      */
-    public void putToBundle(String key, Bundle bundle ) {
+    public void putToBundle(@SuppressWarnings("SameParameterValue") String key, Bundle bundle ) {
 
         for (int i=0;i<order.size();i++) {
             int id=-1;
@@ -326,7 +338,7 @@ public class PipeArea {
      * @param key key name to use in the bundle
      * @param bundle bundle to load from
      */
-    public void getFromBundle(String key, Bundle bundle) {
+    public void getFromBundle(@SuppressWarnings("SameParameterValue") String key, Bundle bundle) {
         params = (Parameters) bundle.getSerializable(key);
 
         assert params != null;
@@ -365,6 +377,7 @@ public class PipeArea {
         /**
          * Storage for the pipe queue
          */
+        @SuppressWarnings("CanBeFinal")
         public Vector<Integer> order= new Vector<>();
     }
 

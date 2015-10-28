@@ -17,7 +17,9 @@ import java.util.Vector;
 
 /**
  * Created by Tyler on 10/10/2015.
+ * The area which stores the current pipes and the pipe we are adding (if there is one).
  */
+@SuppressWarnings({"ALL", "SuspiciousNameCombination"})
 public class PlayingArea {
 
 
@@ -398,81 +400,12 @@ public class PlayingArea {
         }
         else {
             //Draw the handles for the start pipes unrotated
-            canvas.drawBitmap(handle, xMargin, p1StartIndex * hit / gridSize+yMargin, paint);
-            canvas.drawBitmap(handle, xMargin, p2StartIndex * hit / gridSize+yMargin, paint);
+            canvas.drawBitmap(handle, xMargin, p1StartIndex * hit / gridSize + yMargin, paint);
+            canvas.drawBitmap(handle, xMargin, p2StartIndex * hit / gridSize + yMargin, paint);
         }
 
 
 
-
-        //resize and draw the pipe we are adding
-        if (params.toAdd && pipeToAdd.getBitmap() != null) {
-            float x = pipeToAdd.getX();
-            float y = pipeToAdd.getY();
-
-            canvas.save();
-
-            float angle = pipeToAdd.getAngle();
-
-            pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
-
-
-
-            if(!rotating){
-                canvas.rotate(angle, x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2);
-                if (angle ==180.0f)
-                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid - xMargin, y * hit - yMargin, paint);
-                 else if (angle==90.0)
-                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid + yMargin, y * hit - xMargin, paint);
-                 else if (angle==270.0f)
-                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid - yMargin, y * hit + xMargin, paint);
-                 else if(angle==0.0f ||angle==360.0f)
-                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid + xMargin, y* hit + yMargin, paint);
-                else
-                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid + xMargin, y * hit + yMargin, paint);
-
-
-            }
-
-            //special case for rotation, needed to maintain a centerpoint
-            else{
-
-
-                float start=pipeToAdd.getStartingAngle();
-
-
-               if (start ==180.0f) {
-                   canvas.translate(xMargin - pipeToAdd.getBitmap().getWidth(), yMargin - pipeToAdd.getBitmap().getHeight());
-                   canvas.translate(x * wid, y * hit);
-                   canvas.rotate(angle, pipeToAdd.getBitmap().getWidth(), pipeToAdd.getBitmap().getHeight());
-               }
-                else if (start==90.0) {
-                   canvas.translate(xMargin, yMargin - pipeToAdd.getBitmap().getHeight());
-                   canvas.translate(x * wid, y * hit);
-                   canvas.rotate(angle, 0, pipeToAdd.getBitmap().getHeight());
-
-               }
-                else if (start==270.0f) {
-                   canvas.translate(xMargin-pipeToAdd.getBitmap().getWidth(), yMargin);
-                   canvas.translate(x * wid, y * hit);
-                   canvas.rotate(angle, pipeToAdd.getBitmap().getWidth(), 0);
-               }
-                else {
-                   canvas.translate(xMargin, yMargin);
-                   canvas.translate(x * wid, y * hit);
-                   canvas.rotate(angle,0, 0);
-               }
-
-
-                canvas.drawBitmap(pipeToAdd.getBitmap(), 0, 0, paint);
-
-            }
-
-
-           canvas.restore();
-
-
-        }
 
 
         //draw the gauge lines
@@ -501,6 +434,76 @@ public class PlayingArea {
             canvas.drawLine((gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 2.1f+xMargin, (p2StartIndex+1)* hit / gridSize + diff / 5f+yMargin,
                 (gridSize - 1) * wid / gridSize + pipeEnd.getWidth() / 3.6f+xMargin, (p2StartIndex+1) * hit / gridSize - diff / 6.1f+yMargin, paint);
 
+
+
+        //resize and draw the pipe we are adding
+        if (params.toAdd && pipeToAdd.getBitmap() != null) {
+            float x = pipeToAdd.getX();
+            float y = pipeToAdd.getY();
+
+            canvas.save();
+
+            float angle = pipeToAdd.getAngle();
+
+            pipeToAdd.setBitmap(Bitmap.createScaledBitmap(pipeToAdd.getBitmap(), wid / gridSize, hit / gridSize, false));
+
+
+
+            if(!rotating){
+                canvas.rotate(angle, x * wid + pipeToAdd.getBitmap().getWidth() / 2, y * hit + pipeToAdd.getBitmap().getHeight() / 2);
+                if (angle ==180.0f)
+                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid - xMargin, y * hit - yMargin, paint);
+                else if (angle==90.0)
+                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid + yMargin, y * hit - xMargin, paint);
+                else if (angle==270.0f)
+                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid - yMargin, y * hit + xMargin, paint);
+                else if(angle==0.0f ||angle==360.0f)
+                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid + xMargin, y* hit + yMargin, paint);
+                else
+                    canvas.drawBitmap(pipeToAdd.getBitmap(), x * wid + xMargin, y * hit + yMargin, paint);
+
+
+            }
+
+            //special case for rotation, needed to maintain a centerpoint
+            else{
+
+
+                float start=pipeToAdd.getStartingAngle();
+
+
+                if (start ==180.0f) {
+                    canvas.translate(xMargin - pipeToAdd.getBitmap().getWidth(), yMargin - pipeToAdd.getBitmap().getHeight());
+                    canvas.translate(x * wid, y * hit);
+                    canvas.rotate(angle, pipeToAdd.getBitmap().getWidth(), pipeToAdd.getBitmap().getHeight());
+                }
+                else if (start==90.0) {
+                    canvas.translate(xMargin, yMargin - pipeToAdd.getBitmap().getHeight());
+                    canvas.translate(x * wid, y * hit);
+                    canvas.rotate(angle, 0, pipeToAdd.getBitmap().getHeight());
+
+                }
+                else if (start==270.0f) {
+                    canvas.translate(xMargin-pipeToAdd.getBitmap().getWidth(), yMargin);
+                    canvas.translate(x * wid, y * hit);
+                    canvas.rotate(angle, pipeToAdd.getBitmap().getWidth(), 0);
+                }
+                else {
+                    canvas.translate(xMargin, yMargin);
+                    canvas.translate(x * wid, y * hit);
+                    canvas.rotate(angle,0, 0);
+                }
+
+
+                canvas.drawBitmap(pipeToAdd.getBitmap(), 0, 0, paint);
+
+            }
+
+
+            canvas.restore();
+
+
+        }
 
 
         canvas.restore();
@@ -655,7 +658,8 @@ public class PlayingArea {
             //first error check is for out of index
             //second is to make sure the pipe we try to work with isnt null
             if(xLeakInd!=gridSize-1&&pipes[xLeakInd+1][yLeakInd]!=null &&pipes[xLeakInd+1][yLeakInd].getWest()&&
-                    pipes[xLeakInd+1][yLeakInd ].getPlacingPlayer().contentEquals(params.currentPlayer)) {
+                    pipes[xLeakInd+1][yLeakInd ].getPlacingPlayer().contentEquals(params.currentPlayer) &&
+                            (xLeakInd!=gridSize-2 &&(yLeakInd!=p1StartIndex+1||yLeakInd!=p2StartIndex+1))) {
                 canvas.save();
                 canvas.rotate(-90, 0, 0);
                 leak = Bitmap.createScaledBitmap(leak, wid / gridSize, hit / gridSize, false);
@@ -1418,6 +1422,7 @@ public class PlayingArea {
      * @param key key name to use in the bundle
      * @param bundle bundle to load from
      */
+    @SuppressWarnings("SuspiciousNameCombination")
     public void getFromBundle(String key, Bundle bundle) {
         params = (Parameters)bundle.getSerializable(key);
 
@@ -1432,8 +1437,11 @@ public class PlayingArea {
 
         setBitmaps();
 
-        xMargin=params.xMargin;
-        yMargin=params.yMargin;
+        //flip the margins since we are changing the layout
+        //noinspection SuspiciousNameCombination,SuspiciousNameCombination,SuspiciousNameCombination
+        xMargin=params.yMargin;
+        //noinspection SuspiciousNameCombination
+        yMargin=params.xMargin;
     }
 
 
