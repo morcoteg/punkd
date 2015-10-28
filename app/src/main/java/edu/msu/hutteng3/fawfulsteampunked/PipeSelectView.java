@@ -26,10 +26,8 @@ public class PipeSelectView extends View {
     }
 
 
-
     private PipeArea pipeSelect;
     public PipeArea getPipeArea(){return pipeSelect;}
-
 
 
     private void init(AttributeSet attrs, int defStyle) {
@@ -39,21 +37,13 @@ public class PipeSelectView extends View {
     }
 
 
-
-
-
-
-
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         pipeSelect.draw(canvas);
 
     }
-
-
-
-
+    
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         pipeSelect.onTouchEvent(this, event);
@@ -61,10 +51,6 @@ public class PipeSelectView extends View {
 
         return false;
     }
-
-
-
-
 
 
     public void setTouchedPipe(Bitmap selected){
@@ -75,19 +61,14 @@ public class PipeSelectView extends View {
         gameBoardView.newTurn();
     }
 
-
     public void setGameBoardView(GameBoardView view){gameBoardView=view;}
+
     private GameBoardView gameBoardView;
 
-
-
     public void setDiscard(boolean discard){pipeSelect.setDiscard(discard);}
-
-
 
     public void clear(){
         pipeSelect=null;
     }
-
 
 }

@@ -56,7 +56,7 @@ public class EndGameView extends View {
         paint.setStyle(Paint.Style.FILL);
         paint.setColor(Color.BLACK);
 
-        
+
         int wid = canvas.getWidth();
         int hit=canvas.getHeight();
 

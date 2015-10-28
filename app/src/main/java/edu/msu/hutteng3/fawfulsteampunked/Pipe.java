@@ -15,17 +15,6 @@ public class Pipe implements Serializable{
      */
     private PlayingArea playingArea = null;
 
-    public void setPlayingArea(PlayingArea toSet){playingArea=toSet;}
-
-
-
-    /**
-     * The current parameters
-     */
-    //private Parameters params = new Parameters();
-
-
-
     /**
      * Array that indicates which sides of this pipe
      * has flanges. The order is north, east, south, west.
@@ -42,12 +31,63 @@ public class Pipe implements Serializable{
      */
     private float x = 0;
 
+    /**
+     * the pipes angle
+     */
     private float mAngle = 0;
 
     /**
      * Y location in the playing area
      */
     private float y = 0;
+
+    /**
+     * The player who placed this pipe
+     */
+    private String placingPlayer;
+
+    /**
+     * X location in the playing area (index into array)
+     */
+    private int xIndex = 0;
+
+    /**
+     * Y location in the playing area (index into array)
+     */
+    private int yIndex = 0;
+
+    /**
+     * Depth-first visited visited
+     */
+    private boolean visited = false;
+
+    /**
+     * The pipe ID
+     */
+    private int id;
+
+    /**
+     * The pipe bitmap
+     */
+    private Bitmap bitmap;
+
+    /**
+     * The starting angle of a rotation, used in rotating the pipe
+     */
+    private float startingAngle=0;
+
+
+    /* General getters and setters with on extra functionality*/
+    public float getStartingAngle(){return startingAngle;}
+    public void setStartingAngle(float angle){startingAngle=angle;}
+
+    public void setBitmap(Bitmap newMap){bitmap=newMap;}
+    public Bitmap getBitmap() {return bitmap;}
+
+    public void setPlayingArea(PlayingArea toSet){playingArea=toSet;}
+    public PlayingArea getPlayingArea() {
+        return playingArea;
+    }
 
     public float getX(){ return x; }
     public void setX(float newX){ x = newX; }
@@ -58,46 +98,8 @@ public class Pipe implements Serializable{
     public float getAngle(){return mAngle;}
     public void setAngle(float angle){mAngle = angle;}
 
-
-
-
-
-    private String placingPlayer;
-    public String getPlacingPlayer(){return placingPlayer;}
-    public void setPlacingPlayer(String player){placingPlayer=player;}
-
-
-    /**
-     * X location in the playing area (index into array)
-     */
-    private int xIndex = 0;
-
-
-    /**
-     * Y location in the playing area (index into array)
-     */
-    private int yIndex = 0;
-
-
-
-
-
-    /**
-     * Depth-first visited visited
-     */
-    private boolean visited = false;
-
-
-
-
-
-    /**
-     * The pipe ID
-     */
-    private int id;
     public void setID(int newID){id=newID;}
     public int getID(){return id;}
-
 
     public void setConnect(boolean north, boolean east, boolean south, boolean west) {
         connect[0] = north;
@@ -105,42 +107,25 @@ public class Pipe implements Serializable{
         connect[2] = south;
         connect[3] = west;
     }
+    public boolean getNorth() {return connect[0];}
+    public boolean getEast() {return connect[1];}
+    public boolean getSouth() {return connect[2];}
+    public boolean getWest() {return connect[3];}
 
-
-
-    public boolean getNorth() {
-       return connect[0];
-    }
-
-    public boolean getEast() {
-        return connect[1];
-    }
-
-    public boolean getSouth() {
-        return connect[2];
-    }
-
-    public boolean getWest() {
-        return connect[3];
-    }
+    public String getPlacingPlayer(){return placingPlayer;}
+    public void setPlacingPlayer(String player){placingPlayer=player;}
 
 
 
 
 
-
-
-
-
-
+    /**
+     * Constructor
+     * @params id The id for what type of pipe this is
+     */
     public Pipe(int id) {
         this.id = id;
-       // pipe = BitmapFactory.decodeResource(context.getResources(), id);
     }
-
-
-
-
 
 
     /**
@@ -200,18 +185,10 @@ public class Pipe implements Serializable{
 
 
 
-
-
-
-
-
     /**
      * Search to see if there are any downstream of this pipe
-     *
-     * This does a simple depth-first search to find any connections
-     * that are not, in turn, connected to another pipe. It also
-     * set the visited flag in all pipes it does visit, so you can
-     * tell if a pipe is reachable from this pipe by checking that flag.
+     * Basically the same as the given DFS only we keep going after we find a
+     * leak so we can find them all
      * @return True if no leaks in the pipe
      */
     public boolean searchForAllLeaks() {
@@ -294,9 +271,6 @@ public class Pipe implements Serializable{
 
 
 
-
-
-
     /**
      * Find the neighbor of this pipe
      * @param d Index (north=0, east=1, south=2, west=3)
@@ -328,13 +302,7 @@ public class Pipe implements Serializable{
         return null;
     }
 
-    /**
-     * Get the playing area
-     * @return Playing area object
-     */
-    public PlayingArea getPlayingArea() {
-        return playingArea;
-    }
+
 
     /**
      * Set the playing area and location for this pipe
@@ -366,19 +334,6 @@ public class Pipe implements Serializable{
 
 
 
-    private Bitmap bitmap;
-    public void setBitmap(Bitmap newMap){bitmap=newMap;}
-    public Bitmap getBitmap() {return bitmap;}
-
-
-
-
-
-
-
-
-
-
     /**
      * Test to see if we have touched a pipe
      * @param testX X location as a normalized coordinate (0 to 1)
@@ -399,10 +354,7 @@ public class Pipe implements Serializable{
         return !(testX < x * minDim + xMargin * scaleFactor || testX > x * minDim + bitmap.getWidth() * scaleFactor + xMargin * scaleFactor ||
                 testY < y * minDim + yMargin * scaleFactor || testY > y * minDim + bitmap.getHeight() * scaleFactor + yMargin * scaleFactor);
 
-
     }
-
-
 
 
 

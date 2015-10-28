@@ -53,25 +53,12 @@ public class GameBoardView extends View {
     }
 
 
-
-
-
-
-
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
        // GameBoard host = (GameBoard) this.getContext();
 
         return playingArea.onTouchEvent(this,event);
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -84,19 +71,14 @@ public class GameBoardView extends View {
 
 
 
-
+    /* Basically all the functions from here down act as a gateway from the activity to the playing area*/
     public void newTurn(){
         GameBoard gameBoard = (GameBoard) this.getContext();
         gameBoard.switchTurn();
     }
 
 
-
     public void setAddPipe(boolean on){playingArea.setAddPipe(on);}
-
-
-
-
 
     public void setPipeToAdd(Bitmap pipe){
         playingArea.setPipeToAdd(pipe);
@@ -111,23 +93,17 @@ public class GameBoardView extends View {
         playingArea.setPlayer2Name(name);
     }
 
-
-
     public void setCurrentPlayer(String player){playingArea.setCurrentPlayer(player);}
 
     public void setGridSize(int scale){
         playingArea.setGridSize(scale);
     }
 
-
     public PlayingArea getPlayingArea(){return playingArea;}
-
 
     public void setOpened(boolean toOpen){playingArea.setOpened(toOpen);}
 
-    public boolean addToGrid(Context context){return playingArea.addToGrid(context,this);
-    }
-
+    public boolean addToGrid(Context context){return playingArea.addToGrid(context,this);}
 
     public boolean checkForLeaks(String player){return playingArea.checkForLeaks(player);}
 
@@ -137,9 +113,6 @@ public class GameBoardView extends View {
 
 
     public void setWon(boolean won){playingArea.setWon(won);}
-
-
-
 
 
 

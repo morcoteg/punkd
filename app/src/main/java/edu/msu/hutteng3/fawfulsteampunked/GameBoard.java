@@ -72,13 +72,6 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -118,24 +111,18 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
-
-
-
-
-
-
-
+    /**
+     * Handles loading from the app selection screen
+     */
     public void onResume(){
         super.onResume();
-
         getGameBoardView().getPlayingArea().setBitmaps();
-
     }
 
 
-
-
-
+    /**
+     * Handles switching player's turns
+     */
     public void switchTurn(){
         getGameBoardView().invalidate();
         getPipeSelectView().invalidate();
@@ -156,7 +143,9 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
+    /**
+     * Handles the add button press
+     */
     public void addPipe(View view){
         params.setAddPipe=true;
         getGameBoardView().setAddPipe(true);
@@ -169,14 +158,15 @@ public class GameBoard extends AppCompatActivity {
 
 
 
+    /**
+     * Handles the discard button press
+     */
     public void discardPipe(View view) {
         getPipeSelectView().setDiscard(true);
         params.setAddPipe=false;
         getGameBoardView().setAddPipe(false);
         getGameBoardView().setPipeToAdd(null);
     }
-
-
 
 
 
@@ -211,7 +201,9 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
-
+    /**
+     * Handles the open valve button
+     */
     public void open(View view){
         params.setAddPipe=false;
         getGameBoardView().setAddPipe(false);
@@ -237,10 +229,9 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
-
-
-
-
+    /**
+     * Handles the surrender button
+     */
     public void surrender(View view) {
 
         getGameBoardView().clear();
@@ -282,9 +273,6 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
-
-
     //disables the back button
     @Override
     public void onBackPressed() {
@@ -294,16 +282,10 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
-
     /**
      * The current parameters
      */
     private Parameters params = new Parameters();
-
-
-
-
 
 
 
@@ -349,18 +331,50 @@ public class GameBoard extends AppCompatActivity {
      */
     private static class Parameters implements Serializable {
 
-
+        /**
+         * If the add pipes button is enabled
+         */
         public boolean addEnabled=true;
+
+        /**
+         * PIf the discard button is enabled
+         */
         public boolean discardEnabled=true;
+
+        /**
+         * If the open valve button is enabled
+         */
         public boolean openEnabled=true;
 
+
+        /**
+         * Storage for the current player
+         */
         public String currentPlayer;
+
+        /**
+         * Storage for the not current player
+         */
         public String otherPlayer;
+
+        /**
+         * Storage for if we are on the first turn or not
+         */
         public boolean firstTurn=true;
+
+        /**
+         * Storage for if we have a pipe we are trying to add
+         */
         public boolean setAddPipe=true;
+
+        /**
+         * Storage for the text for the surrender buttonm
+         */
         public int surrenderString=R.string.buttonSurrender;
 
-
+        /**
+         * Storage for if a player has won or not
+         */
         public boolean won=false;
     }
 
