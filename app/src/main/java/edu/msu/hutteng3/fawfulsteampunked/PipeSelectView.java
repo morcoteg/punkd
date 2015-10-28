@@ -30,7 +30,7 @@ public class PipeSelectView extends View {
     public PipeArea getPipeArea(){return pipeSelect;}
 
 
-    private void init(AttributeSet attrs, int defStyle) {
+    private void init(@SuppressWarnings("UnusedParameters") AttributeSet attrs, @SuppressWarnings("UnusedParameters") int defStyle) {
 
         pipeSelect = new PipeArea(getContext());
         pipeSelect.setPipeSelectView(this);

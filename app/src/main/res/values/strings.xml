@@ -23,7 +23,8 @@
         (used to strategically keep pipes your opponent needs out of the queue). A player can go back to adding
         a pipe if they press the add pipe button before discarding a pipe from the queue.\n\n
     3. Open valve: opens the current player\'s starting valve, resulting in a win if there is a leak free path from the start to the finish.\n\n
-    4. Surrender: the current player concedes the current game.</string>
+    4. Surrender: the current player concedes the current game.\n\n
+    A player can go from the adding state to the discard state by pressing the \"discard\" button, and can go from discard to adding by pressing the \"add\" button.</string>
 
 
     <color name="green"> #4caf50</color>

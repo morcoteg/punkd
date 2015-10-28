@@ -64,6 +64,7 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
         android:textSize="8sp"
-        android:onClick="surrender" />
+        android:onClick="surrender"
+        tools:ignore="SmallSp" />
 
 </RelativeLayout>
