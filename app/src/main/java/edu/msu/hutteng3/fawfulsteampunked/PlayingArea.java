@@ -31,10 +31,6 @@ public class PlayingArea {
      */
     private int height;
 
-    /**
-     *  Scale variable for when user scales the screen, zoom in/out
-     */
-    private float scale = 1.0f;
 
     /**
      * Storage for the pipes
@@ -143,6 +139,7 @@ public class PlayingArea {
     public void setPipeToAdd(Bitmap pipe){
         pipeToAdd.setBitmap(pipe);
         pipeToAdd.setAngle(0);//<keep position but reset angle
+        pipeToAdd.setStartingAngle(0);
 
         //do the pipe!=null error checks to avoid segfaults when its null
         if (pipe !=null) {
@@ -339,7 +336,7 @@ public class PlayingArea {
 
 
         canvas.save();
-        canvas.scale(this.scale, this.scale);
+        canvas.scale(params.scale, params.scale);
 
 
         //pipeStart height to get below +42f for text size
@@ -812,7 +809,7 @@ public class PlayingArea {
                 return true;
 
             case MotionEvent.ACTION_MOVE:
-                if(pipeToAdd!=null &&pipeToAdd.getBitmap() != null &&pipeToAdd.hit(touch1.x, touch1.y,scale,width, height,xMargin,yMargin)) {
+                if(pipeToAdd!=null &&pipeToAdd.getBitmap() != null &&pipeToAdd.hit(touch1.x, touch1.y,params.scale,width, height,xMargin,yMargin)) {
                     getPositions(event, view);
                     move();
                     view.invalidate();
@@ -847,10 +844,10 @@ public class PlayingArea {
             //We are moving
             touch1.computeDeltas();
 
-            if(pipeToAdd.hit(touch1.x, touch1.y,scale,width, height,xMargin,yMargin)) {
+            if(pipeToAdd.hit(touch1.x, touch1.y,params.scale,width, height,xMargin,yMargin)) {
                 //multiply by 1/scale or wwe move too fast when we are zoomed in and too slow zoomed out
-                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width*1/scale);
-                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height*1/scale);
+                pipeToAdd.setX(pipeToAdd.getX() + touch1.dX / width*1/params.scale);
+                pipeToAdd.setY(pipeToAdd.getY() + touch1.dY / height*1/params.scale);
             }
         }
 
@@ -940,7 +937,7 @@ public class PlayingArea {
      * @param distance Distance to scale in... float?
      */
     public void scale(float distance) {
-        this.scale *= distance;
+        params.scale *= distance;
     }
 
 
@@ -1088,6 +1085,7 @@ public class PlayingArea {
             pipeToAdd.setX(0.5f);
             pipeToAdd.setY(0.5f);
             pipeToAdd.setAngle(0);
+            pipeToAdd.setStartingAngle(0);
             pipeToAdd.setID(-1);
 
             //it passed all the tests and is now set on the board
@@ -1406,7 +1404,8 @@ public class PlayingArea {
 
 
 
-
+        params.xMargin=xMargin;
+        params.yMargin=yMargin;
 
 
         bundle.putSerializable(key, params);
@@ -1432,6 +1431,9 @@ public class PlayingArea {
 
 
         setBitmaps();
+
+        xMargin=params.xMargin;
+        yMargin=params.yMargin;
     }
 
 
@@ -1600,5 +1602,25 @@ public class PlayingArea {
          * Storage for if a player has a complete path with no leaks
          */
         public boolean won=false;
+
+
+
+        /**
+         *  Scale variable for when user scales the screen, zoom in/out
+         */
+        public float scale = 1.0f;
+
+
+        /**
+         * Storage for the xMargin
+         */
+        public int xMargin=0;
+
+
+        /**
+         * Storage for the yMargin
+         */
+        public int yMargin=0;
+
     }
 }

@@ -117,6 +117,7 @@ public class GameBoard extends AppCompatActivity {
     public void onResume(){
         super.onResume();
         getGameBoardView().getPlayingArea().setBitmaps();
+
     }
 
 

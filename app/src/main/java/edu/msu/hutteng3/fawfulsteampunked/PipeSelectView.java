@@ -43,7 +43,7 @@ public class PipeSelectView extends View {
         pipeSelect.draw(canvas);
 
     }
-    
+
     @Override
     public boolean onTouchEvent(@NonNull MotionEvent event) {
         pipeSelect.onTouchEvent(this, event);
