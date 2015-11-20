@@ -133,7 +133,7 @@ public class GameBoard extends AppCompatActivity {
 
         params.setAddPipe=true;
         getGameBoardView().setAddPipe(true);
-
+        getPipeSelectView().setTouchedPipePos(-1);
 
         Toast toast = Toast.makeText(this, params.currentPlayer +getResources().getString(R.string.titleSet), Toast.LENGTH_LONG);
         toast.show();
@@ -153,7 +153,7 @@ public class GameBoard extends AppCompatActivity {
         getPipeSelectView().setDiscard(false);
 
         if(getGameBoardView().addToGrid(this)) {
-            switchTurn();
+            getPipeSelectView().discardPipe();
         }
     }
 

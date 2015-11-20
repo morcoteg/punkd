@@ -71,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartGame(@SuppressWarnings("UnusedParameters") View view) {
 
-        Intent intent = new Intent(this, GameBoard.class);
+        Intent intent = new Intent(this, GameSearch.class);
 
         EditText txtDescriptionp1 = (EditText) findViewById(R.id.player1);
         String p1 = txtDescriptionp1.getText().toString();
@@ -137,5 +137,20 @@ public class MainActivity extends AppCompatActivity {
         alertDialog.show();
     }
 
+
+
+
+
+
+
+
+
+    public void onRegister(@SuppressWarnings("UnusedParameters") View view) {
+
+        Intent intent = new Intent(this, Register.class);
+
+        startActivity(intent);
+
+    }
 
 }

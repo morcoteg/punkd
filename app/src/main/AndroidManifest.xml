@@ -25,6 +25,14 @@
             android:name=".EndGame"
             android:label="@string/title_activity_end_game" >
         </activity>
+        <activity
+            android:name=".Register"
+            android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name=".GameSearch"
+            android:label="@string/title_activity_game_search" >
+        </activity>
     </application>
 
 </manifest>

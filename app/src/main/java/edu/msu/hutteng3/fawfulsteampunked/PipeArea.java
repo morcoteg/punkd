@@ -82,6 +82,7 @@ public class PipeArea {
     /*general getters and setters*/
     public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
     public void setDiscard(boolean disc){params.discard=disc;}
+    public void setTouchedPipePos(int pos){touchedPipePos=pos;}
 
 
     /**
@@ -265,7 +266,6 @@ public class PipeArea {
         touchedPipe = order.elementAt(touchedPipePos);
 
         if(!params.discard) {
-            touchedPipePos = -1;
             pipeSelect.setTouchedPipe(touchedPipe);
         }
         else
@@ -329,6 +329,8 @@ public class PipeArea {
                 params.order.set(i,id) ;
         }
 
+        params.touchedPipePos=touchedPipePos;
+
         bundle.putSerializable(key, params);
 
     }
@@ -358,6 +360,8 @@ public class PipeArea {
 
         }
 
+        touchedPipePos=params.touchedPipePos;
+
     }
 
 
@@ -379,6 +383,12 @@ public class PipeArea {
          */
         @SuppressWarnings("CanBeFinal")
         public Vector<Integer> order= new Vector<>();
+
+
+        /**
+         * Storage for the position in the queue of the touched pipe
+         */
+        public int touchedPipePos=-1;
     }
 
 

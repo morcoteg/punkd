@@ -4,7 +4,7 @@
     <string name="player1">Player 1</string>
     <string name="player2">Player 2</string>
 
-    <string name="buttonStart">Start</string>
+    <string name="buttonStart">Search For Game</string>
 
     <string name="action_settings">Settings</string>
     <string name="title_activity_game_board">GameBoard</string>
@@ -17,14 +17,15 @@
     <string name="rules">At the start of a player\'s turn you have the ability to select any one of
         the 5 pipes in the green pipe queue. Once a pipe is selected, it will be placed on the game
         board and is available to move or rotate. There are also 4 buttons a player can use: \n\n
-    1. Add a pipe: adds the pipe that was selected from the queue to the current player\'s path, given the pipe is in a valid location.\n\n
+    1. Add a pipe: adds the pipe that was selected from the queue to the current player\'s path, given the pipe is in a valid location.
+        If the pipe is added it then randomizes the selected pipe\'s location in the queue.\n\n
     2. Discard pipe: discards any pipe that was selected from the queue and allows you to touch one
         of the 5 pipes in the queue to change it to one of the other 3 types of pipes
-        (used to strategically keep pipes your opponent needs out of the queue). A player can go back to adding
-        a pipe if they press the add pipe button before discarding a pipe from the queue.\n\n
+        (The selected pipe is not discarded, the player must chose which pipe they wish to discard after pressing the button).\n\n
     3. Open valve: opens the current player\'s starting valve, resulting in a win if there is a leak free path from the start to the finish.\n\n
     4. Surrender: the current player concedes the current game.\n\n
-    A player can go from the adding state to the discard state by pressing the \"discard\" button, and can go from discard to adding by pressing the \"add\" button.</string>
+    A player can go from the adding state to the discard state by pressing the \"discard\" button, and can go from discard to adding by pressing the \"add\" button.\n\n
+    Note: the back button is disabled throughout the game.</string>
 
 
     <color name="green"> #4caf50</color>
@@ -56,6 +57,28 @@
 
     <string name="winner">Winner: </string>
     <string name="loser">Loser: </string>
+    <string name="title_activity_register">Register</string>
 
+
+    <string name="username">Username: </string>
+    <string name="password">Password: </string>
+    <string name="password_check">Re-type password: </string>
+
+    <string name="register">Register</string>
+
+    <string name="create">Create Account</string>
+
+    <string name="error">Error</string>
+
+    <string name="passMissMatchError">Passwords did not match, please try again.</string>
+
+    <string name="passLengthError">Password was not the correct length, your password must be between 4 and 10 characters long.</string>
+
+    <string name="userLengthError">Username was not the correct length, your username must be between 4 and 10 characters long.</string>
+    <string name="title_activity_game_search">GameSearch</string>
+
+    <string name="waiting">Waiting...</string>
+
+    <string name="remember">Remember Me</string>
 
 </resources>
