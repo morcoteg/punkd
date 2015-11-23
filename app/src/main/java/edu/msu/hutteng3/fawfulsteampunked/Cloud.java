@@ -248,7 +248,7 @@ public class Cloud {
 
         InputStream stream = null;
         try {
-            URL url = new URL(LOGIN_URL);
+            URL url = new URL(SAVE_URL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -329,7 +329,7 @@ public class Cloud {
      * @param view view we are getting the data from
      * @return true if successful
      */
-    public int login(final String username, final String password,final View view) {
+    public int login(final String username, final String password,final View view, final MainActivity main) {
                 /*
          * Create a thread to load the hatting from the cloud
          */
@@ -382,7 +382,7 @@ public class Cloud {
                                     // do something with the hatting tag...
                                     success =xml.getAttributeValue(null, "stat").equals("yes");
 
-
+                                   // main.setLogin(success);
 
                                     if(success)
                                         state=0;
