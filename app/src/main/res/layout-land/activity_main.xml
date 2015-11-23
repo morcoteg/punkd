@@ -26,9 +26,9 @@
         android:layout_height="wrap_content"
         android:text="@string/player1"
         android:ems="10"
-        android:id="@+id/player1"
+        android:id="@+id/username"
         android:inputType="text"
-        android:layout_above="@+id/player2"
+        android:layout_above="@+id/password"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
@@ -38,7 +38,7 @@
         android:inputType="text"
         android:text="@string/player2"
         android:ems="10"
-        android:id="@+id/player2"
+        android:id="@+id/password"
         android:layout_above="@+id/spinnerGrid"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
@@ -79,17 +79,17 @@
         android:layout_height="wrap_content"
         android:text="@string/username"
         android:id="@+id/textView6"
-        android:layout_alignTop="@+id/player1"
-        android:layout_toLeftOf="@+id/player1"
-        android:layout_toStartOf="@+id/player1" />
+        android:layout_alignTop="@+id/username"
+        android:layout_toLeftOf="@+id/username"
+        android:layout_toStartOf="@+id/username" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/password"
         android:id="@+id/textView7"
-        android:layout_alignBaseline="@+id/player2"
-        android:layout_alignBottom="@+id/player2"
+        android:layout_alignBaseline="@+id/password"
+        android:layout_alignBottom="@+id/password"
         android:layout_alignLeft="@+id/textView6"
         android:layout_alignStart="@+id/textView6" />
 

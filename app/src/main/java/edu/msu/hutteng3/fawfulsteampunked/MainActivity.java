@@ -11,6 +11,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -71,21 +72,49 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartGame(@SuppressWarnings("UnusedParameters") View view) {
 
-        Intent intent = new Intent(this, GameSearch.class);
 
-        EditText txtDescriptionp1 = (EditText) findViewById(R.id.player1);
-        String p1 = txtDescriptionp1.getText().toString();
-        intent.putExtra("PLAYER_1_NAME", p1);
 
-        EditText txtDescriptionp2 = (EditText) findViewById(R.id.player2);
-        String p2 = txtDescriptionp2.getText().toString();
-        intent.putExtra("PLAYER_2_NAME", p2);
+        EditText txtDescriptionp1 = (EditText) findViewById(R.id.username);
+        String username = txtDescriptionp1.getText().toString();
 
-        intent.putExtra("GRID_SIZE",gridSize);
+        EditText txtDescriptionp2 = (EditText) findViewById(R.id.password);
+        String password = txtDescriptionp2.getText().toString();
 
-        startActivity(intent);
+        checkUser(username,password, view);
+        if(login) {
+            Intent intent = new Intent(this, GameSearch.class);
+            intent.putExtra("PLAYER_NAME", username);
+            intent.putExtra("GRID_SIZE", gridSize);
+            startActivity(intent);
+        }
+        else if (checkUser(username,password, view)==1) {
+            //display a toast
+        }
+        else{}
 
     }
+
+
+
+    private boolean login=false;
+    public void setLogin(boolean stat){login=stat;}
+
+
+
+
+    public int checkUser(final String username, final String password, final View view){
+
+
+
+        Cloud cloud = new Cloud();
+        final int ok = cloud.login(username,password, view);
+
+
+
+       return ok;
+
+    }
+
 
 
 

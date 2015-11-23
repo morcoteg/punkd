@@ -3,6 +3,7 @@ package edu.msu.hutteng3.fawfulsteampunked;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
+import android.widget.Toast;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -32,6 +33,7 @@ public class Cloud {
    // private static final String CATALOG_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/step6/hatter-cat.php";
     //private static final String SAVE_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-save.php";
     private static final String SAVE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476AddUser.php";
+    private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476Login.php";
     //private static final String DELETE_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-delete.php";
   //  private static final String DELETE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/step6/hatter-delete.php";
     //private static final String LOAD_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-load.php";
@@ -246,7 +248,7 @@ public class Cloud {
 
         InputStream stream = null;
         try {
-            URL url = new URL(SAVE_URL);
+            URL url = new URL(LOGIN_URL);
 
             HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 
@@ -315,6 +317,151 @@ public class Cloud {
 
 
 
+
+    private volatile boolean success=false;
+    private volatile int state;
+
+
+    /**
+     * Save a hatting to the cloud.
+     * This should be run in a thread.
+     * @param username name to save under
+     * @param view view we are getting the data from
+     * @return true if successful
+     */
+    public int login(final String username, final String password,final View view) {
+                /*
+         * Create a thread to load the hatting from the cloud
+         */
+        new Thread(new Runnable() {
+
+            @Override
+            public void run() {
+                // Create a cloud object and get the XML
+
+                InputStream stream = null;
+
+               String query = LOGIN_URL + "?user=" + username + "&magic=" + MAGIC + "&pw=" + password;
+
+                try {
+                    URL url = new URL(query);
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    int responseCode = conn.getResponseCode();
+                    if(responseCode != HttpURLConnection.HTTP_OK) {
+                        stream = null;
+                    }
+                    else
+                        stream = conn.getInputStream();
+
+                }
+                catch (MalformedURLException e) {
+                    // Should never happen
+                    stream = null;
+                }
+                catch (IOException ex) {
+                    stream = null;
+                }
+
+                // Test for an error
+                boolean fail = stream == null;
+                if (!fail) {
+                    try {
+
+                        XmlPullParser xml = Xml.newPullParser();
+                        xml.setInput(stream, "UTF-8");
+
+                        xml.nextTag();      // Advance to first tag
+                        xml.require(XmlPullParser.START_TAG, null, "hatter");
+                        String status = xml.getAttributeValue(null, "status");
+                        if (status.equals("yes")) {
+
+                            while (xml.nextTag() == XmlPullParser.START_TAG) {
+                                if (xml.getName().equals("hatting")) {
+
+                                    // do something with the hatting tag...
+                                    success =xml.getAttributeValue(null, "stat").equals("yes");
+
+
+
+                                    if(success)
+                                        state=0;
+                                    else
+                                        state=1;
+                                    break;
+                                }
+
+                                Cloud.skipToEndTag(xml);
+                            }
+                        }
+                        else {
+                            fail = true;
+                        }
+
+                    }
+                    catch (IOException ex) {
+                        fail = true;
+                    }
+                    catch (XmlPullParserException ex) {
+                        fail = true;
+                    }
+                    finally {
+                        try {
+                            stream.close();
+                        }
+                        catch (IOException ex) {
+                        }
+                    }
+                }
+
+
+                final boolean fail1 = fail;
+                view.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        //dlg.dismiss();
+                        if (fail1) {
+                            Toast.makeText(view.getContext(),
+                                    R.string.error,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                });
+
+            }
+        }).start();
+
+
+        return state;
+    }
+
+
+
+
+
+    /**
+     * Skip the XML parser to the end tag for whatever
+     * tag we are currently within.
+     * @param xml the parser
+     * @throws IOException
+     * @throws XmlPullParserException
+     */
+    public static void skipToEndTag(XmlPullParser xml)
+            throws IOException, XmlPullParserException {
+        int tag;
+        do
+        {
+            tag = xml.next();
+            if(tag == XmlPullParser.START_TAG) {
+                // Recurse over any start tag
+                skipToEndTag(xml);
+            }
+        } while(tag != XmlPullParser.END_TAG &&
+                tag != XmlPullParser.END_DOCUMENT);
+    }
 
 
 
