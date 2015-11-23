@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="edu.msu.hutteng3.fawfulsteampunked" >
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <application
         android:allowBackup="true"
         android:fullBackupContent="true"
@@ -24,6 +27,14 @@
         <activity
             android:name=".EndGame"
             android:label="@string/title_activity_end_game" >
+        </activity>
+        <activity
+            android:name=".Register"
+            android:label="@string/title_activity_register" >
+        </activity>
+        <activity
+            android:name=".GameSearch"
+            android:label="@string/title_activity_game_search" >
         </activity>
     </application>
 

@@ -71,4 +71,8 @@ public class PipeSelectView extends View {
         pipeSelect=null;
     }
 
+    public void setTouchedPipePos(int pos){pipeSelect.setTouchedPipePos(pos);}
+
+    public void discardPipe(){pipeSelect.discardPipe();}
+
 }
