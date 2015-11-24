@@ -65,47 +65,20 @@ public class Register extends AppCompatActivity {
         EditText txtPasswordCheck = (EditText) findViewById(R.id.regPasswordCheck);
         String passwordCheck = txtPasswordCheck.getText().toString();
 
+
         //check if the passwords are the same
-        if(!password.equals(passwordCheck)){
+        if(!password.equals(passwordCheck))
+            Toast.makeText(view.getContext(), R.string.passMissMatchError, Toast.LENGTH_SHORT).show();
 
-            // Parameterize the builder
-            builder.setTitle(R.string.error);
-            builder.setMessage(R.string.passMissMatchError);
-            builder.setPositiveButton(android.R.string.ok, null);
-
-            // Create the dialog box and show it
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-
-        }
 
         //check if the password is the correct size
-        else if(password.length()<4 || password.length()>10){
+        else if(password.length()<4 || password.length()>10)
+            Toast.makeText(view.getContext(), R.string.passLengthError, Toast.LENGTH_SHORT).show();
 
-            // Parameterize the builder
-            builder.setTitle(R.string.error);
-            builder.setMessage(R.string.passLengthError);
-            builder.setPositiveButton(android.R.string.ok, null);
-
-            // Create the dialog box and show it
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-
-        }
 
         //check if the username is the correct size
-        else if(username.length()<4 || username.length()>10){
-
-            // Parameterize the builder
-            builder.setTitle(R.string.error);
-            builder.setMessage(R.string.userLengthError);
-            builder.setPositiveButton(android.R.string.ok, null);
-
-            // Create the dialog box and show it
-            AlertDialog alertDialog = builder.create();
-            alertDialog.show();
-
-        }
+        else if(username.length()<4 || username.length()>10)
+            Toast.makeText(view.getContext(), R.string.userLengthError, Toast.LENGTH_SHORT).show();
 
 
         else{
