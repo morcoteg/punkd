@@ -3,16 +3,6 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buttonStart"
-        android:id="@+id/buttonStart"
-        android:onClick="onStartGame"
-        android:layout_below="@+id/spinnerGrid"
-        android:layout_alignLeft="@+id/spinnerGrid"
-        android:layout_alignStart="@+id/spinnerGrid" />
-
     <Spinner
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -52,34 +42,15 @@
         android:layout_alignParentStart="true"
         android:layout_above="@+id/username" />
 
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/buttonHowTo"
-        android:id="@+id/buttonHowTo"
-        android:onClick="onHowTo"
-        android:layout_below="@+id/buttonStart"
-        android:layout_alignRight="@+id/spinnerGrid"
-        android:layout_alignEnd="@+id/spinnerGrid" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/register"
-        android:id="@+id/buttonReg"
-        android:layout_below="@+id/buttonStart"
-        android:layout_alignLeft="@+id/buttonStart"
-        android:layout_alignStart="@+id/buttonStart"
-        android:onClick="onRegister" />
-
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/password"
         android:id="@+id/textView4"
-        android:layout_below="@+id/username"
+        android:layout_below="@+id/spinnerGrid"
         android:layout_toLeftOf="@+id/username"
-        android:layout_toStartOf="@+id/username" />
+        android:layout_toStartOf="@+id/username"
+        android:layout_alignTop="@+id/password" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -88,14 +59,60 @@
         android:id="@+id/textView5"
         android:layout_above="@+id/password"
         android:layout_toLeftOf="@+id/username"
-        android:layout_toStartOf="@+id/username" />
+        android:layout_toStartOf="@+id/username"
+        android:layout_alignTop="@+id/username" />
 
-    <CheckBox
+    <LinearLayout
+        android:orientation="vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/remember"
-        android:id="@+id/checkBoxRemember"
-        android:layout_above="@+id/buttonHowTo"
-        android:layout_toRightOf="@+id/buttonStart"
-        android:layout_toEndOf="@+id/buttonStart" />
+        android:layout_below="@+id/spinnerGrid"
+        android:layout_centerHorizontal="true">
+
+        <CheckBox
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/remember"
+            android:id="@+id/checkBoxRemember"
+            android:layout_below="@+id/buttonStart"
+            android:layout_alignLeft="@+id/buttonReg"
+            android:layout_alignStart="@+id/buttonReg"
+            android:layout_gravity="center_horizontal" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buttonStart"
+            android:id="@+id/buttonStart"
+            android:onClick="onStartGame"
+            android:layout_alignLeft="@+id/spinnerGrid"
+            android:layout_alignStart="@+id/spinnerGrid"
+            android:layout_below="@+id/spinnerGrid"
+            android:layout_gravity="center_horizontal"
+            android:textSize="10sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/register"
+            android:id="@+id/buttonReg"
+            android:onClick="onRegister"
+            android:layout_below="@+id/checkBoxRemember"
+            android:layout_alignLeft="@+id/buttonStart"
+            android:layout_alignStart="@+id/buttonStart"
+            android:layout_gravity="center_horizontal"
+            android:textSize="10sp" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/buttonHowTo"
+            android:id="@+id/buttonHowTo"
+            android:onClick="onHowTo"
+            android:layout_below="@+id/checkBoxRemember"
+            android:layout_alignRight="@+id/spinnerGrid"
+            android:layout_alignEnd="@+id/spinnerGrid"
+            android:layout_gravity="center_horizontal"
+            android:textSize="10sp" />
+    </LinearLayout>
 </RelativeLayout>
