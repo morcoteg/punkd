@@ -82,5 +82,8 @@
     <string name="remember">Remember Me</string>
 
     <string name="invalidUserPass">Error, invalid username or password.</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hing">Password</string>
+    <string name="password_repeat_hint">Repeat password</string>
 
 </resources>
