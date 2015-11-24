@@ -6,42 +6,17 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="edu.msu.hutteng3.fawfulsteampunked.Register">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username"
-        android:id="@+id/textView"
-        android:layout_alignTop="@+id/regUsername"
-        android:layout_toLeftOf="@+id/regUsername"
-        android:layout_toStartOf="@+id/regUsername" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password"
-        android:id="@+id/textView2"
-        android:layout_below="@+id/regUsername"
-        android:layout_toLeftOf="@+id/regUsername"
-        android:layout_toStartOf="@+id/regUsername" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password_check"
-        android:id="@+id/textView3"
-        android:layout_alignTop="@+id/regPasswordCheck"
-        android:layout_toLeftOf="@+id/regPasswordCheck"
-        android:layout_toStartOf="@+id/regPasswordCheck" />
-
     <EditText
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/regUsername"
-        android:layout_alignRight="@+id/regPassword"
-        android:layout_alignEnd="@+id/regPassword"
+        android:hint="@string/username_hint"
+        android:textSize="16dp"
+        android:layout_above="@+id/regPassword"
         android:layout_alignLeft="@+id/regPassword"
         android:layout_alignStart="@+id/regPassword"
-        android:layout_above="@+id/regPassword" />
+        android:layout_alignRight="@+id/regPassword"
+        android:layout_alignEnd="@+id/regPassword" />
 
     <EditText
         android:layout_width="wrap_content"
@@ -49,6 +24,8 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/regPassword"
+        android:hint="@string/password_hing"
+        android:textSize="14dp"
         android:layout_centerInParent="true" />
 
     <EditText
@@ -57,8 +34,11 @@
         android:inputType="textPassword"
         android:ems="10"
         android:id="@+id/regPasswordCheck"
-        android:layout_below="@+id/regPassword"
-        android:layout_centerHorizontal="true" />
+        android:hint="@string/password_repeat_hint"
+        android:textSize="14dp"
+        android:layout_centerVertical="true"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/regPassword" />
 
     <Button
         android:layout_width="wrap_content"
@@ -66,6 +46,7 @@
         android:text="@string/create"
         android:id="@+id/buttonCreate"
         android:onClick="onCreateAccount"
-        android:layout_below="@+id/regPasswordCheck"
-        android:layout_centerHorizontal="true" />
+        android:layout_below="@+id/regPassword"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="41dp" />
 </RelativeLayout>
