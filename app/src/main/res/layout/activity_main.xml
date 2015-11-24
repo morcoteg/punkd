@@ -1,126 +1,150 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    android:orientation="vertical"
+    android:id="@+id/masterLay"
+    android:weightSum="1">
 
-    <Spinner
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/spinnerGrid"
-        android:layout_below="@+id/password"
-        android:layout_alignLeft="@+id/password"
-        android:layout_alignStart="@+id/password"
-        android:layout_alignRight="@+id/password"
-        android:layout_alignEnd="@+id/password" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:id="@+id/username"
-        android:inputType="text"
-        android:layout_centerVertical="true"
-        android:layout_centerHorizontal="true" />
-
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/password"
-        android:layout_below="@+id/username"
-        android:layout_alignLeft="@+id/username"
-        android:layout_alignStart="@+id/username" />
-
-    <ImageView
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/spalshView"
-        android:src="@drawable/splash"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_above="@+id/username" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/password"
-        android:id="@+id/textView4"
-        android:layout_alignBaseline="@+id/password"
-        android:layout_alignBottom="@+id/password"
-        android:layout_toLeftOf="@+id/password"
-        android:layout_toStartOf="@+id/password" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/username"
-        android:id="@+id/textView5"
-        android:layout_alignBaseline="@+id/username"
-        android:layout_alignBottom="@+id/username"
-        android:layout_alignRight="@+id/textView4"
-        android:layout_alignEnd="@+id/textView4" />
-
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/spinnerGrid"
-        android:layout_centerHorizontal="true"
-        android:id="@+id/linearLayout">
-
-        <CheckBox
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/remember"
-            android:id="@+id/checkBoxRemember"
-            android:layout_below="@+id/buttonStart"
-            android:layout_alignLeft="@+id/buttonReg"
-            android:layout_alignStart="@+id/buttonReg"
-            android:layout_gravity="center_horizontal" />
-
-        <Button
-            android:layout_width="177dp"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonStart"
-            android:id="@+id/buttonStart"
-            android:onClick="onStartGame"
-            android:layout_alignLeft="@+id/spinnerGrid"
-            android:layout_alignStart="@+id/spinnerGrid"
-            android:layout_below="@+id/spinnerGrid"
-            android:textSize="10sp" />
-
-    </LinearLayout>
-
-    <LinearLayout
+        android:layout_height="0dp"
+        android:layout_weight=".4"
         android:orientation="horizontal"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/linearLayout"
-        android:layout_centerHorizontal="true">
+        android:id="@+id/keyboardLay">
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/register"
-            android:id="@+id/buttonReg"
-            android:onClick="onRegister"
-            android:layout_below="@+id/checkBoxRemember"
-            android:layout_alignLeft="@+id/buttonStart"
-            android:layout_alignStart="@+id/buttonStart"
-            android:layout_gravity="center_horizontal"
-            android:textSize="10sp" />
 
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/buttonHowTo"
-            android:id="@+id/buttonHowTo"
-            android:onClick="onHowTo"
-            android:layout_below="@+id/checkBoxRemember"
-            android:layout_alignRight="@+id/spinnerGrid"
-            android:layout_alignEnd="@+id/spinnerGrid"
-            android:textSize="10sp" />
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/spalshView"
+            android:src="@drawable/splash"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_above="@+id/username" />
     </LinearLayout>
-</RelativeLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight=".6"
+        android:orientation="horizontal"
+        android:id="@+id/groupLay">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:ignore="UselessParent"
+            android:id="@+id/groupRel">
+
+            <Spinner
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/spinnerGrid"
+                android:layout_below="@+id/checkBoxRemember"
+                android:layout_toRightOf="@+id/textView4"
+                android:layout_alignRight="@+id/password"
+                android:layout_alignEnd="@+id/password" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:id="@+id/username"
+                android:inputType="text"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true" />
+
+            <EditText
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword"
+                android:ems="10"
+                android:id="@+id/password"
+                android:layout_below="@+id/username"
+                android:layout_alignLeft="@+id/username"
+                android:layout_alignStart="@+id/username" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/password"
+                android:id="@+id/textView4"
+                android:layout_below="@+id/spinnerGrid"
+                android:layout_toStartOf="@+id/username"
+                android:layout_alignTop="@+id/password"
+                android:layout_toLeftOf="@+id/username" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/username"
+                android:id="@+id/textView5"
+                android:layout_above="@+id/password"
+                android:layout_toStartOf="@+id/username"
+                android:layout_alignTop="@+id/username"
+                android:layout_toLeftOf="@+id/username" />
+
+
+
+            <CheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/remember"
+                android:id="@+id/checkBoxRemember"
+                android:layout_gravity="center_horizontal"
+                android:layout_below="@+id/password"
+                android:layout_alignLeft="@+id/password"
+                android:layout_alignStart="@+id/password" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonStart"
+                android:id="@+id/buttonStart"
+                android:onClick="onStartGame"
+                android:layout_gravity="center_horizontal"
+                android:textSize="10sp"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/textView4"
+                android:layout_alignRight="@+id/buttonHowTo"
+                android:layout_alignEnd="@+id/buttonHowTo"
+                android:layout_below="@+id/spinnerGrid" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/register"
+                android:id="@+id/buttonReg"
+                android:onClick="onRegister"
+                android:layout_gravity="center_horizontal"
+                android:textSize="10sp"
+                android:layout_below="@+id/buttonStart"
+                android:layout_toRightOf="@+id/textView4"
+                android:layout_alignRight="@+id/checkBoxRemember"
+                android:layout_alignEnd="@+id/checkBoxRemember" />
+
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/buttonHowTo"
+                android:id="@+id/buttonHowTo"
+                android:onClick="onHowTo"
+                android:layout_gravity="center_horizontal"
+                android:textSize="10sp"
+                android:layout_alignTop="@+id/buttonReg"
+                android:layout_alignRight="@+id/spinnerGrid"
+                android:layout_alignEnd="@+id/spinnerGrid" />
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+
+</LinearLayout>

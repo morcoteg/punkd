@@ -51,11 +51,6 @@ public class Register extends AppCompatActivity {
      */
     public void onCreateAccount(final View view) {
 
-        AlertDialog.Builder builder =
-                new AlertDialog.Builder(view.getContext());
-
-
-
         EditText txtUsername = (EditText) findViewById(R.id.regUsername);
         final String username = txtUsername.getText().toString();
 
