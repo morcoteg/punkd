@@ -48,8 +48,8 @@
                 android:layout_below="@+id/checkBoxRemember"
                 android:layout_alignRight="@+id/password"
                 android:layout_alignEnd="@+id/password"
-                android:layout_alignLeft="@+id/checkBoxRemember"
-                android:layout_alignStart="@+id/checkBoxRemember" />
+                android:layout_alignLeft="@+id/password"
+                android:layout_alignStart="@+id/password" />
 
             <EditText
                 android:layout_width="wrap_content"
@@ -80,8 +80,7 @@
                 android:id="@+id/checkBoxRemember"
                 android:layout_gravity="center_horizontal"
                 android:layout_below="@+id/password"
-                android:layout_alignLeft="@+id/password"
-                android:layout_alignStart="@+id/password" />
+                android:layout_centerHorizontal="true" />
 
             <Button
                 android:layout_width="wrap_content"
@@ -108,7 +107,9 @@
                 android:textSize="10sp"
                 android:layout_below="@+id/buttonStart"
                 android:layout_alignLeft="@+id/buttonStart"
-                android:layout_alignStart="@+id/buttonStart" />
+                android:layout_alignStart="@+id/buttonStart"
+                android:layout_toLeftOf="@+id/buttonHowTo"
+                android:layout_toStartOf="@+id/buttonHowTo" />
 
             <Button
                 android:layout_width="wrap_content"

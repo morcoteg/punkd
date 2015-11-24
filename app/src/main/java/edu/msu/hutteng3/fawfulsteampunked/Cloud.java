@@ -27,17 +27,12 @@ import java.net.URLEncoder;
 public class Cloud {
 
     private static final String MAGIC = "NechAtHa6RuzeR8x";
-    private static final String USER = "hutteng3";
-    private static final String PASSWORD = "azicf987";
-    //private static final String CATALOG_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-cat.php";
-   // private static final String CATALOG_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/step6/hatter-cat.php";
-    //private static final String SAVE_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-save.php";
+    //private static final String USER = "hutteng3";
+    //private static final String PASSWORD = "azicf987";
+
     private static final String SAVE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476AddUser.php";
     private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476Login.php";
-    //private static final String DELETE_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-delete.php";
-  //  private static final String DELETE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/step6/hatter-delete.php";
-    //private static final String LOAD_URL = "https://facweb.cse.msu.edu/cbowen/cse476x/hatter-load.php";
-    //private static final String LOAD_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/step6/hatter-load.php";
+
     private static final String UTF8 = "UTF-8";
 
 
@@ -45,7 +40,7 @@ public class Cloud {
 
 
     /**
-     * Save a hatting to the cloud.
+     * Save a user to the cloud.
      * This should be run in a thread.
      * @param username name to save under
      * @param view view we are getting the data from
@@ -66,18 +61,16 @@ public class Cloud {
 
             xml.startDocument("UTF-8", true);
 
-            xml.startTag(null, "hatter");
-            xml.attribute(null, "user", USER);
-            xml.attribute(null, "pw", PASSWORD);
+            xml.startTag(null, "pipe");
             xml.attribute(null, "magic", MAGIC);
 
 
-            xml.startTag(null, "hatting");
+            xml.startTag(null, "user");
             xml.attribute(null, "username", username);
             xml.attribute(null, "password", password);
-            xml.endTag(null, "hatting");
+            xml.endTag(null, "user");
 
-            xml.endTag(null, "hatter");
+            xml.endTag(null, "pipe");
 
             xml.endDocument();
 
@@ -138,7 +131,7 @@ public class Cloud {
                 xmlR.setInput(stream, UTF8);
 
                 xmlR.nextTag();      // Advance to first tag
-                xmlR.require(XmlPullParser.START_TAG, null, "hatter");
+                xmlR.require(XmlPullParser.START_TAG, null, "pipe");
 
                 String status = xmlR.getAttributeValue(null, "status");
                 if(status.equals("no")) {
@@ -177,7 +170,7 @@ public class Cloud {
 
 
     /**
-     * Save a hatting to the cloud.
+     * Log a user in from the cloud.
      * This should be run in a thread.
      * @param username name to save under
      * @param view view we are getting the data from
@@ -185,7 +178,7 @@ public class Cloud {
      */
     public void login(final String username, final String password,final View view, final MainActivity main) {
                 /*
-         * Create a thread to load the hatting from the cloud
+         * Create a thread to load the user from the cloud
          */
         new Thread(new Runnable() {
 
@@ -226,12 +219,12 @@ public class Cloud {
                         xml.setInput(stream, "UTF-8");
 
                         xml.nextTag();      // Advance to first tag
-                        xml.require(XmlPullParser.START_TAG, null, "hatter");
+                        xml.require(XmlPullParser.START_TAG, null, "pipe");
                         String status = xml.getAttributeValue(null, "status");
                         if (status.equals("yes")) {
 
                             while (xml.nextTag() == XmlPullParser.START_TAG) {
-                                if (xml.getName().equals("hatting")) {
+                                if (xml.getName().equals("user")) {
 
                                     //check if the username and password match a record in the database
                                     success =xml.getAttributeValue(null, "stat").equals("yes");
