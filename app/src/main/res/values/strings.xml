@@ -68,7 +68,7 @@
 
     <string name="create">Create Account</string>
 
-    <string name="error">Error</string>
+    <string name="error">Error connecting to database.</string>
 
     <string name="passMissMatchError">Passwords did not match, please try again.</string>
 
@@ -80,5 +80,7 @@
     <string name="waiting">Waiting...</string>
 
     <string name="remember">Remember Me</string>
+
+    <string name="invalidUserPass">Error, invalid username or password.</string>
 
 </resources>

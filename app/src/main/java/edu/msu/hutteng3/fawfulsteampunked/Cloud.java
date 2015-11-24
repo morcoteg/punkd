@@ -41,145 +41,6 @@ public class Cloud {
     private static final String UTF8 = "UTF-8";
 
 
-    /**
-     * Save a hatting to the cloud.
-     * This should be run in a thread.
-     *
-     * @param username name to save under
-     * @param password given password
-     * @param view     view we are getting the data from
-     * @return true if successful
-     */
-   /* public boolean saveToCloud(String username, String password, View view) {
-        username = username.trim();
-        if (username.length() == 0) {
-            return false;
-        }
-
-        // Create an XML packet with the information about the current image
-        XmlSerializer xml = Xml.newSerializer();
-        StringWriter writer = new StringWriter();
-
-        try {
-            xml.setOutput(writer);
-
-            xml.startDocument("UTF-8", true);
-
-            xml.startTag(null, "pipe");
-            xml.attribute(null, "user", USER);
-            xml.attribute(null, "pw", PASSWORD);
-            xml.attribute(null, "magic", MAGIC);
-
-            xml.startTag(null, "pipes");
-
-            xml.attribute(null, "username", username);
-            xml.attribute(null, "password", password);
-
-            xml.endTag(null, "pipes");
-
-            xml.endTag(null, "pipe");
-
-            xml.endDocument();
-
-        } catch (IOException e) {
-            // This won't occur when writing to a string
-            return false;
-        }
-
-        final String xmlStr = writer.toString(); //may need to be above return
-
-
-
-
-        /*
-         * Convert the XML into HTTP POST data
-         */
-   /*     String postDataStr;
-        try {
-            postDataStr = "xml=" + URLEncoder.encode(xmlStr, "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            return false;
-        }
-
-        /*
-         * Send the data to the server
-         */
-     /*   byte[] postData = postDataStr.getBytes();
-
-
-        InputStream stream = null;
-        try {
-            URL url = new URL(SAVE_URL);
-
-            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-
-            conn.setDoOutput(true);
-            conn.setRequestMethod("POST");
-            conn.setRequestProperty("Content-Length", Integer.toString(postData.length));
-            conn.setUseCaches(false);
-
-            OutputStream out = conn.getOutputStream();
-            out.write(postData);
-            out.close();
-
-            int responseCode = conn.getResponseCode();
-            if (responseCode != HttpURLConnection.HTTP_OK) {
-                return false;
-            }
-/*
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                //Log.i("hatter", line);
-
-            }
-*/
-      /*      stream = conn.getInputStream();
-
-
-            /**
-             * Create an XML parser for the result
-             */
-      /*      try {
-               XmlPullParser xmlR = Xml.newPullParser();
-                xmlR.setInput(stream, UTF8);
-
-                xmlR.nextTag();      // Advance to first tag
-                xmlR.require(XmlPullParser.START_TAG, null, "pipe");
-
-                String status = xmlR.getAttributeValue(null, "status");
-                if (status.equals("no")) {
-                    return false;
-                }
-
-                // We are done
-            } catch (XmlPullParserException ex) {
-                return false;
-            } catch (IOException ex) {
-                return false;
-            }
-
-        } catch (MalformedURLException e) {
-            return false;
-        } catch (IOException ex) {
-            return false;
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException ex) {
-                    // Fail silently
-                }
-            }
-        }
-
-        return true;
-    }*/
-
-
-
-
-
 
 
 
@@ -265,14 +126,7 @@ public class Cloud {
             if(responseCode != HttpURLConnection.HTTP_OK) {
                 return false;
             }
-/*
-            BufferedReader reader = new BufferedReader(new InputStreamReader(conn.getInputStream()));
-            String line;
-            while ((line = reader.readLine()) != null) {
-                //Log.i("hatter", line);
 
-            }
-*/
             stream = conn.getInputStream();
 
 
@@ -319,7 +173,7 @@ public class Cloud {
 
 
     private volatile boolean success=false;
-    private volatile int state;
+
 
 
     /**
@@ -329,7 +183,7 @@ public class Cloud {
      * @param view view we are getting the data from
      * @return true if successful
      */
-    public int login(final String username, final String password,final View view, final MainActivity main) {
+    public void login(final String username, final String password,final View view, final MainActivity main) {
                 /*
          * Create a thread to load the hatting from the cloud
          */
@@ -379,15 +233,9 @@ public class Cloud {
                             while (xml.nextTag() == XmlPullParser.START_TAG) {
                                 if (xml.getName().equals("hatting")) {
 
-                                    // do something with the hatting tag...
+                                    //check if the username and password match a record in the database
                                     success =xml.getAttributeValue(null, "stat").equals("yes");
-
-                                   // main.setLogin(success);
-
-                                    if(success)
-                                        state=0;
-                                    else
-                                        state=1;
+                                    main.setLogin(success, view);
                                     break;
                                 }
 
@@ -420,7 +268,6 @@ public class Cloud {
 
                     @Override
                     public void run() {
-                        //dlg.dismiss();
                         if (fail1) {
                             Toast.makeText(view.getContext(),
                                     R.string.error,
@@ -435,10 +282,7 @@ public class Cloud {
         }).start();
 
 
-        return state;
     }
-
-
 
 
 

@@ -72,48 +72,53 @@ public class MainActivity extends AppCompatActivity {
 
     public void onStartGame(@SuppressWarnings("UnusedParameters") View view) {
 
-
-
         EditText txtDescriptionp1 = (EditText) findViewById(R.id.username);
         String username = txtDescriptionp1.getText().toString();
 
         EditText txtDescriptionp2 = (EditText) findViewById(R.id.password);
         String password = txtDescriptionp2.getText().toString();
 
-        checkUser(username,password, view);
-        if(login) {
+        Cloud cloud = new Cloud();
+        cloud.login(username, password, view, this);
+
+    }
+
+
+
+
+    public void setLogin(boolean stat,final View view){
+
+        EditText txtDescriptionp1 = (EditText) findViewById(R.id.username);
+        String username = txtDescriptionp1.getText().toString();
+
+        if(stat) {
+
             Intent intent = new Intent(this, GameSearch.class);
             intent.putExtra("PLAYER_NAME", username);
             intent.putExtra("GRID_SIZE", gridSize);
             startActivity(intent);
         }
-        else if (checkUser(username,password, view)==1) {
-            //display a toast
+        else{
+
+            view.post(new Runnable() {
+
+                @Override
+                public void run() {
+                    Toast.makeText(view.getContext(), R.string.invalidUserPass, Toast.LENGTH_SHORT).show();
+                }
+
+            });
+
+
         }
-        else{}
+
+
 
     }
 
 
 
-    private boolean login=false;
-    public void setLogin(boolean stat){login=stat;}
 
-
-
-
-    public int checkUser(final String username, final String password, final View view){
-
-
-
-        Cloud cloud = new Cloud();
-        final int ok = cloud.login(username,password, view);
-
-
-
-       return ok;
-
-    }
 
 
 
