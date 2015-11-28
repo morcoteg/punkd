@@ -60,9 +60,6 @@
     <string name="title_activity_register">Register</string>
 
 
-    <string name="username">Username: </string>
-    <string name="password">Password: </string>
-    <string name="password_check">Re-type password: </string>
 
     <string name="register">Register</string>
 
@@ -77,10 +74,14 @@
     <string name="userLengthError">Username was not the correct length, your username must be between 4 and 10 characters long.</string>
     <string name="title_activity_game_search">GameSearch</string>
 
-    <string name="waiting">Waiting...</string>
+    <string name="waiting">Waiting...\n
+                            (Logged in username should be the current title)</string>
 
     <string name="remember">Remember Me</string>
 
     <string name="invalidUserPass">Error, invalid username or password.</string>
+    <string name="username_hint">Username</string>
+    <string name="password_hing">Password</string>
+    <string name="password_repeat_hint">Re-type Password</string>
 
 </resources>
