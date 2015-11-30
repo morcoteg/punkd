@@ -1,9 +1,11 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import java.io.Serializable;
 
@@ -32,6 +34,42 @@ public class GameSearch extends AppCompatActivity {
 
         }
     }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+        Cloud cloud=new Cloud();
+
+        View view=findViewById(android.R.id.content);
+
+        cloud.findGame(params.currentPlayer,view, this);
+
+    }
+
+
+
+
+
+    public void startNewSame(String otherPlayer){
+
+        Intent intent = new Intent(this, GameBoard.class);
+        intent.putExtra("PLAYER_1_NAME", params.currentPlayer);
+        intent.putExtra("PLAYER_2_NAME", otherPlayer);
+        intent.putExtra("PLAYER_DEVICE", params.currentPlayer); //<may not need
+        intent.putExtra("GRID_SIZE", 0);
+        startActivity(intent);
+
+
+
+    }
+
+
+
+
+
+
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
