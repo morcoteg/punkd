@@ -2,6 +2,7 @@ package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.app.AlertDialog;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -9,18 +10,37 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String PREFS_NAME = "MyPrefsFile";
+    private static final String PREF_USERNAME = "username";
+    private static final String PREF_PASSWORD = "password";
+
+    private boolean rememberMeChecked = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        // Load in the username/password if REMEMBER ME
+        SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
+        String username = pref.getString(PREF_USERNAME, null);
+        String password = pref.getString(PREF_PASSWORD, null);
 
+        EditText usernameTxt = (EditText) findViewById(R.id.username);
+        usernameTxt.setText(username);
+        EditText passwordTxt = (EditText) findViewById(R.id.password);
+        passwordTxt.setText(password);
+
+        if (username == null || password == null) {
+            //Prompt for username and password
+        }
 
         /*
          * Set up the spinner
@@ -90,6 +110,22 @@ public class MainActivity extends AppCompatActivity {
 
         EditText txtDescriptionp1 = (EditText) findViewById(R.id.username);
         String username = txtDescriptionp1.getText().toString();
+
+        EditText txtDescriptionp2 = (EditText) findViewById(R.id.password);
+        String password = txtDescriptionp2.getText().toString();
+
+        final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBoxRemember);
+        if (checkBox.isChecked()) {
+            //checkBox.setChecked(false);
+            this.rememberMeChecked = true;
+
+            getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+                    .edit()
+                    .putString(PREF_USERNAME, username)
+                    .putString(PREF_PASSWORD, password)
+                    .commit();
+        }
+
 
         if(stat) {
 
