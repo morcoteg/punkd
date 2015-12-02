@@ -22,6 +22,7 @@ public class MainActivity extends AppCompatActivity {
     private static final String PREF_PASSWORD = "password";
 
     private boolean rememberMeChecked = false;
+    private GCM gcm = new GCM();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        gcm.register(this);
     }
 
 
