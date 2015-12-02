@@ -39,7 +39,11 @@ public class GCM {
                     // [END get_token]
                     Log.i("gcm", "GCM Registration Token: " + token);
 
-                    sendToServer(token);
+                    //sendToServer(token);
+
+                    MainActivity activity = (MainActivity) context;
+
+                    activity.setToken(token);
 
                     //GcmPubSub pubSub = GcmPubSub.getInstance(context);
                     //pubSub.subscribe(token, "/topics/global", null);

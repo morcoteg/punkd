@@ -34,8 +34,10 @@ public class Cloud {
     //private static final String PASSWORD = "azicf987";
 
     private static final String SAVE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476AddUser.php";
-    private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476Login.php";
-    private static final String SEARCH_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476FindGame.php";
+   // private static final String LOGIN_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476Login.php";
+   private static final String LOGIN_URL = "http://cse.msu.edu/~hutteng3/476/476Login.php";
+    //private static final String SEARCH_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476FindGame.php";
+    private static final String SEARCH_URL = "http://cse.msu.edu/~hutteng3/476/476FindGame.php";
     private static final String SAVE_GAME_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476SaveGame.php";
     private static final String GAME_STATE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476GetGameState.php";
 
@@ -182,7 +184,7 @@ public class Cloud {
      * @param view view we are getting the data from
      * @return true if successful
      */
-    public void login(final String username, final String password,final View view, final MainActivity main) {
+    public void login(final String username, final String password,final String token,final View view, final MainActivity main) {
                 /*
          * Create a thread to load the user from the cloud
          */
@@ -194,7 +196,7 @@ public class Cloud {
 
                 InputStream stream = null;
 
-               String query = LOGIN_URL + "?user=" + username + "&magic=" + MAGIC + "&pw=" + password;
+               String query = LOGIN_URL + "?user=" + username + "&magic=" + MAGIC +"&token=" + token + "&pw=" + password;
 
                 try {
                     URL url = new URL(query);

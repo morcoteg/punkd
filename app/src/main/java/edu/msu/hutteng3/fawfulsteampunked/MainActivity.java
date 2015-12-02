@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity {
         String password = txtDescriptionp2.getText().toString();
 
         Cloud cloud = new Cloud();
-        cloud.login(username, password, view, this);
+        cloud.login(username, password, token, view, this);
 
     }
 
@@ -207,6 +207,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+
+
+
+    private String token="";
+    public void setToken(String newToken){token=newToken;}
 
 
 
