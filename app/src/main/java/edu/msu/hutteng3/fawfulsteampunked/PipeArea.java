@@ -85,6 +85,32 @@ public class PipeArea {
     public void setTouchedPipePos(int pos){touchedPipePos=pos;}
 
 
+
+    public Vector getPipeList(){
+
+
+        Vector pipeList=new Vector();
+
+        for (int i=0;i<order.size();i++) {
+            int id=-1;
+            if(order.elementAt(i).sameAs(pipe90))
+                id=1;
+            else if(order.elementAt(i).sameAs(pipeCap))
+                id=2;
+            else if(order.elementAt(i).sameAs(pipeStraight))
+                id=3;
+            else if(order.elementAt(i).sameAs(pipeTee))
+                id=4;
+
+            if(id!=-1)
+                pipeList.add(id) ;
+        }
+
+        return pipeList;
+
+    }
+
+
     /**
      * Constructor, sets the sizes for the orders and fills the initial one
      * @param context The current context
@@ -344,25 +370,34 @@ public class PipeArea {
         params = (Parameters) bundle.getSerializable(key);
 
         assert params != null;
-        if (params.order != null) {
-            for(int i=0; i<params.order.size();i++)
-            {
-                if(params.order.elementAt(i).equals(1))
-                    order.set(i, pipe90);
-                else if(params.order.elementAt(i).equals(2))
-                    order.set(i, pipeCap);
-                else if(params.order.elementAt(i).equals(3))
-                    order.set(i, pipeStraight);
-                else if(params.order.elementAt(i).equals(4))
-                    order.set(i, pipeTee);
+        if (params.order != null)
+            loadNewPipes(params.order);
 
-            }
-
-        }
 
         touchedPipePos=params.touchedPipePos;
 
     }
+
+
+    public void loadNewPipes(Vector newPipes){
+
+        for(int i=0; i<newPipes.size();i++)
+        {
+            if(newPipes.elementAt(i).equals(1))
+                order.set(i, pipe90);
+            else if(newPipes.elementAt(i).equals(2))
+                order.set(i, pipeCap);
+            else if(newPipes.elementAt(i).equals(3))
+                order.set(i, pipeStraight);
+            else if(newPipes.elementAt(i).equals(4))
+                order.set(i, pipeTee);
+
+        }
+
+    }
+
+
+
 
 
 /////////////////////////////////////////// NESTED CLASS parameters ///////////////////////

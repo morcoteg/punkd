@@ -1,6 +1,7 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.app.AlertDialog;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
@@ -89,6 +90,21 @@ public class Register extends AppCompatActivity {
 
                     Cloud cloud = new Cloud();
                     final boolean ok = cloud.saveToCloud(username,password, view);
+
+
+
+
+
+                   // RegistrationIntentService thing = new RegistrationIntentService();
+
+                   // Intent intent = new Intent();
+
+
+                  //  thing.onHandleIntent(intent);
+
+
+
+
 
                     view.post(new Runnable() {
 

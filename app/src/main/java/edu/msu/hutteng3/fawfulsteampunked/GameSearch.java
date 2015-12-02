@@ -1,12 +1,18 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.content.Intent;
+import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.google.android.gms.gcm.GcmPubSub;
+import com.google.android.gms.gcm.GoogleCloudMessaging;
+import com.google.android.gms.iid.InstanceID;
+
+import java.io.IOException;
 import java.io.Serializable;
 
 public class GameSearch extends AppCompatActivity {
@@ -23,17 +29,31 @@ public class GameSearch extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
 
         params.currentPlayer = extras.getString("PLAYER_NAME");
+        params.gridSize=extras.getInt("GRID_SIZE");
 
         this.setTitle(params.currentPlayer);
 
                 /*
         *   Save any state
         */
-        if (savedInstanceState !=  null){
+        if (savedInstanceState != null) {
             this.getFromBundle(PARAMETERS, savedInstanceState);
 
         }
+
+
+
     }
+
+
+
+
+
+
+
+
+
+
 
 
     @Override
@@ -44,7 +64,7 @@ public class GameSearch extends AppCompatActivity {
 
         View view=findViewById(android.R.id.content);
 
-        cloud.findGame(params.currentPlayer,view, this);
+        cloud.findGame(params.currentPlayer,params.gridSize,view, this);
 
     }
 
@@ -52,13 +72,14 @@ public class GameSearch extends AppCompatActivity {
 
 
 
-    public void startNewSame(String otherPlayer){
+    public void startNewSame(String otherPlayer, String id){
 
         Intent intent = new Intent(this, GameBoard.class);
         intent.putExtra("PLAYER_1_NAME", params.currentPlayer);
         intent.putExtra("PLAYER_2_NAME", otherPlayer);
         intent.putExtra("PLAYER_DEVICE", params.currentPlayer); //<may not need
-        intent.putExtra("GRID_SIZE", 0);
+        intent.putExtra("GAME_ID", id);
+        intent.putExtra("GRID_SIZE", params.gridSize);
         startActivity(intent);
 
 
@@ -159,6 +180,11 @@ public class GameSearch extends AppCompatActivity {
          */
         public String currentPlayer="";
 
+
+        /**
+         * the selected grid size
+         */
+        public int gridSize=0;
 
     }
 

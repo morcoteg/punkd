@@ -13,6 +13,7 @@ import android.view.View;
 import android.widget.Toast;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Vector;
 
 /**
@@ -132,6 +133,32 @@ public class PlayingArea {
     public void setPlayer1Name(String name){player1name=name;}
     public void setPlayer2Name(String name){player2name=name;}
     public int getGridSize(){return gridSize;}
+
+
+
+
+
+    public Vector getPipeGrid(){
+
+        Vector<Integer> pipeIds=new Vector<>();
+
+
+        for(int i=0; i<gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if(pipes[i][j] != null) {
+                    pipeIds.add(pipes[i][j].getID()+((int)pipes[i][j].getAngle()));
+                }
+                else
+                    pipeIds.add(9);
+            }
+        }
+
+        return pipeIds;
+
+    }
+
+
+
 
 
     /**
@@ -342,7 +369,7 @@ public class PlayingArea {
 
 
         //pipeStart height to get below +42f for text size
-        canvas.drawText(player1name, xMargin, p1StartIndex * hit / gridSize+pipeStraight.getHeight() + 42f + yMargin, paint);
+        canvas.drawText(player1name, xMargin, p1StartIndex * hit / gridSize + pipeStraight.getHeight() + 42f + yMargin, paint);
 
         //2*hit/5 from where the start pipe is + pipeStart height to get below +42f for text size
         canvas.drawText(player2name, xMargin, p2StartIndex * hit / gridSize + pipeStraight.getHeight() + 42f + yMargin, paint);
@@ -372,7 +399,7 @@ public class PlayingArea {
             drawLeaks(canvas, wid, hit, paint);
 
 
-        drawPipes(canvas, wid, hit,newHeight, diff, paint);
+        drawPipes(canvas, wid, hit, newHeight, diff, paint);
 
 
         //draws tha handles and their positions
@@ -1373,6 +1400,103 @@ public class PlayingArea {
         return start.searchForAllLeaks();
 
     }
+
+
+
+
+
+
+
+    public void updatePipes(Vector newPipes){
+
+
+        int count=0;
+        for(int i=0; i<gridSize; i++) {
+            for (int j = 0; j < gridSize; j++) {
+                if(pipes[i][j] == null &&(int)newPipes.elementAt(count)!=9) {
+
+                    int newId=(int)newPipes.elementAt(count)%10;
+
+                    pipes[i][j]=new Pipe(newId);
+
+
+                    pipes[i][j].setX(((float) i / gridSize));
+                    pipes[i][j].setY((float) j / gridSize);
+
+
+                    float newAngle=(float)((int)newPipes.elementAt(count)-newId);
+
+                    pipes[i][j].setAngle(newAngle);
+                    pipes[i][j].set(this, i, j);
+
+                    setNewConnections(newId,newAngle,i,j);
+
+                    pipes[i][j].setPlacingPlayer(params.currentPlayer);
+
+
+                }
+
+                count+=1;
+
+            }
+        }
+
+
+        setBitmaps();
+
+    }
+
+
+
+
+    public void setNewConnections(int id,float angle,int xInd, int yInd){
+        boolean north=false;
+        boolean east=false;
+        boolean south=false;
+        boolean west=false;
+
+        if(id==1) {
+            if (angle==90.0f)
+                west=south=true;
+            else if(angle==180.0f)
+                west=north=true;
+            else if(angle==270.0f)
+                east=north=true;
+            else
+                east=south=true;
+        }
+        else if(id==2)
+            if (angle==90.0f)
+                west=true;
+            else if(angle==180.0f)
+                north=true;
+            else if(angle==270.0f)
+                east=true;
+            else
+                south=true;
+        else if(id==3)
+            if (angle==90.0f ||angle==270.0f)
+                north=south=true;
+            else
+                east=west=true;
+        else if(id==4)
+            if (angle==90.0f)
+                east=west=south=true;
+            else if(angle==180.0f)
+                north=south=west=true;
+            else if(angle==270.0f)
+                east=west=north=true;
+            else
+                north=east=south=true;
+
+        else if(id==5)
+            west=true;
+
+
+        pipes[xInd][yInd].setConnect(north,east,south,west);
+
+    }
+
 
 
 
