@@ -162,7 +162,9 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
+        Cloud cloud=new Cloud();
+        View view=findViewById(android.R.id.content);
+        cloud.sendMessage(params.opponentToken, "turn", view);
 
 
 
