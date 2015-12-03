@@ -66,13 +66,15 @@ public class GameSearch extends AppCompatActivity {
 
         cloud.findGame(params.currentPlayer,params.gridSize,view, this);
 
+        //cloud.joinGame(params.currentPlayer,view, this);
+
     }
 
 
 
 
 
-    public void startNewSame(String otherPlayer, String id,String token){
+    public void startNewGame(String otherPlayer, String id,String token){
 
         Intent intent = new Intent(this, GameBoard.class);
         intent.putExtra("PLAYER_1_NAME", params.currentPlayer);
@@ -89,7 +91,18 @@ public class GameSearch extends AppCompatActivity {
 
 
 
+    public void joinGame(String otherPlayer, String id,String token){
 
+        Intent intent = new Intent(this, GameBoard.class);
+        intent.putExtra("PLAYER_1_NAME", otherPlayer);
+        intent.putExtra("PLAYER_2_NAME", params.currentPlayer);
+        intent.putExtra("PLAYER_DEVICE", params.currentPlayer); //<may not need
+        intent.putExtra("GAME_ID", id);
+        intent.putExtra("GRID_SIZE", params.gridSize);
+        intent.putExtra("OPPONENT_TOKEN", token);
+        startActivity(intent);
+
+    }
 
 
 
