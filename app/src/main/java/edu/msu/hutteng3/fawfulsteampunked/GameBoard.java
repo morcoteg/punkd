@@ -84,6 +84,9 @@ public class GameBoard extends AppCompatActivity {
         }
 
 
+
+        MyGcmListenerService listener = new MyGcmListenerService();
+        listener.setGameBoard(this);
     }
 
 

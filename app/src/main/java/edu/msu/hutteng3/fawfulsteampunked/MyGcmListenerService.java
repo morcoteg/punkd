@@ -23,12 +23,18 @@ public class MyGcmListenerService extends GcmListenerService {
 
         //ServerComm serverComm = ServerComm.get();
 
-        if(message.equals("join") )
+        if(message.equals("join") && gameSearch!=null)
             gameSearch.joinMessage();
+
+        else if(message.equals("turn") && gameBoard!=null)
+            gameBoard.loadGameState();
 
     }
 
 
     private static GameSearch gameSearch=null;
     public void setGameSearch(GameSearch newGameSearch){gameSearch=newGameSearch;}
+
+    private static GameBoard gameBoard=null;
+    public void setGameBoard(GameBoard newGameBoard){gameBoard=newGameBoard;}
 }
