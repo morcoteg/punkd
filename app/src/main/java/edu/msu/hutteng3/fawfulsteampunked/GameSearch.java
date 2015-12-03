@@ -43,6 +43,9 @@ public class GameSearch extends AppCompatActivity {
         }
 
 
+        MyGcmListenerService listener = new MyGcmListenerService();
+        listener.setGameSearch(this);
+
 
     }
 
@@ -65,6 +68,7 @@ public class GameSearch extends AppCompatActivity {
 
         View view=findViewById(android.R.id.content);
 
+
         cloud.findGame(params.currentPlayer, params.gridSize, view, this);
 
         //cloud.joinGame(params.currentPlayer,view, this);
@@ -80,13 +84,13 @@ public class GameSearch extends AppCompatActivity {
         waiting.setText(getString(R.string.waiting) + " " + display + "X" + display + "... \n" + getString(R.string.loggedInUser));
 
 
-        MyGcmListenerService listener = new MyGcmListenerService();
-        listener.setGameSearch(this);
+
     }
 
 
 
     public void joinMessage(){
+
         Cloud cloud=new Cloud();
 
         View view=findViewById(android.R.id.content);
