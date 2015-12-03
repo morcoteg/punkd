@@ -51,7 +51,13 @@ public class GameSearch extends AppCompatActivity {
 
 
 
+    public void joinMessage(){
+        Cloud cloud=new Cloud();
 
+        View view=findViewById(android.R.id.content);
+
+        cloud.joinGame(params.currentPlayer,view, this);
+    }
 
 
 
@@ -64,10 +70,12 @@ public class GameSearch extends AppCompatActivity {
 
         View view=findViewById(android.R.id.content);
 
-        cloud.findGame(params.currentPlayer,params.gridSize,view, this);
+        cloud.findGame(params.currentPlayer, params.gridSize, view, this);
 
         //cloud.joinGame(params.currentPlayer,view, this);
 
+        MyGcmListenerService listener = new MyGcmListenerService();
+        listener.setGameSearch(this);
     }
 
 
@@ -75,6 +83,11 @@ public class GameSearch extends AppCompatActivity {
 
 
     public void startNewGame(String otherPlayer, String id,String token){
+
+
+        Cloud cloud=new Cloud();
+        View view=findViewById(android.R.id.content);
+        cloud.sendMessage(token,"join",view);
 
         Intent intent = new Intent(this, GameBoard.class);
         intent.putExtra("PLAYER_1_NAME", params.currentPlayer);
