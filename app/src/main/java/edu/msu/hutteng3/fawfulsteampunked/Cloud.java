@@ -350,8 +350,9 @@ public class Cloud {
                                     //check if the username and password match a record in the database
                                     String user =xml.getAttributeValue(null, "username");
                                     String id=xml.getAttributeValue(null, "id");
+                                    String token=xml.getAttributeValue(null, "token");
                                     if(!(user.equals("no")))
-                                        search.startNewSame(user,id);
+                                        search.startNewSame(user,id,token);
 
                                     break;
                                 }

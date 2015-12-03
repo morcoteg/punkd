@@ -72,7 +72,7 @@ public class GameSearch extends AppCompatActivity {
 
 
 
-    public void startNewSame(String otherPlayer, String id){
+    public void startNewSame(String otherPlayer, String id,String token){
 
         Intent intent = new Intent(this, GameBoard.class);
         intent.putExtra("PLAYER_1_NAME", params.currentPlayer);
@@ -80,6 +80,7 @@ public class GameSearch extends AppCompatActivity {
         intent.putExtra("PLAYER_DEVICE", params.currentPlayer); //<may not need
         intent.putExtra("GAME_ID", id);
         intent.putExtra("GRID_SIZE", params.gridSize);
+        intent.putExtra("OPPONENT_TOKEN", token);
         startActivity(intent);
 
 

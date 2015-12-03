@@ -47,6 +47,8 @@ public class GameBoard extends AppCompatActivity {
         params.gameId=extras.getString("GAME_ID");
         int gridSize = extras.getInt("GRID_SIZE");
 
+        params.opponentToken=extras.getString("OPPONENT_TOKEN");
+
         getGameBoardView().setPlayer1name(p1);
         getGameBoardView().setPlayer2name(p2);
         getGameBoardView().setGridSize(gridSize);
@@ -587,6 +589,12 @@ public class GameBoard extends AppCompatActivity {
          * Storage for the not current player
          */
         public String gameId="";
+
+
+        /**
+         * Storage for the token of the non-device player
+         */
+        public String opponentToken="";
 
     }
 
