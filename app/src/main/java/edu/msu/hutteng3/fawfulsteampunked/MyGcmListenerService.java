@@ -21,7 +21,7 @@ public class MyGcmListenerService extends GcmListenerService {
         Log.d("gcm", "Message: " + message);
 
 
-        ServerComm serverComm = ServerComm.get();
+        //ServerComm serverComm = ServerComm.get();
 
         if(message.equals("join") )
             gameSearch.joinMessage();

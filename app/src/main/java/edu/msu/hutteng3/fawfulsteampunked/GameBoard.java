@@ -78,11 +78,8 @@ public class GameBoard extends AppCompatActivity {
             getGameBoardView().setCurrentPlayer(params.currentPlayer);
 
 
-
-
-           // loadGameState();
-
-
+           if(params.devicePlayer.equals(params.otherPlayer))
+               updateUI(false);
 
         }
 
