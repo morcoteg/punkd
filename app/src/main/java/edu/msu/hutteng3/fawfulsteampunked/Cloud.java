@@ -41,7 +41,9 @@ public class Cloud {
     private static final String SAVE_GAME_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476SaveGame.php";
     private static final String GAME_STATE_URL = "http://webdev.cse.msu.edu/~hutteng3/cse476/project2/476GetGameState.php";
     private static final String JOIN_URL = "http://cse.msu.edu/~hutteng3/476/476JoinGame.php";
+    private static final String LOGOUT_URL = "http://cse.msu.edu/~hutteng3/476/476Logout.php";
     private static final String GCM_URL = "http://cse.msu.edu/~hutteng3/476/gcm.php";
+
 
     private static final String UTF8 = "UTF-8";
 
@@ -851,7 +853,75 @@ public class Cloud {
 
 
 
+    /**
+     * Log a user in from the cloud.
+     * This should be run in a thread.
+     * @param view view we are getting the data from
+     * @return true if successful
+     */
+    public void logout(final String username, final View view) {
+                /*
+         * Create a thread to load the user from the cloud
+         */
+        new Thread(new Runnable() {
 
+            @Override
+            public void run() {
+                // Create a cloud object and get the XML
+
+                InputStream stream = null;
+
+                String query = LOGOUT_URL + "?username=" + username + "&magic=" + MAGIC;
+
+                try {
+                    URL url = new URL(query);
+
+                    HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+                    int responseCode = conn.getResponseCode();
+                    if(responseCode != HttpURLConnection.HTTP_OK) {
+                        stream = null;
+                    }
+                    else
+                        stream = conn.getInputStream();
+
+                }
+                catch (MalformedURLException e) {
+                    // Should never happen
+                    stream = null;
+                }
+                catch (IOException ex) {
+                    stream = null;
+                }
+
+                // Test for an error
+                boolean fail = stream == null;
+                try {
+                    stream.close();
+                }
+                catch (IOException ex) {
+                }
+
+
+                final boolean fail1 = fail;
+                view.post(new Runnable() {
+
+                    @Override
+                    public void run() {
+                        if (fail1) {
+                            Toast.makeText(view.getContext(),
+                                    R.string.error,
+                                    Toast.LENGTH_SHORT).show();
+                        }
+
+                    }
+
+                });
+
+            }
+        }).start();
+
+
+    }
 
     /**
      * Skip the XML parser to the end tag for whatever

@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
 
 import com.google.android.gms.gcm.GcmPubSub;
 import com.google.android.gms.gcm.GoogleCloudMessaging;
@@ -67,6 +68,17 @@ public class GameSearch extends AppCompatActivity {
         cloud.findGame(params.currentPlayer, params.gridSize, view, this);
 
         //cloud.joinGame(params.currentPlayer,view, this);
+
+        TextView waiting = (TextView) findViewById(R.id.waiting);
+
+        String display="5";
+        if(params.gridSize==1)
+            display="10";
+        else if(params.gridSize==2)
+            display="20";
+
+        waiting.setText(getString(R.string.waiting) + " " + display + "X" + display + "... \n" + getString(R.string.loggedInUser));
+
 
         MyGcmListenerService listener = new MyGcmListenerService();
         listener.setGameSearch(this);
@@ -142,6 +154,24 @@ public class GameSearch extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+
+
+
+
+
+    @Override
+    public void onBackPressed() {
+
+        Cloud cloud=new Cloud();
+
+        View view=findViewById(android.R.id.content);
+
+        cloud.logout(params.currentPlayer, view);
+
+        super.onBackPressed();
+
     }
 
 

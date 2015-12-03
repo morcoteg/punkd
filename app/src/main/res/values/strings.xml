@@ -74,8 +74,9 @@
     <string name="userLengthError">Username was not the correct length, your username must be between 4 and 10 characters long.</string>
     <string name="title_activity_game_search">GameSearch</string>
 
-    <string name="waiting">Waiting...\n
-                            (Logged in username should be the current title)</string>
+    <string name="waiting">Waiting for another player who wants to play a game on grid size: </string>
+
+    <string name="loggedInUser">(Logged in username should be the current title, logout by pressing back)</string>
 
     <string name="remember">Remember Me</string>
 

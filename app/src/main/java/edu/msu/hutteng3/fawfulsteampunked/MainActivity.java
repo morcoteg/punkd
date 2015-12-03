@@ -144,7 +144,7 @@ public class MainActivity extends AppCompatActivity {
                     .putString(PREF_USERNAME, "")
                     .putString(PREF_PASSWORD, "")
                     .commit();
-            
+
         }
 
 
