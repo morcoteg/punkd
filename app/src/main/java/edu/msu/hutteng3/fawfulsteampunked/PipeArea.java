@@ -79,11 +79,12 @@ public class PipeArea {
     private int touchedPipePos=-1;
 
 
+
     /*general getters and setters*/
     public void setPipeSelectView(PipeSelectView toSet){pipeSelect=toSet;}
     public void setDiscard(boolean disc){params.discard=disc;}
     public void setTouchedPipePos(int pos){touchedPipePos=pos;}
-
+    public void update(boolean update){params.enabled=update;}
 
 
     public Vector getPipeList(){
@@ -167,7 +168,7 @@ public class PipeArea {
             if (pipe.sameAs(pipeStraight))
                 drawStraightPipe(canvas,count, pipe,wid, hit, orientation);
             else
-                drawNotStraightPipe(canvas,count, pipe,wid, hit, orientation);
+                drawNotStraightPipe(canvas, count, pipe, wid, hit, orientation);
         }
 
 
@@ -243,12 +244,14 @@ public class PipeArea {
         // puzzle.
         //
 
-        float relX = (event.getX(0) )/ cWidth;
-        float relY = (event.getY(0)) / cHeight;
+        if(params.enabled) {
+            float relX = (event.getX(0)) / cWidth;
+            float relY = (event.getY(0)) / cHeight;
 
-        return onTouched(relX, relY);
+            return onTouched(relX, relY);
 
-
+        }
+        return false;
     }
 
 
@@ -424,6 +427,11 @@ public class PipeArea {
          * Storage for the position in the queue of the touched pipe
          */
         public int touchedPipePos=-1;
+
+        /**
+         * Storage for if the pipes are touchable
+         */
+        private boolean enabled=true;
     }
 
 

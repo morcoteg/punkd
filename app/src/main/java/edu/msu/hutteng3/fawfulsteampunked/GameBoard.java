@@ -104,9 +104,18 @@ public class GameBoard extends AppCompatActivity {
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch(item.getItemId()) {
+            case R.id.menu_disconnect:
+                Cloud cloud=new Cloud();
+                View view=findViewById(android.R.id.content);
+               // cloud.sendMessage(params.opponentToken,"surrender",view);
+
+                surrender(view);
+                return true;
+
+            case R.id.action_settings:
+                return true;
+
         }
 
         return super.onOptionsItemSelected(item);
@@ -175,6 +184,9 @@ public class GameBoard extends AppCompatActivity {
 
         this.setTitle(params.currentPlayer);
         getGameBoardView().setCurrentPlayer(params.currentPlayer);
+
+
+        updateUI(false);
     }
 
 
@@ -236,7 +248,7 @@ public class GameBoard extends AppCompatActivity {
 
         cloud.getTurn(params.gameId, view, this);
 
-
+        updateUI(true);
     }
 
 
@@ -326,6 +338,27 @@ public class GameBoard extends AppCompatActivity {
 
 
 
+
+
+
+
+    public void updateUI(boolean update){
+        params.addEnabled=update;
+        params.discardEnabled=update;
+        params.openEnabled=update;
+        params.surrenderEnabled=update;
+
+
+        getAddButton().setEnabled(params.addEnabled);
+        getDiscardButton().setEnabled(params.discardEnabled);
+        getOpenButton().setEnabled(params.openEnabled);
+        getSurrenderButton().setEnabled(params.surrenderEnabled);
+
+
+        getPipeSelectView().getPipeArea().update(update);
+
+
+    }
 
 
     /**
@@ -544,6 +577,10 @@ public class GameBoard extends AppCompatActivity {
          */
         public boolean openEnabled=true;
 
+        /**
+         * If the surrender button is enabled
+         */
+        public boolean surrenderEnabled=true;
 
         /**
          * Storage for the current player
@@ -595,6 +632,8 @@ public class GameBoard extends AppCompatActivity {
          * Storage for the token of the non-device player
          */
         public String opponentToken="";
+
+
 
     }
 

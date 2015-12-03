@@ -51,13 +51,7 @@ public class GameSearch extends AppCompatActivity {
 
 
 
-    public void joinMessage(){
-        Cloud cloud=new Cloud();
 
-        View view=findViewById(android.R.id.content);
-
-        cloud.joinGame(params.currentPlayer,view, this);
-    }
 
 
 
@@ -78,6 +72,15 @@ public class GameSearch extends AppCompatActivity {
         listener.setGameSearch(this);
     }
 
+
+
+    public void joinMessage(){
+        Cloud cloud=new Cloud();
+
+        View view=findViewById(android.R.id.content);
+
+        cloud.joinGame(params.currentPlayer, view, this);
+    }
 
 
 

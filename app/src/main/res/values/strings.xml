@@ -84,4 +84,6 @@
     <string name="password_hing">Password</string>
     <string name="password_repeat_hint">Re-type Password</string>
 
+    <string name="menu_disconnect">Disconnect From Game...</string>
+
 </resources>

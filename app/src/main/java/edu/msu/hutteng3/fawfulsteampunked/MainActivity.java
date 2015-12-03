@@ -69,6 +69,15 @@ public class MainActivity extends AppCompatActivity {
 
         });
 
+        final CheckBox checkBox = (CheckBox) findViewById(R.id.checkBoxRemember);
+
+        EditText txtDescriptionp1 = (EditText) findViewById(R.id.username);
+        String user = txtDescriptionp1.getText().toString();
+        if(!user.isEmpty())
+            rememberMeChecked=true;
+        checkBox.setChecked(rememberMeChecked);
+
+
         gcm.register(this);
     }
 
@@ -127,6 +136,17 @@ public class MainActivity extends AppCompatActivity {
                     .putString(PREF_PASSWORD, password)
                     .commit();
         }
+        else{
+            this.rememberMeChecked = false;
+
+            getSharedPreferences(PREFS_NAME,MODE_PRIVATE)
+                    .edit()
+                    .putString(PREF_USERNAME, "")
+                    .putString(PREF_PASSWORD, "")
+                    .commit();
+            
+        }
+
 
 
         if(stat) {
