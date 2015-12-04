@@ -278,7 +278,7 @@ public class GameBoard extends AppCompatActivity {
         Vector newPipeList=processSplit(splitList);
 
 
-        getGameBoardView().getPlayingArea().updatePipes(newPipeGrid);
+        getGameBoardView().getPlayingArea().updatePipes(newPipeGrid,params.cloudPlayer);
         getPipeSelectView().getPipeArea().loadNewPipes(newPipeList);
 
 

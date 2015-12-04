@@ -1407,7 +1407,7 @@ public class PlayingArea {
 
 
 
-    public void updatePipes(Vector newPipes){
+    public void updatePipes(Vector newPipes, String placingPlayer){
 
 
         int count=0;
@@ -1431,7 +1431,7 @@ public class PlayingArea {
 
                     setNewConnections(newId,newAngle,i,j);
 
-                    pipes[i][j].setPlacingPlayer(params.currentPlayer);
+                    pipes[i][j].setPlacingPlayer(placingPlayer);
 
 
                 }
