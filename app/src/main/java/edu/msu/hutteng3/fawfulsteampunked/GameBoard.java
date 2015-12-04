@@ -3,6 +3,7 @@ package edu.msu.hutteng3.fawfulsteampunked;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.test.UiThreadTest;
 import android.util.Xml;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -46,6 +47,15 @@ public class GameBoard extends AppCompatActivity {
         params.devicePlayer=extras.getString("PLAYER_DEVICE");
         params.gameId=extras.getString("GAME_ID");
         int gridSize = extras.getInt("GRID_SIZE");
+
+
+
+
+        if(params.devicePlayer.equals(p1))
+            params.cloudPlayer=p2;
+        else
+            params.cloudPlayer=p1;
+
 
         params.opponentToken=extras.getString("OPPONENT_TOKEN");
 
@@ -343,7 +353,7 @@ public class GameBoard extends AppCompatActivity {
 
 
 
-
+    @UiThreadTest
     public void updateUI(boolean update){
         params.addEnabled=update;
         params.discardEnabled=update;
@@ -351,10 +361,10 @@ public class GameBoard extends AppCompatActivity {
         params.surrenderEnabled=update;
 
 
-        getAddButton().setEnabled(params.addEnabled);
-        getDiscardButton().setEnabled(params.discardEnabled);
-        getOpenButton().setEnabled(params.openEnabled);
-        getSurrenderButton().setEnabled(params.surrenderEnabled);
+       // getAddButton().setEnabled(params.addEnabled);
+       // getDiscardButton().setEnabled(params.discardEnabled);
+       // getOpenButton().setEnabled(params.openEnabled);
+       // getSurrenderButton().setEnabled(params.surrenderEnabled);
 
 
         getPipeSelectView().getPipeArea().update(update);
@@ -421,10 +431,55 @@ public class GameBoard extends AppCompatActivity {
     }
 
 
+
+
+    public void openMessage(){
+
+        params.setAddPipe=false;
+        params.opened=true;
+        getGameBoardView().setAddPipe(false);
+
+        getPipeSelectView().setDiscard(false);
+        getGameBoardView().setOpened(true);
+
+
+
+        if(getGameBoardView().checkForLeaks(params.cloudPlayer)) {
+            params.won = true;
+            getGameBoardView().setWon(true);
+        }
+
+
+
+      /*  params.addEnabled=false;
+        params.discardEnabled=false;
+        params.openEnabled=false;
+
+        getAddButton().setEnabled(false);
+        getDiscardButton().setEnabled(params.discardEnabled);
+        getOpenButton().setEnabled(params.openEnabled);
+*/
+
+        //params.surrenderString=R.string.openedValve;
+       // getSurrenderButton().setText(params.surrenderString);
+        getGameBoardView().postInvalidate();
+
+    }
+
+
+
+
     /**
      * Handles the open valve button
      */
-    public void open(@SuppressWarnings("UnusedParameters") View view){
+    public void open(View view){
+
+
+
+        Cloud cloud=new Cloud();
+        cloud.sendMessage(params.opponentToken, "open", view);
+
+
         params.setAddPipe=false;
         params.opened=true;
         getGameBoardView().setAddPipe(false);
@@ -453,7 +508,7 @@ public class GameBoard extends AppCompatActivity {
     /**
      * Handles the surrender button
      */
-    public void surrender(@SuppressWarnings("UnusedParameters") View view) {
+    public void surrender(View view) {
 
         getGameBoardView().clear();
         getPipeSelectView().clear();
@@ -476,7 +531,8 @@ public class GameBoard extends AppCompatActivity {
 
         //BEFORE THE NEW INTENT IS CALLED SEND A MESSAGE TO THE OTHER PLAYER THAT YOU HAVE SURRENEDERED
 
-
+        Cloud cloud=new Cloud();
+        cloud.sendMessage(params.opponentToken, "surrender", view);
 
 
 
@@ -485,6 +541,26 @@ public class GameBoard extends AppCompatActivity {
 
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);
+    }
+
+
+
+    public void surrenderMessage(){
+
+
+        getGameBoardView().clear();
+        getPipeSelectView().clear();
+
+        Intent intent = new Intent(this, EndGame.class);
+
+
+        intent.putExtra("WINNER", params.devicePlayer);
+        intent.putExtra("LOSER", params.cloudPlayer);
+
+
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK);
+        startActivity(intent);
+
     }
 
 
@@ -636,6 +712,10 @@ public class GameBoard extends AppCompatActivity {
         public String opponentToken="";
 
 
+        /**
+         * Storage for the player we are connected to
+         */
+        public String cloudPlayer="";
 
     }
 

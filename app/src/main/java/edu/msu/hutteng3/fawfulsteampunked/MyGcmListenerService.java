@@ -29,6 +29,11 @@ public class MyGcmListenerService extends GcmListenerService {
         else if(message.equals("turn") && gameBoard!=null)
             gameBoard.loadGameState();
 
+        else if(message.equals("open") && gameBoard!=null)
+            gameBoard.openMessage();
+
+        else if(message.equals("surrender") && gameBoard!=null)
+            gameBoard.surrenderMessage();
     }
 
 

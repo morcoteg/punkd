@@ -77,12 +77,12 @@ public class EndGameView extends View {
 
 
         paint.setTextSize(wid/20);
-        canvas.drawText(getResources().getString(R.string.winner) + winner, canvas.getWidth() / 3, 5*canvas.getHeight() / 12, paint);
+        canvas.drawText(getResources().getString(R.string.winner) +" " +winner, canvas.getWidth() / 3, 5*canvas.getHeight() / 12, paint);
 
 
 
         paint.setTextSize(wid/30);
-        canvas.drawText(getResources().getString(R.string.loser)+ loser, canvas.getWidth()/2.5f, 7*canvas.getHeight() / 12, paint);
+        canvas.drawText(getResources().getString(R.string.loser)+" "+ loser, canvas.getWidth()/2.5f, 7*canvas.getHeight() / 12, paint);
 
 
     }

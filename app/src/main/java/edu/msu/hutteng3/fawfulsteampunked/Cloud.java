@@ -1,5 +1,6 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
+import android.os.Handler;
 import android.util.Log;
 import android.util.Xml;
 import android.view.View;
@@ -24,6 +25,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.net.URLEncoder;
 
+
 /**
  * Created by Tyler on 11/21/2015.
  */
@@ -44,6 +46,8 @@ public class Cloud {
     private static final String LOGOUT_URL = "http://cse.msu.edu/~hutteng3/476/476Logout.php";
     private static final String GCM_URL = "http://cse.msu.edu/~hutteng3/476/gcm.php";
 
+
+    //http://cse.msu.edu/~hutteng3/476/gcm.php?token=fEFJAGmbF2I:APA91bHzNy7F_dg0y7ywBnveVV7qPpj4Hl4MDTAypiPMevOpTXbJElditOAg6tO_2Wi_weUJmqAPeTTMuzBjREl-wnWWxvAp8sHoObyvxdAUgpqd0Z6DmofzCv8KDP9oAbQEYPv8Fov1&message=join
 
     private static final String UTF8 = "UTF-8";
 
@@ -648,6 +652,8 @@ public class Cloud {
                     }
 
                 });
+
+
 
             }
         }).start();
