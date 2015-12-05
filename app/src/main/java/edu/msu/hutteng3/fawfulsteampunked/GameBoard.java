@@ -49,12 +49,8 @@ public class GameBoard extends AppCompatActivity {
         int gridSize = extras.getInt("GRID_SIZE");
 
 
+        params.cloudPlayer=extras.getString("PLAYER_CLOUD");;
 
-
-        if(params.devicePlayer.equals(p1))
-            params.cloudPlayer=p2;
-        else
-            params.cloudPlayer=p1;
 
 
         params.opponentToken=extras.getString("OPPONENT_TOKEN");

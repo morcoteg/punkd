@@ -112,6 +112,7 @@ public class GameSearch extends AppCompatActivity {
         intent.putExtra("PLAYER_1_NAME", params.currentPlayer);
         intent.putExtra("PLAYER_2_NAME", otherPlayer);
         intent.putExtra("PLAYER_DEVICE", params.currentPlayer); //<may not need
+        intent.putExtra("PLAYER_CLOUD", otherPlayer);
         intent.putExtra("GAME_ID", id);
         intent.putExtra("GRID_SIZE", params.gridSize);
         intent.putExtra("OPPONENT_TOKEN", token);
@@ -129,6 +130,7 @@ public class GameSearch extends AppCompatActivity {
         intent.putExtra("PLAYER_1_NAME", otherPlayer);
         intent.putExtra("PLAYER_2_NAME", params.currentPlayer);
         intent.putExtra("PLAYER_DEVICE", params.currentPlayer); //<may not need
+        intent.putExtra("PLAYER_CLOUD", otherPlayer);
         intent.putExtra("GAME_ID", id);
         intent.putExtra("GRID_SIZE", params.gridSize);
         intent.putExtra("OPPONENT_TOKEN", token);
