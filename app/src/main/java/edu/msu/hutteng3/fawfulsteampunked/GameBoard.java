@@ -260,8 +260,49 @@ public class GameBoard extends AppCompatActivity {
 
         cloud.getTurn(params.gameId, view, this);
 
-        updateUI(true);
+        GameBoard.this.runOnUiThread(new Runnable() {
+            public void run() {
+                //updateUI(true);
+
+                turnMessageSwitch();
+
+            }
+        });
+
     }
+
+
+
+    public void turnMessageSwitch(){
+
+
+
+        //getGameBoardView().invalidate();
+       // getPipeSelectView().invalidate();
+        String temp=params.currentPlayer;
+        params.currentPlayer=params.otherPlayer;
+        params.otherPlayer=temp;
+
+        params.setAddPipe=true;
+        getGameBoardView().setAddPipe(true);
+        getPipeSelectView().setTouchedPipePos(-1);
+
+
+
+        Toast toast = Toast.makeText(this, params.currentPlayer +getResources().getString(R.string.titleSet), Toast.LENGTH_LONG);
+        toast.show();
+
+        this.setTitle(params.currentPlayer);
+        getGameBoardView().setCurrentPlayer(params.currentPlayer);
+        updateUI(true);
+
+        getGameBoardView().getPlayingArea().what();
+
+
+    }
+
+
+
 
 
 
@@ -361,10 +402,10 @@ public class GameBoard extends AppCompatActivity {
         params.surrenderEnabled=update;
 
 
-       // getAddButton().setEnabled(params.addEnabled);
-       // getDiscardButton().setEnabled(params.discardEnabled);
-       // getOpenButton().setEnabled(params.openEnabled);
-       // getSurrenderButton().setEnabled(params.surrenderEnabled);
+        getAddButton().setEnabled(params.addEnabled);
+        getDiscardButton().setEnabled(params.discardEnabled);
+        getOpenButton().setEnabled(params.openEnabled);
+        getSurrenderButton().setEnabled(params.surrenderEnabled);
 
 
         getPipeSelectView().getPipeArea().update(update);
@@ -450,18 +491,23 @@ public class GameBoard extends AppCompatActivity {
         }
 
 
+        GameBoard.this.runOnUiThread(new Runnable() {
+            public void run() {
+                params.addEnabled = false;
+                params.discardEnabled = false;
+                params.openEnabled = false;
+                params.surrenderEnabled = true;
 
-      /*  params.addEnabled=false;
-        params.discardEnabled=false;
-        params.openEnabled=false;
+                getAddButton().setEnabled(false);
+                getDiscardButton().setEnabled(params.discardEnabled);
+                getOpenButton().setEnabled(params.openEnabled);
+                getSurrenderButton().setEnabled(true);
 
-        getAddButton().setEnabled(false);
-        getDiscardButton().setEnabled(params.discardEnabled);
-        getOpenButton().setEnabled(params.openEnabled);
-*/
+                params.surrenderString = R.string.openedValve;
+                getSurrenderButton().setText(params.surrenderString);
+            }
+        });
 
-        //params.surrenderString=R.string.openedValve;
-       // getSurrenderButton().setText(params.surrenderString);
         getGameBoardView().postInvalidate();
 
     }

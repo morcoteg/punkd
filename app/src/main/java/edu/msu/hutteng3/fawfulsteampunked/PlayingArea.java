@@ -593,6 +593,9 @@ public class PlayingArea {
 
 
 
+    public void what(){xMargin+=1;}
+
+
     /**
      * Handles drawing of the leaks
      * @param canvas The current canvas we are drawing on

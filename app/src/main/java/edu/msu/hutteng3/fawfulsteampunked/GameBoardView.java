@@ -67,6 +67,8 @@ public class GameBoardView extends View {
         super.onDraw(canvas);
 
         playingArea.draw(canvas);
+        
+       // invalidate();
     }
 
 

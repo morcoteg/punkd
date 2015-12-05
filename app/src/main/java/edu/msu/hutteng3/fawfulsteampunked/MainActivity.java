@@ -1,6 +1,7 @@
 package edu.msu.hutteng3.fawfulsteampunked;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,30 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+
+
+
+
+
+
+        Context context=getBaseContext();
+        context.sendBroadcast(new Intent("com.google.android.intent.action.GTALK_HEARTBEAT"));
+        context.sendBroadcast(new Intent("com.google.android.intent.action.MCS_HEARTBEAT"));
+
+
+
+
+
+
+
+
+
+
+
+
+
 
         // Load in the username/password if REMEMBER ME
         SharedPreferences pref = getSharedPreferences(PREFS_NAME,MODE_PRIVATE);
