@@ -114,7 +114,11 @@ public class GameBoard extends AppCompatActivity {
             case R.id.menu_disconnect:
                 Cloud cloud=new Cloud();
                 View view=findViewById(android.R.id.content);
-               // cloud.sendMessage(params.opponentToken,"surrender",view);
+                cloud.sendMessage(params.opponentToken,"surrender",view);
+
+
+                params.currentPlayer=params.devicePlayer;
+                params.otherPlayer=params.cloudPlayer;
 
                 surrender(view);
                 return true;
@@ -476,7 +480,7 @@ public class GameBoard extends AppCompatActivity {
         params.opened=true;
         getGameBoardView().setAddPipe(false);
 
-        getPipeSelectView().setDiscard(false);
+        getPipeSelectView().getPipeArea().update(false);
         getGameBoardView().setOpened(true);
 
 
@@ -485,6 +489,9 @@ public class GameBoard extends AppCompatActivity {
             params.won = true;
             getGameBoardView().setWon(true);
         }
+
+
+        params.openReceived=true;
 
 
         GameBoard.this.runOnUiThread(new Runnable() {
@@ -573,9 +580,10 @@ public class GameBoard extends AppCompatActivity {
 
         //BEFORE THE NEW INTENT IS CALLED SEND A MESSAGE TO THE OTHER PLAYER THAT YOU HAVE SURRENEDERED
 
-        Cloud cloud=new Cloud();
-        cloud.sendMessage(params.opponentToken, "surrender", view);
-
+        if(!params.openReceived) {
+            Cloud cloud = new Cloud();
+            cloud.sendMessage(params.opponentToken, "surrender", view);
+        }
 
 
 
@@ -758,6 +766,12 @@ public class GameBoard extends AppCompatActivity {
          * Storage for the player we are connected to
          */
         public String cloudPlayer="";
+
+
+        /**
+         * Storage for if the surrender message was sent, used to avoid sending two surrenders at end of game
+         */
+        public boolean openReceived=false;
 
     }
 
