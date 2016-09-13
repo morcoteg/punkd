@@ -34,7 +34,7 @@ public class GameSearch extends AppCompatActivity {
 
         this.setTitle(params.currentPlayer);
 
-                /*
+        /*
         *   Save any state
         */
         if (savedInstanceState != null) {

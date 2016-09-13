@@ -6,8 +6,8 @@ import android.util.Xml;
 import android.view.View;
 import android.widget.Toast;
 
-import com.google.android.gms.gcm.GoogleCloudMessaging;
-import com.google.android.gms.iid.InstanceID;
+//import com.google.android.gms.gcm.GoogleCloudMessaging;
+//import com.google.android.gms.iid.InstanceID;
 
 import org.xmlpull.v1.XmlPullParser;
 import org.xmlpull.v1.XmlPullParserException;
@@ -306,7 +306,7 @@ public class Cloud {
      * @return true if successful
      */
     public void findGame(final String username,final int gridSize, final View view, final GameSearch search) {
-                /*
+        /*
          * Create a thread to load the user from the cloud
          */
         new Thread(new Runnable() {

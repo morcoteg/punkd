@@ -21,7 +21,7 @@ import java.net.URLEncoder;
 import edu.msu.hutteng3.fawfulsteampunked.R;
 
 /**
- * My support for Google Cloud Messaging
+ * Support for Google Cloud Messaging
  */
 public class GCM {
     public static final String REGISTER_URL = "http://webdev.cse.msu.edu/~morcoteg/cse476/proj2/register.php";
